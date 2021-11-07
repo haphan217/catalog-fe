@@ -1,3 +1,3 @@
 export default function RecentlyAdded() {
-  return <div>Recently Added</div>;
+  return <div className="u-sizeFull lg:u-size9of12">Recently Added</div>;
 }

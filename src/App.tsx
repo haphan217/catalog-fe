@@ -14,7 +14,7 @@ function App() {
           <Route path="/movie">
             <MovieDetails />
           </Route>
-          <Redirect from="*" to="/genres" />
+          <Redirect from="*" to="/genres/recent" />
         </Switch>
       </BrowserRouter>
     </div>

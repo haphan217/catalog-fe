@@ -2,7 +2,11 @@ import { useState } from "react";
 import { SidebarMenu } from "@ahaui/react";
 import { useHistory } from "react-router-dom";
 
-export default function GenresList() {
+interface Props {
+  isOpen: boolean;
+}
+
+export default function GenresList({ isOpen }: Props) {
   const [selectedGenres, setSelectedGenres] = useState<string>("");
   const history = useHistory();
   const onSelectGenre = (id: string) => {
@@ -11,7 +15,7 @@ export default function GenresList() {
   };
 
   return (
-    <div className="u-hidden lg:u-block lg:u-size3of12">
+    <div className={`Collapse ${isOpen ? "Show " : ""}sidenav u-sizeFull lg:u-size2of10`}>
       <SidebarMenu size="small" current={selectedGenres} onSelect={onSelectGenre}>
         <SidebarMenu.Item eventKey="recent">Recently added</SidebarMenu.Item>
         {[1, 2, 3, 4, 5].map((i) => (

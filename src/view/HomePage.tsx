@@ -4,13 +4,17 @@ import RecentlyAdded from "components/HomePage/RecentlyAdded";
 import { Redirect, Route, Switch, useRouteMatch } from "react-router-dom";
 import { PageLayout } from "@ahaui/react";
 
-export default function HomePage() {
+interface Props {
+  isOpen: boolean;
+}
+
+export default function HomePage({ isOpen }: Props) {
   const { path } = useRouteMatch();
   return (
     <PageLayout>
       <PageLayout.Body className="u-flexColumn">
-        <div className="Container u-flex u-flexWrap">
-          <GenresList />
+        <div className="Grid">
+          <GenresList isOpen={isOpen} />
           <Switch>
             <Route path={`${path}/recent`}>
               <RecentlyAdded />

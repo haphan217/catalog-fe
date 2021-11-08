@@ -7,7 +7,7 @@ interface Props {
 }
 
 export default function GenresList({ isOpen }: Props) {
-  const [selectedGenres, setSelectedGenres] = useState<string>("");
+  const [selectedGenres, setSelectedGenres] = useState<string>("recent");
   const history = useHistory();
   const onSelectGenre = (id: string) => {
     setSelectedGenres(id);
@@ -15,7 +15,7 @@ export default function GenresList({ isOpen }: Props) {
   };
 
   return (
-    <div className={`Collapse ${isOpen ? "Show " : ""}sidenav u-sizeFull lg:u-size2of10`}>
+    <div className={`Collapse ${isOpen ? "Show " : ""}sidenav u-sizeFull md:u-size2of10`}>
       <SidebarMenu size="small" current={selectedGenres} onSelect={onSelectGenre}>
         <SidebarMenu.Item eventKey="recent">Recently added</SidebarMenu.Item>
         {[1, 2, 3, 4, 5].map((i) => (

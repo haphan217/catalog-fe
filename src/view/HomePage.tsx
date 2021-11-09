@@ -20,7 +20,7 @@ export default function HomePage({ isOpen }: Props) {
               <RecentlyAdded />
             </Route>
             <Route path={`${path}/:id`}>
-              <MovieList />
+              <MovieList genreId={1} />
             </Route>
             <Redirect from="/" to="recent" />
           </Switch>

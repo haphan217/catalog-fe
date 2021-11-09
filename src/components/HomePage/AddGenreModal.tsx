@@ -2,10 +2,14 @@ import { Button, Modal, Icon, Form } from "@ahaui/react";
 import { useState } from "react";
 import { Genre } from "utils/Types";
 
-export default function AddGenreModal() {
+interface Props {
+  editingGenre?: Genre;
+}
+
+export default function AddGenreModal({ editingGenre }: Props) {
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
-  const [genre, setGenre] = useState<Genre>({ title: "" });
+  const [genre, setGenre] = useState<Genre>({ title: editingGenre?.title || "" });
   const [invalidFields, setInvalidFields] = useState<string[]>([]);
 
   const onSubmit = () => {
@@ -22,7 +26,7 @@ export default function AddGenreModal() {
 
   const onToggle = () => {
     if (show) {
-      setGenre({ title: "" });
+      setGenre({ title: editingGenre?.title || "" });
       setInvalidFields([]);
     }
     setShow(!show);
@@ -34,15 +38,26 @@ export default function AddGenreModal() {
     setGenre({ ...genre, [id]: value });
   };
 
+  const renderButton = () => {
+    if (editingGenre)
+      return (
+        <Icon name="edit" role="button" className="u-marginHorizontalSmall hover:u-textPrimary" onClick={onToggle} />
+      );
+    else
+      return (
+        <Button variant="primary" className="u-textTransformNone u-marginLeftSmall" onClick={onToggle}>
+          <Icon name="plus" role="button" className="u-marginRightTiny" /> Genre
+        </Button>
+      );
+  };
+
   return (
     <>
-      <Button variant="primary" className="u-textTransformNone u-marginLeftSmall" onClick={onToggle}>
-        <Icon name="plus" role="button" className="u-marginRightTiny" /> Genre
-      </Button>
+      {renderButton()}
       {show && (
         <Modal show={show} onHide={handleClose}>
           <Modal.Header closeButton>
-            <Modal.Title>Add Genre</Modal.Title>
+            <Modal.Title>{editingGenre ? "Edit" : "Add"} Genre</Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <Form.Group>
@@ -52,6 +67,7 @@ export default function AddGenreModal() {
                 type="text"
                 id="title"
                 onChange={handleChange}
+                value={genre.title}
               ></Form.Input>
               <Form.Feedback type="invalid" visible={invalidFields.includes("title")}>
                 Genre title is required
@@ -63,7 +79,7 @@ export default function AddGenreModal() {
               Cancel
             </Button>
             <Button variant="primary" onClick={onSubmit}>
-              Add
+              {editingGenre ? "Edit" : "Add"}
             </Button>
           </Modal.Footer>
         </Modal>

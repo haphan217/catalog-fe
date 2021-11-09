@@ -4,9 +4,10 @@ import { Movie } from "utils/Types";
 
 interface Props {
   genre: string;
+  isEdit: boolean;
 }
 
-export default function AddMovieModal({ genre }: Props) {
+export default function AddMovieModal({ genre, isEdit }: Props) {
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const [movie, setMovie] = useState<Movie>({ title: "", description: "", genre });
@@ -41,11 +42,19 @@ export default function AddMovieModal({ genre }: Props) {
     setMovie({ ...movie, [id]: value });
   };
 
+  const renderButton = () => {
+    if (isEdit) return <Icon name="edit" role="button" className="u-marginHorizontalTiny hover:u-textPrimary" />;
+    else
+      return (
+        <Button variant="primary" className="u-textTransformNone" onClick={onToggle}>
+          <Icon name="plus" role="button" className="u-marginRightTiny" /> Movie
+        </Button>
+      );
+  };
+
   return (
     <>
-      <Button variant="primary" className="u-textTransformNone" onClick={onToggle}>
-        <Icon name="plus" role="button" className="u-marginRightTiny" /> Movie
-      </Button>
+      {renderButton()}
       {show && (
         <Modal show={show} onHide={handleClose}>
           <Modal.Header closeButton>

@@ -18,7 +18,7 @@ export default function TopNav({ isOpen, setIsOpen }: Props) {
         />
       </Header.Left>
       <Header.Right>
-        <Avatar className="u-backgroundPrimary u-text200" text="AB" />
+        <Avatar className="u-backgroundAccent u-text200" text="AB" />
       </Header.Right>
     </Header>
   );

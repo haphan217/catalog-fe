@@ -1,5 +1,5 @@
 import DeleteModal from "components/common/DeleteModal";
-import PaginationCustom from "components/layout/CustomPagination";
+import PaginationCustom from "components/common/CustomPagination";
 import { useEffect, useState } from "react";
 import { Genre } from "utils/Types";
 import AddGenreModal from "./AddGenreModal";

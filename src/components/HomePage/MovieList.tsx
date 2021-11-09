@@ -1,3 +1,4 @@
+import DeleteModal from "components/common/DeleteModal";
 import PaginationCustom from "components/layout/CustomPagination";
 import { useEffect, useState } from "react";
 import { Genre } from "utils/Types";
@@ -22,15 +23,23 @@ export default function MovieList({ genreId }: Props) {
   };
 
   useEffect(() => {
+    //getMovieByGenreId, getGenreDetails here
     setGenre({ title: "comedy" });
   }, []);
 
+  const onDelete = () => {
+    console.log(genre.title);
+  };
+
   return (
     <div className="u-sizeFull md:u-size8of10">
-      <div className="u-flex u-alignItemsCenter u-marginBottomSmall">
-        <h3 style={{ marginBottom: 0 }}>{genre.title} movies</h3>
-        {genre.title && <AddGenreModal editingGenre={genre} />}
-      </div>
+      {genre.title && (
+        <div className="u-flex u-alignItemsCenter u-marginBottomSmall">
+          <h3 style={{ marginBottom: 0 }}>{genre.title} movies</h3>
+          <AddGenreModal editingGenre={genre} />
+          <DeleteModal type="genre" item={genre} onDelete={onDelete} />
+        </div>
+      )}
       <AddMovieModal genre="genre 1" />
       <div className="u-flex u-flexWrap u-marginTopSmall">
         {[1, 2, 3, 4].map((movie) => (

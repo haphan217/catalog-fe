@@ -15,9 +15,13 @@ function App() {
           <Route path="/genres">
             <HomePage isOpen={isOpen} />
           </Route>
-          <Route path="/movie">
-            <MovieDetails />
-          </Route>
+          <Route
+            path="/movie/:id"
+            render={(routeProps) => {
+              const movieId = parseInt(routeProps.match.params.id);
+              return <MovieDetails movieId={movieId} />;
+            }}
+          />
           <Redirect from="*" to="/genres/recent" />
         </Switch>
       </BrowserRouter>

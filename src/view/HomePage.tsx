@@ -19,9 +19,14 @@ export default function HomePage({ isOpen }: Props) {
             <Route path={`${path}/recent`}>
               <RecentlyAdded />
             </Route>
-            <Route path={`${path}/:id`}>
-              <MovieList genreId={1} />
-            </Route>
+            <Route
+              path={`${path}/:id`}
+              render={(routeProps) => {
+                const genreId = parseInt(routeProps.match.params.id);
+                return <MovieList genreId={genreId} />;
+              }}
+            />
+            ;
             <Redirect from="/" to="recent" />
           </Switch>
         </div>

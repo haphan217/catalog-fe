@@ -8,7 +8,6 @@ interface Props {
 
 export default function AddGenreModal({ editingGenre }: Props) {
   const [show, setShow] = useState(false);
-  const handleClose = () => setShow(false);
   const [genre, setGenre] = useState<Genre>({ title: editingGenre?.title || "" });
   const [invalidFields, setInvalidFields] = useState<string[]>([]);
 
@@ -54,7 +53,7 @@ export default function AddGenreModal({ editingGenre }: Props) {
     <>
       {renderButton()}
       {show && (
-        <Modal show={show} onHide={handleClose}>
+        <Modal show={show} onHide={onToggle}>
           <Modal.Header closeButton>
             <Modal.Title>{editingGenre ? "Edit" : "Add"} Genre</Modal.Title>
           </Modal.Header>

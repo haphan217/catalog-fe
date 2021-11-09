@@ -9,7 +9,6 @@ interface Props {
 
 export default function AddMovieModal({ genre, editingMovie }: Props) {
   const [show, setShow] = useState(false);
-  const handleClose = () => setShow(false);
   const [movie, setMovie] = useState<Movie>({
     title: editingMovie?.title || "",
     description: editingMovie?.description || "",
@@ -61,7 +60,7 @@ export default function AddMovieModal({ genre, editingMovie }: Props) {
     <>
       {renderButton()}
       {show && (
-        <Modal show={show} onHide={handleClose}>
+        <Modal show={show} onHide={onToggle}>
           <Modal.Header closeButton>
             <Modal.Title>{editingMovie ? "Edit" : "Add"} Movie</Modal.Title>
           </Modal.Header>

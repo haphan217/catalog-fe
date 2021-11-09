@@ -1,18 +1,22 @@
 import { Button, Modal, Icon, Form } from "@ahaui/react";
-import { title } from "process";
 import { useState } from "react";
 import { Movie } from "utils/Types";
 
-export default function AddMovieModal() {
+interface Props {
+  genre: string;
+}
+
+export default function AddMovieModal({ genre }: Props) {
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
-  const [movie, setMovie] = useState<Movie>({ title: "", description: "" });
+  const [movie, setMovie] = useState<Movie>({ title: "", description: "", genre });
   const [invalidFields, setInvalidFields] = useState<string[]>([]);
 
   const onSubmit = () => {
     if (movie.title && movie.description) {
+      setMovie({ title: "", description: "", genre });
       setShow(false);
-      console.log(invalidFields);
+      console.log(movie);
       return;
     }
     if (!movie.title && !invalidFields.includes("title")) {
@@ -25,7 +29,7 @@ export default function AddMovieModal() {
 
   const onToggle = () => {
     if (show) {
-      setMovie({ title: "", description: "" });
+      setMovie({ title: "", description: "", genre });
       setInvalidFields([]);
     }
     setShow(!show);

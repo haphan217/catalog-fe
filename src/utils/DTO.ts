@@ -14,4 +14,10 @@ export type MovieDTO = {
   id?: number;
   title: string;
   description: string;
+  genre: string;
+};
+
+export type GenreDTO = {
+  id?: number;
+  title: string;
 };

@@ -16,7 +16,7 @@ export default function MovieList() {
   return (
     <div className="u-sizeFull md:u-size8of10">
       <h3>Movie List</h3>
-      <AddMovieModal />
+      <AddMovieModal genre="genre 1" />
       <div className="u-flex u-flexWrap u-marginTopSmall">
         {[1, 2, 3, 4].map((movie) => (
           <MovieCard key={movie} />

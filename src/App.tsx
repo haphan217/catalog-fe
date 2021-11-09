@@ -1,10 +1,12 @@
+import { useState } from "react";
 import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
 import BackToTop from "components/layout/BackToTop";
 import HomePage from "view/HomePage";
 import MovieDetails from "view/MovieDetails";
 import TopNav from "components/layout/TopNav";
 import Login from "view/LoginPage";
-import { useState } from "react";
+import Signup from "view/Signup";
+
 function App() {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   return (
@@ -25,6 +27,9 @@ function App() {
           />
           <Route path="/login">
             <Login />
+          </Route>
+          <Route path="/signup">
+            <Signup />
           </Route>
           <Redirect from="*" to="/genres/recent" />
         </Switch>

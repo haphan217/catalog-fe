@@ -36,7 +36,7 @@ export default function MovieList({ genreId }: Props) {
     <div className="u-sizeFull md:u-size8of10">
       {genre.title && (
         <div className="u-flex u-justifyContentBetween u-marginRightMedium">
-          <h3>{genre.title} movies</h3>
+          <h3 className="u-marginLeftSmall">{genre.title} movies</h3>
           <Dropdown alignRight>
             <Dropdown.Toggle className="u-textLight u-lineHeightNone">
               <Icon name="more" size="medium" />
@@ -52,7 +52,9 @@ export default function MovieList({ genreId }: Props) {
           </Dropdown>
         </div>
       )}
-      <AddMovieModal genre="genre 1" />
+      <div className="u-marginLeftSmall">
+        <AddMovieModal genre="genre 1" />
+      </div>
       <div className="u-flex u-flexWrap u-marginTopSmall">
         {[1, 2, 3, 4].map((movie) => (
           <MovieCard key={movie} movieId={movie} />

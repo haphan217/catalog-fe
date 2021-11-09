@@ -37,10 +37,7 @@ export default function AddGenreModal({ editingGenre }: Props) {
   };
 
   const renderButton = () => {
-    if (editingGenre)
-      return (
-        <Icon name="edit" role="button" className="u-marginHorizontalSmall hover:u-textPrimary" onClick={onToggle} />
-      );
+    if (editingGenre) return <span onClick={onToggle}>Edit genre</span>;
     else
       return (
         <Button variant="primary" className="u-textTransformNone u-marginLeftSmall" onClick={onToggle}>

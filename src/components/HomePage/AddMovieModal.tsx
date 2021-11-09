@@ -44,10 +44,7 @@ export default function AddMovieModal({ genre, editingMovie }: Props) {
   };
 
   const renderButton = () => {
-    if (editingMovie)
-      return (
-        <Icon name="edit" role="button" className="u-marginHorizontalTiny hover:u-textPrimary" onClick={onToggle} />
-      );
+    if (editingMovie) return <span onClick={onToggle}>Edit movie</span>;
     else
       return (
         <Button variant="primary" className="u-textTransformNone" onClick={onToggle}>

@@ -5,6 +5,7 @@ import { Genre } from "utils/Types";
 import AddGenreModal from "./AddGenreModal";
 import AddMovieModal from "./AddMovieModal";
 import MovieCard from "./MovieCard";
+import { Dropdown, Icon } from "@ahaui/react";
 
 interface Props {
   genreId: number;
@@ -34,10 +35,21 @@ export default function MovieList({ genreId }: Props) {
   return (
     <div className="u-sizeFull md:u-size8of10">
       {genre.title && (
-        <div className="u-flex u-alignItemsCenter u-marginBottomSmall">
-          <h3 style={{ marginBottom: 0 }}>{genre.title} movies</h3>
-          <AddGenreModal editingGenre={genre} />
-          <DeleteModal type="genre" item={genre} onDelete={onDelete} />
+        <div className="u-flex u-justifyContentBetween u-marginRightMedium">
+          <h3>{genre.title} movies</h3>
+          <Dropdown alignRight>
+            <Dropdown.Toggle className="u-textLight u-lineHeightNone">
+              <Icon name="more" size="medium" />
+            </Dropdown.Toggle>
+            <Dropdown.Container className="u-paddingVerticalExtraSmall">
+              <Dropdown.Item>
+                <AddGenreModal editingGenre={genre} />
+              </Dropdown.Item>
+              <Dropdown.Item>
+                <DeleteModal type="genre" item={genre} onDelete={onDelete} />
+              </Dropdown.Item>
+            </Dropdown.Container>
+          </Dropdown>
         </div>
       )}
       <AddMovieModal genre="genre 1" />

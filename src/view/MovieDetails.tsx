@@ -23,7 +23,7 @@ export default function MovieDetails({ movieId }: Props) {
     <div className="Container">
       {movie.title && (
         <div className="u-flex u-justifyContentBetween">
-          <h2 className="u-textUppercase">{movie.title}</h2>
+          <h1 className="u-textUppercase">{movie.title}</h1>
           <Dropdown alignRight>
             <Dropdown.Toggle className="u-textLight u-lineHeightNone">
               <Icon name="more" size="medium" />

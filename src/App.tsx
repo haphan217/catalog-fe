@@ -3,6 +3,7 @@ import BackToTop from "components/layout/BackToTop";
 import HomePage from "view/HomePage";
 import MovieDetails from "view/MovieDetails";
 import TopNav from "components/layout/TopNav";
+import Login from "view/LoginPage";
 import { useState } from "react";
 function App() {
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -22,6 +23,9 @@ function App() {
               return <MovieDetails movieId={movieId} />;
             }}
           />
+          <Route path="/login">
+            <Login />
+          </Route>
           <Redirect from="*" to="/genres/recent" />
         </Switch>
       </BrowserRouter>

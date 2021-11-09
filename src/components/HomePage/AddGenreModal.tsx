@@ -12,24 +12,23 @@ export default function AddGenreModal({ editingGenre }: Props) {
   const [genre, setGenre] = useState<Genre>({ title: editingGenre?.title || "" });
   const [invalidFields, setInvalidFields] = useState<string[]>([]);
 
-  const onSubmit = () => {
-    if (genre.title) {
-      setShow(false);
-      setGenre({ title: "" });
-      console.log(genre);
-      return;
-    }
-    if (!genre.title && !invalidFields.includes("title")) {
-      setInvalidFields((prev) => [...prev, "title"]);
-    }
-  };
-
   const onToggle = () => {
     if (show) {
       setGenre({ title: editingGenre?.title || "" });
       setInvalidFields([]);
     }
     setShow(!show);
+  };
+
+  const onSubmit = () => {
+    if (genre.title) {
+      onToggle();
+      console.log(genre);
+      return;
+    }
+    if (!genre.title && !invalidFields.includes("title")) {
+      setInvalidFields((prev) => [...prev, "title"]);
+    }
   };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {

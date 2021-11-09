@@ -4,19 +4,29 @@ import { Movie } from "utils/Types";
 
 interface Props {
   genre: string;
-  isEdit: boolean;
+  editingMovie?: Movie;
 }
 
-export default function AddMovieModal({ genre, isEdit }: Props) {
+export default function AddMovieModal({ genre, editingMovie }: Props) {
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
-  const [movie, setMovie] = useState<Movie>({ title: "", description: "", genre });
+  const [movie, setMovie] = useState<Movie>({
+    title: editingMovie?.title || "",
+    description: editingMovie?.description || "",
+    genre,
+  });
   const [invalidFields, setInvalidFields] = useState<string[]>([]);
 
+  const onToggle = () => {
+    if (show) {
+      setMovie({ title: editingMovie?.title || "", description: editingMovie?.description || "", genre });
+      setInvalidFields([]);
+    }
+    setShow(!show);
+  };
   const onSubmit = () => {
     if (movie.title && movie.description) {
-      setMovie({ title: "", description: "", genre });
-      setShow(false);
+      onToggle();
       console.log(movie);
       return;
     }
@@ -28,14 +38,6 @@ export default function AddMovieModal({ genre, isEdit }: Props) {
     }
   };
 
-  const onToggle = () => {
-    if (show) {
-      setMovie({ title: "", description: "", genre });
-      setInvalidFields([]);
-    }
-    setShow(!show);
-  };
-
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { id, value } = event.target;
     setInvalidFields(invalidFields.filter((field) => field !== id));
@@ -43,7 +45,10 @@ export default function AddMovieModal({ genre, isEdit }: Props) {
   };
 
   const renderButton = () => {
-    if (isEdit) return <Icon name="edit" role="button" className="u-marginHorizontalTiny hover:u-textPrimary" />;
+    if (editingMovie)
+      return (
+        <Icon name="edit" role="button" className="u-marginHorizontalTiny hover:u-textPrimary" onClick={onToggle} />
+      );
     else
       return (
         <Button variant="primary" className="u-textTransformNone" onClick={onToggle}>
@@ -58,7 +63,7 @@ export default function AddMovieModal({ genre, isEdit }: Props) {
       {show && (
         <Modal show={show} onHide={handleClose}>
           <Modal.Header closeButton>
-            <Modal.Title>Add Movie</Modal.Title>
+            <Modal.Title>{editingMovie ? "Edit" : "Add"} Movie</Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <Form.Group>
@@ -68,6 +73,7 @@ export default function AddMovieModal({ genre, isEdit }: Props) {
                 type="text"
                 id="title"
                 onChange={handleChange}
+                value={movie.title}
               ></Form.Input>
               <Form.Feedback type="invalid" visible={invalidFields.includes("title")}>
                 Movie title is required
@@ -81,6 +87,7 @@ export default function AddMovieModal({ genre, isEdit }: Props) {
                 rows={3}
                 id="description"
                 onChange={handleChange}
+                value={movie.description}
               ></Form.Input>
               <Form.Feedback type="invalid" visible={invalidFields.includes("description")}>
                 Movie description is required
@@ -92,7 +99,7 @@ export default function AddMovieModal({ genre, isEdit }: Props) {
               Cancel
             </Button>
             <Button variant="primary" onClick={onSubmit}>
-              Add
+              {editingMovie ? "Edit" : "Add"}
             </Button>
           </Modal.Footer>
         </Modal>

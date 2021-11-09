@@ -31,7 +31,7 @@ export default function MovieList({ genreId }: Props) {
         <h3 style={{ marginBottom: 0 }}>{genre.title} movies</h3>
         {genre.title && <AddGenreModal editingGenre={genre} />}
       </div>
-      <AddMovieModal genre="genre 1" isEdit={false} />
+      <AddMovieModal genre="genre 1" />
       <div className="u-flex u-flexWrap u-marginTopSmall">
         {[1, 2, 3, 4].map((movie) => (
           <MovieCard key={movie} />

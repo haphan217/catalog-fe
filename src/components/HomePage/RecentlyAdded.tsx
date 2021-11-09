@@ -1,6 +1,19 @@
-import { Card } from "@ahaui/react";
+import { Card, Button, EmptyState } from "@ahaui/react";
 import { useHistory } from "react-router-dom";
+import AddGenreModal from "./AddGenreModal";
 import MovieCard from "./MovieCard";
+
+const BlankPage = () => {
+  return (
+    <div className="u-flex u-justifyContentCenter u-marginTopLarge">
+      <EmptyState src="https://raw.githubusercontent.com/gotitinc/aha-assets/master/gotit/emptyState/general.svg">
+        <EmptyState.Description>You have not created any genres.</EmptyState.Description>
+        <EmptyState.Heading className="u-marginBottomSmall">Start creating one!</EmptyState.Heading>
+        <AddGenreModal />
+      </EmptyState>
+    </div>
+  );
+};
 
 export default function RecentlyAdded() {
   const history = useHistory();

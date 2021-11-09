@@ -7,7 +7,7 @@ interface Props {
 
 export default function TopNav({ isOpen, setIsOpen }: Props) {
   return (
-    <Header>
+    <Header className=" u-backgroundPrimaryLighter u-marginBottomSmall">
       <Header.Left className="md:u-hidden">
         <Icon
           className={isOpen ? "u-textPrimary" : ""}
@@ -18,7 +18,7 @@ export default function TopNav({ isOpen, setIsOpen }: Props) {
         />
       </Header.Left>
       <Header.Right>
-        <Avatar className="u-backgroundPrimaryLight u-text200" text="AB" />
+        <Avatar className="u-backgroundPrimary u-text200" text="AB" />
       </Header.Right>
     </Header>
   );

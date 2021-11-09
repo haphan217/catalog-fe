@@ -43,7 +43,7 @@ export default function MovieList({ genreId }: Props) {
       <AddMovieModal genre="genre 1" />
       <div className="u-flex u-flexWrap u-marginTopSmall">
         {[1, 2, 3, 4].map((movie) => (
-          <MovieCard key={movie} />
+          <MovieCard key={movie} movieId={movie} />
         ))}
       </div>
       {totalPage > 1 && (

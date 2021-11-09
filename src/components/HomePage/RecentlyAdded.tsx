@@ -1,7 +1,5 @@
 import MovieCard from "./MovieCard";
 import { Card } from "@ahaui/react";
-import AddGenreModal from "./AddGenreModal";
-import AddMovieModal from "./AddMovieModal";
 
 export default function RecentlyAdded() {
   return (
@@ -10,7 +8,7 @@ export default function RecentlyAdded() {
       <h5 className="u-marginRightSmall">Genres</h5>
       <div className="u-flex u-flexWrap">
         {[1, 2, 3, 4].map((genre) => (
-          <Card size="small" key={genre} body className="u-marginHorizontalSmall">
+          <Card size="small" key={genre} body className="u-marginHorizontalSmall u-shadowSmall">
             Genre {genre}
           </Card>
         ))}
@@ -19,7 +17,7 @@ export default function RecentlyAdded() {
 
       <div className="u-flex u-flexWrap">
         {[1, 2, 3, 4].map((movie) => (
-          <MovieCard key={movie} />
+          <MovieCard key={movie} movieId={movie} />
         ))}
       </div>
     </div>

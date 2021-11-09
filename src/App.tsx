@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
 import BackToTop from "components/layout/BackToTop";
+import TopNav from "components/layout/TopNav";
 import HomePage from "view/HomePage";
 import MovieDetails from "view/MovieDetails";
-import TopNav from "components/layout/TopNav";
 import Login from "view/LoginPage";
 import Signup from "view/Signup";
 

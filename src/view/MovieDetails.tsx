@@ -1,9 +1,9 @@
-import AddMovieModal from "components/HomePage/AddMovieModal";
 import { useState, useEffect } from "react";
-import { Movie } from "utils/Types";
-import DeleteModal from "components/common/DeleteModal";
-import { Dropdown, Icon } from "@ahaui/react";
 import { Link } from "react-router-dom";
+import { Dropdown, Icon } from "@ahaui/react";
+import { Movie } from "utils/Types";
+import AddMovieModal from "components/HomePage/AddMovieModal";
+import DeleteModal from "components/common/DeleteModal";
 interface Props {
   movieId: number;
 }

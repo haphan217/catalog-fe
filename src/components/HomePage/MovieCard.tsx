@@ -1,5 +1,5 @@
+import { useHistory } from "react-router-dom";
 import { Card } from "@ahaui/react";
-import { Link, useHistory } from "react-router-dom";
 
 export default function MovieCard({ movieId }: { movieId: number }) {
   const history = useHistory();

@@ -1,6 +1,6 @@
-import { Card, Form, Button, Icon } from "@ahaui/react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { Card, Form, Button, Icon } from "@ahaui/react";
 
 type RegForm = {
   username: string;

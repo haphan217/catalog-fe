@@ -1,8 +1,8 @@
+import { Redirect, Route, Switch, useRouteMatch } from "react-router-dom";
+import { PageLayout } from "@ahaui/react";
 import GenresList from "components/HomePage/GenresList";
 import MovieList from "components/HomePage/MovieList";
 import RecentlyAdded from "components/HomePage/RecentlyAdded";
-import { Redirect, Route, Switch, useRouteMatch } from "react-router-dom";
-import { PageLayout } from "@ahaui/react";
 
 interface Props {
   isOpen: boolean;

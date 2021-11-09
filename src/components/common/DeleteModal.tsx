@@ -1,5 +1,5 @@
-import { Modal, Button, Icon } from "@ahaui/react";
 import { useState } from "react";
+import { Modal, Button } from "@ahaui/react";
 import { Genre, Movie } from "utils/Types";
 
 interface Props {

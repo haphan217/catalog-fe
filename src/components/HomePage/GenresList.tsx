@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { SidebarMenu } from "@ahaui/react";
 import { useHistory } from "react-router-dom";
+import { SidebarMenu } from "@ahaui/react";
 import AddGenreModal from "components/HomePage/AddGenreModal";
 interface Props {
   isOpen: boolean;

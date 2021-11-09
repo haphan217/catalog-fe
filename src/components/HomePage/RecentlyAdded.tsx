@@ -1,6 +1,6 @@
-import MovieCard from "./MovieCard";
 import { Card } from "@ahaui/react";
 import { useHistory } from "react-router-dom";
+import MovieCard from "./MovieCard";
 
 export default function RecentlyAdded() {
   const history = useHistory();

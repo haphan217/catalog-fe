@@ -1,13 +1,12 @@
 import { useLocation } from "react-router-dom";
-import React from "react";
-
+import { useEffect } from "react";
 interface Props {
   mainContent: React.RefObject<HTMLDivElement>;
 }
 
 const ScrollToTop = ({ mainContent }: Props) => {
   const location = useLocation();
-  React.useEffect(() => {
+  useEffect(() => {
     document.documentElement.scrollTop = 0;
     if (document.scrollingElement) {
       document.scrollingElement.scrollTop = 0;

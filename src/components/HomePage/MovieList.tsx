@@ -1,11 +1,11 @@
+import { useEffect, useState } from "react";
+import { Dropdown, Icon } from "@ahaui/react";
+import { Genre } from "utils/Types";
 import DeleteModal from "components/common/DeleteModal";
 import PaginationCustom from "components/common/CustomPagination";
-import { useEffect, useState } from "react";
-import { Genre } from "utils/Types";
 import AddGenreModal from "./AddGenreModal";
 import AddMovieModal from "./AddMovieModal";
 import MovieCard from "./MovieCard";
-import { Dropdown, Icon } from "@ahaui/react";
 
 interface Props {
   genreId: number;

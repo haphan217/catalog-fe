@@ -3,7 +3,7 @@ import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
 import BackToTop from "components/layout/BackToTop";
 import TopNav from "components/layout/TopNav";
 import HomePage from "view/HomePage";
-import MovieDetails from "view/MovieDetails";
+import ItemDetails from "view/ItemDetails";
 import Login from "view/LoginPage";
 import Signup from "view/Signup";
 
@@ -15,14 +15,14 @@ function App() {
         <BackToTop />
         <TopNav isOpen={isOpen} setIsOpen={setIsOpen} />
         <Switch>
-          <Route path="/genres">
+          <Route path="/category">
             <HomePage isOpen={isOpen} />
           </Route>
           <Route
-            path="/movie/:id"
+            path="/item/:id"
             render={(routeProps) => {
-              const movieId = parseInt(routeProps.match.params.id);
-              return <MovieDetails movieId={movieId} />;
+              const itemId = parseInt(routeProps.match.params.id);
+              return <ItemDetails itemId={itemId} />;
             }}
           />
           <Route path="/login">
@@ -31,7 +31,7 @@ function App() {
           <Route path="/signup">
             <Signup />
           </Route>
-          <Redirect from="*" to="/genres/recent" />
+          <Redirect from="*" to="/category/recent" />
         </Switch>
       </BrowserRouter>
     </div>

@@ -1,23 +1,22 @@
 import { useHistory } from "react-router-dom";
 import { Card } from "@ahaui/react";
 
-export default function MovieCard({ movieId }: { movieId: number }) {
+export default function ItemCard({ itemId }: { itemId: number }) {
   const history = useHistory();
-  const toMovieDetails = () => {
-    history.push(`/movie/${movieId}`);
+  const toItemDetails = () => {
+    history.push(`/item/${itemId}`);
   };
   return (
     <Card
       style={{ width: 300 }}
       size="medium"
       className="u-marginHorizontalSmall u-shadowMedium hover:u-shadowLarge"
-      onClick={toMovieDetails}
+      onClick={toItemDetails}
       role="button"
     >
-      <img className="u-widthFull" src="/logo192.png" alt="" />
       <Card.Body>
-        <h3>Movie title</h3>
-        <p>Movie description</p>
+        <h3>Item name</h3>
+        <p>Item description</p>
       </Card.Body>
     </Card>
   );

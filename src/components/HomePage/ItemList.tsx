@@ -1,22 +1,23 @@
 import { useEffect, useState } from "react";
 import { Dropdown, Icon } from "@ahaui/react";
-import { Genre } from "utils/Types";
+import { Category, Item } from "utils/Types";
 import DeleteModal from "components/common/DeleteModal";
 import PaginationCustom from "components/common/CustomPagination";
-import AddGenreModal from "./AddGenreModal";
-import AddMovieModal from "./AddMovieModal";
-import MovieCard from "./MovieCard";
+import AddCategoryModal from "./AddCategoryModal";
+import AddItemModal from "./AddItemModal";
+import ItemCard from "./ItemCard";
 
 interface Props {
-  genreId: number;
+  categoryId: number;
 }
 
-export default function MovieList({ genreId }: Props) {
+export default function ItemList({ categoryId }: Props) {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [totalPage, setTotalPage] = useState<number>(10);
 
-  const [genre, setGenre] = useState<Genre>({ title: "" });
+  const [category, setCategory] = useState<Category>();
+  const [itemList, setItemList] = useState<Item[]>([]);
 
   const onPageChange = (page: number) => {
     setCurrentPage(page);
@@ -24,40 +25,40 @@ export default function MovieList({ genreId }: Props) {
   };
 
   useEffect(() => {
-    //getMovieByGenreId, getGenreDetails here
-    setGenre({ title: "comedy" });
+    //getItemByCategoryId, getCategoryDetails here
+    setCategory({ name: "comedy" });
   }, []);
 
   const onDelete = () => {
-    console.log(genre.title);
+    console.log(category?.name);
   };
 
   return (
     <div className="u-sizeFull md:u-size8of10">
-      {genre.title && (
+      {category && (
         <div className="u-flex u-justifyContentBetween u-marginRightMedium">
-          <h3 className="u-marginLeftSmall">{genre.title} movies</h3>
+          <h3 className="u-marginLeftSmall">{category.name} items</h3>
           <Dropdown alignRight>
             <Dropdown.Toggle className="u-textLight u-lineHeightNone">
               <Icon name="more" size="medium" />
             </Dropdown.Toggle>
             <Dropdown.Container className="u-paddingVerticalExtraSmall">
               <Dropdown.Item>
-                <AddGenreModal editingGenre={genre} />
+                <AddCategoryModal editingCategory={category} />
               </Dropdown.Item>
               <Dropdown.Item>
-                <DeleteModal type="genre" item={genre} onDelete={onDelete} />
+                <DeleteModal type="category" item={category} onDelete={onDelete} />
               </Dropdown.Item>
             </Dropdown.Container>
           </Dropdown>
         </div>
       )}
       <div className="u-marginLeftSmall">
-        <AddMovieModal genre="genre 1" />
+        <AddItemModal categoryId={categoryId} />
       </div>
       <div className="u-flex u-flexWrap u-marginTopSmall">
-        {[1, 2, 3, 4].map((movie) => (
-          <MovieCard key={movie} movieId={movie} />
+        {[1, 2, 3, 4].map((item) => (
+          <ItemCard key={item} itemId={item} />
         ))}
       </div>
       {totalPage > 1 && (

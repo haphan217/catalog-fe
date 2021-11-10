@@ -1,47 +1,47 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button, Modal, Icon, Form } from "@ahaui/react";
-import { Genre } from "utils/Types";
+import { Category } from "utils/Types";
 
 interface Props {
-  editingGenre?: Genre;
+  editingCategory?: Category;
 }
 
-export default function AddGenreModal({ editingGenre }: Props) {
+export default function AddCategoryModal({ editingCategory }: Props) {
   const [show, setShow] = useState(false);
-  const [genre, setGenre] = useState<Genre>({ title: editingGenre?.title || "" });
+  const [category, setCategory] = useState<Category>({ name: editingCategory ? editingCategory.name : "" });
   const [invalidFields, setInvalidFields] = useState<string[]>([]);
 
   const onToggle = () => {
     if (show) {
-      setGenre({ title: editingGenre?.title || "" });
+      setCategory({ name: editingCategory ? editingCategory.name : "" });
       setInvalidFields([]);
     }
     setShow(!show);
   };
 
   const onSubmit = () => {
-    if (genre.title) {
+    if (category.name) {
       onToggle();
-      console.log(genre);
+      console.log(category);
       return;
     }
-    if (!genre.title && !invalidFields.includes("title")) {
-      setInvalidFields((prev) => [...prev, "title"]);
+    if (!category.name && !invalidFields.includes("name")) {
+      setInvalidFields((prev) => [...prev, "name"]);
     }
   };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { id, value } = event.target;
     setInvalidFields(invalidFields.filter((field) => field !== id));
-    setGenre({ ...genre, [id]: value });
+    setCategory({ ...category, [id]: value });
   };
 
   const renderButton = () => {
-    if (editingGenre) return <span onClick={onToggle}>Edit genre</span>;
+    if (editingCategory) return <span onClick={onToggle}>Edit category</span>;
     else
       return (
         <Button variant="primary" className="u-textTransformNone u-marginLeftSmall" onClick={onToggle}>
-          <Icon name="plus" role="button" className="u-marginRightTiny" /> Genre
+          <Icon name="plus" role="button" className="u-marginRightTiny" /> Category
         </Button>
       );
   };
@@ -52,20 +52,20 @@ export default function AddGenreModal({ editingGenre }: Props) {
       {show && (
         <Modal show={show} onHide={onToggle}>
           <Modal.Header closeButton>
-            <Modal.Title>{editingGenre ? "Edit" : "Add"} Genre</Modal.Title>
+            <Modal.Title>{editingCategory ? "Edit" : "Add"} Category</Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <Form.Group>
-              <Form.Label>Genre title</Form.Label>
+              <Form.Label>Category name</Form.Label>
               <Form.Input
-                isInvalid={invalidFields.includes("title")}
+                isInvalid={invalidFields.includes("name")}
                 type="text"
-                id="title"
+                id="name"
                 onChange={handleChange}
-                value={genre.title}
+                value={category.name}
               ></Form.Input>
-              <Form.Feedback type="invalid" visible={invalidFields.includes("title")}>
-                Genre title is required
+              <Form.Feedback type="invalid" visible={invalidFields.includes("name")}>
+                Category name is required
               </Form.Feedback>
             </Form.Group>
           </Modal.Body>
@@ -74,7 +74,7 @@ export default function AddGenreModal({ editingGenre }: Props) {
               Cancel
             </Button>
             <Button variant="primary" onClick={onSubmit}>
-              {editingGenre ? "Edit" : "Add"}
+              {editingCategory ? "Edit" : "Add"}
             </Button>
           </Modal.Footer>
         </Modal>

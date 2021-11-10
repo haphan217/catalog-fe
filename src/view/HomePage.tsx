@@ -1,7 +1,7 @@
 import { Redirect, Route, Switch, useRouteMatch } from "react-router-dom";
 import { PageLayout } from "@ahaui/react";
-import GenresList from "components/HomePage/GenresList";
-import MovieList from "components/HomePage/MovieList";
+import CategoryList from "components/HomePage/CategoryList";
+import ItemList from "components/HomePage/ItemList";
 import RecentlyAdded from "components/HomePage/RecentlyAdded";
 
 interface Props {
@@ -14,7 +14,7 @@ export default function HomePage({ isOpen }: Props) {
     <PageLayout>
       <PageLayout.Body className="u-flexColumn">
         <div className="Grid">
-          <GenresList isOpen={isOpen} />
+          <CategoryList isOpen={isOpen} />
           <Switch>
             <Route path={`${path}/recent`}>
               <RecentlyAdded />
@@ -22,8 +22,8 @@ export default function HomePage({ isOpen }: Props) {
             <Route
               path={`${path}/:id`}
               render={(routeProps) => {
-                const genreId = parseInt(routeProps.match.params.id);
-                return <MovieList genreId={genreId} />;
+                const categoryId = parseInt(routeProps.match.params.id);
+                return <ItemList categoryId={categoryId} />;
               }}
             />
             ;

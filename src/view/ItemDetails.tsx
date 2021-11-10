@@ -1,55 +1,55 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Dropdown, Icon } from "@ahaui/react";
-import { Movie } from "utils/Types";
-import AddMovieModal from "components/HomePage/AddMovieModal";
+import { Item } from "utils/Types";
+import AddItemModal from "components/HomePage/AddItemModal";
 import DeleteModal from "components/common/DeleteModal";
 interface Props {
-  movieId: number;
+  itemId: number;
 }
 
-export default function MovieDetails({ movieId }: Props) {
-  const [movie, setMovie] = useState<Movie>({ genre: "", description: "", title: "" });
+export default function ItemDetails({ itemId }: Props) {
+  const [item, setItem] = useState<Item>();
 
   useEffect(() => {
-    //getMovieById here
-    console.log(movieId);
-    setMovie({ genre: "comedy", description: "Awesome movie with awesome description", title: "Awesome movie" });
+    //getItemById here
+    console.log(itemId);
+    setItem({ categoryId: 1, description: "Awesome item with awesome description", name: "Awesome item" });
   }, []);
   const onDelete = () => {
-    console.log(movie.title);
+    console.log(item?.name);
   };
   return (
     <div className="Container">
-      {movie.title && (
+      {item && (
         <div className="u-flex u-justifyContentBetween">
-          <h1 className="u-textUppercase">{movie.title}</h1>
+          <h1 className="u-textUppercase">{item.name}</h1>
           <Dropdown alignRight>
             <Dropdown.Toggle className="u-textLight u-lineHeightNone">
               <Icon name="more" size="medium" />
             </Dropdown.Toggle>
             <Dropdown.Container className="u-paddingVerticalExtraSmall">
               <Dropdown.Item>
-                <AddMovieModal genre={movie.genre} editingMovie={movie} />
+                <AddItemModal categoryId={item.categoryId || 0} editingItem={item} />
               </Dropdown.Item>
               <Dropdown.Item>
-                <DeleteModal type="movie" item={movie} onDelete={onDelete} />
+                <DeleteModal type="item" item={item} onDelete={onDelete} />
               </Dropdown.Item>
             </Dropdown.Container>
           </Dropdown>
         </div>
       )}
       <p>
-        <span className="u-fontBold">Genre &nbsp;</span>
+        <span className="u-fontBold">Category &nbsp;</span>
         <Link
           className="u-textCapitalize u-textDark hover:u-textPrimary"
           style={{ textDecoration: "none" }}
-          to={`/genres/1`}
+          to={`/category/1`}
         >
-          {movie.genre}
+          {item?.categoryId}
         </Link>
       </p>
-      <p>{movie.description}</p>
+      <p>{item?.description}</p>
     </div>
   );
 }

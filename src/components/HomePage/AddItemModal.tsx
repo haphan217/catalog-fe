@@ -1,38 +1,37 @@
 import { useState } from "react";
 import { Button, Modal, Icon, Form } from "@ahaui/react";
-import { Movie } from "utils/Types";
+import { Item } from "utils/Types";
 
 interface Props {
-  genre: string;
-  editingMovie?: Movie;
+  editingItem?: Item;
+  categoryId: number;
 }
 
-export default function AddMovieModal({ genre, editingMovie }: Props) {
+export default function AddItemModal({ editingItem, categoryId }: Props) {
   const [show, setShow] = useState(false);
-  const [movie, setMovie] = useState<Movie>({
-    title: editingMovie?.title || "",
-    description: editingMovie?.description || "",
-    genre,
+  const [item, setItem] = useState<Item>({
+    name: editingItem?.name || "",
+    description: editingItem?.description || "",
   });
   const [invalidFields, setInvalidFields] = useState<string[]>([]);
 
   const onToggle = () => {
     if (show) {
-      setMovie({ title: editingMovie?.title || "", description: editingMovie?.description || "", genre });
+      setItem({ name: editingItem?.name || "", description: editingItem?.description || "" });
       setInvalidFields([]);
     }
     setShow(!show);
   };
   const onSubmit = () => {
-    if (movie.title && movie.description) {
+    if (item.name && item.description) {
       onToggle();
-      console.log(movie);
+      console.log(item);
       return;
     }
-    if (!movie.title && !invalidFields.includes("title")) {
-      setInvalidFields((prev) => [...prev, "title"]);
+    if (!item.name && !invalidFields.includes("name")) {
+      setInvalidFields((prev) => [...prev, "name"]);
     }
-    if (!movie.description && !invalidFields.includes("description")) {
+    if (!item.description && !invalidFields.includes("description")) {
       setInvalidFields((prev) => [...prev, "description"]);
     }
   };
@@ -40,15 +39,15 @@ export default function AddMovieModal({ genre, editingMovie }: Props) {
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { id, value } = event.target;
     setInvalidFields(invalidFields.filter((field) => field !== id));
-    setMovie({ ...movie, [id]: value });
+    setItem({ ...item, [id]: value });
   };
 
   const renderButton = () => {
-    if (editingMovie) return <span onClick={onToggle}>Edit movie</span>;
+    if (editingItem) return <span onClick={onToggle}>Edit item</span>;
     else
       return (
         <Button variant="primary" className="u-textTransformNone" onClick={onToggle}>
-          <Icon name="plus" role="button" className="u-marginRightTiny" /> Movie
+          <Icon name="plus" role="button" className="u-marginRightTiny" /> Item
         </Button>
       );
   };
@@ -59,34 +58,34 @@ export default function AddMovieModal({ genre, editingMovie }: Props) {
       {show && (
         <Modal show={show} onHide={onToggle}>
           <Modal.Header closeButton>
-            <Modal.Title>{editingMovie ? "Edit" : "Add"} Movie</Modal.Title>
+            <Modal.Title>{editingItem ? "Edit" : "Add"} Item</Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <Form.Group>
-              <Form.Label>Movie title</Form.Label>
+              <Form.Label>Item name</Form.Label>
               <Form.Input
-                isInvalid={invalidFields.includes("title")}
+                isInvalid={invalidFields.includes("name")}
                 type="text"
-                id="title"
+                id="name"
                 onChange={handleChange}
-                value={movie.title}
+                value={item.name}
               ></Form.Input>
-              <Form.Feedback type="invalid" visible={invalidFields.includes("title")}>
-                Movie title is required
+              <Form.Feedback type="invalid" visible={invalidFields.includes("name")}>
+                Item name is required
               </Form.Feedback>
             </Form.Group>
             <Form.Group>
-              <Form.Label>Movie description</Form.Label>
+              <Form.Label>Item description</Form.Label>
               <Form.Input
                 isInvalid={invalidFields.includes("description")}
                 as="textarea"
                 rows={3}
                 id="description"
                 onChange={handleChange}
-                value={movie.description}
+                value={item.description}
               ></Form.Input>
               <Form.Feedback type="invalid" visible={invalidFields.includes("description")}>
-                Movie description is required
+                Item description is required
               </Form.Feedback>
             </Form.Group>
           </Modal.Body>
@@ -95,7 +94,7 @@ export default function AddMovieModal({ genre, editingMovie }: Props) {
               Cancel
             </Button>
             <Button variant="primary" onClick={onSubmit}>
-              {editingMovie ? "Edit" : "Add"}
+              {editingItem ? "Edit" : "Add"}
             </Button>
           </Modal.Footer>
         </Modal>

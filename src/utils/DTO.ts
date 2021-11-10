@@ -10,14 +10,20 @@ export type KeysToCamelCase<T> = {
   [K in keyof T as CamelCase<string & K>]: T[K] extends Dictionary<T> ? KeysToCamelCase<T[K]> : T[K];
 };
 
-export type MovieDTO = {
+export type ItemDTO = {
   id?: number;
-  title: string;
+  name: string;
   description: string;
-  genre: string;
+  category_id?: number;
+  created_at?: string;
+  updated_at?: string;
+  author_id?: number;
 };
 
-export type GenreDTO = {
+export type CategoryDTO = {
   id?: number;
-  title: string;
+  name: string;
+  author_id?: number;
+  created_at?: string;
+  updated_at?: string;
 };

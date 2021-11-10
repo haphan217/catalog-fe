@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { Modal, Button } from "@ahaui/react";
-import { Genre, Movie } from "utils/Types";
+import { Category, Item } from "utils/Types";
 
 interface Props {
   type: string;
-  item: Movie | Genre;
+  item: Category | Item;
   onDelete: () => void;
 }
 
@@ -29,7 +29,7 @@ export default function DeleteModal({ type, item, onDelete }: Props) {
           </Modal.Header>
           <Modal.Body>
             <p>
-              Are you sure you want to delete {type} {item.title}?
+              Are you sure you want to delete {type} {item.name}?
             </p>
           </Modal.Body>
           <Modal.Footer>

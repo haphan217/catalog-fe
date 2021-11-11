@@ -21,7 +21,9 @@ export default function DeleteModal({ type, item, onDelete }: Props) {
   };
   return (
     <>
-      <span onClick={onToggle}>Delete {type}</span>
+      <span className="u-widthFull" onClick={onToggle}>
+        Delete {type}
+      </span>
       {show && (
         <Modal size="small" show={show} onHide={onToggle}>
           <Modal.Header closeButton>

@@ -43,7 +43,12 @@ export default function AddItemModal({ editingItem, categoryId }: Props) {
   };
 
   const renderButton = () => {
-    if (editingItem) return <span onClick={onToggle}>Edit item</span>;
+    if (editingItem)
+      return (
+        <span className="u-widthFull" onClick={onToggle}>
+          Edit item
+        </span>
+      );
     else
       return (
         <Button variant="primary" className="u-textTransformNone" onClick={onToggle}>

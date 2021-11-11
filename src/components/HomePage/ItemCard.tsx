@@ -10,7 +10,7 @@ export default function ItemCard({ itemId }: { itemId: number }) {
     <Card
       style={{ width: 300 }}
       size="medium"
-      className="u-marginHorizontalSmall u-shadowMedium hover:u-shadowLarge"
+      className="u-marginHorizontalSmall u-shadowSmall hover:u-shadowMedium"
       onClick={toItemDetails}
       role="button"
     >

@@ -1,8 +1,8 @@
-import { Redirect, Route, Switch, useRouteMatch } from "react-router-dom";
+import { Route, Switch, useRouteMatch, useLocation, useHistory } from "react-router-dom";
 import { PageLayout } from "@ahaui/react";
 import CategoryList from "components/HomePage/CategoryList";
 import ItemList from "components/HomePage/ItemList";
-import RecentlyAdded from "components/HomePage/RecentlyAdded";
+import { useEffect } from "react";
 
 interface Props {
   isOpen: boolean;
@@ -10,15 +10,20 @@ interface Props {
 
 export default function HomePage({ isOpen }: Props) {
   const { path } = useRouteMatch();
+  const location = useLocation();
+  const history = useHistory();
+  useEffect(() => {
+    if (!location.pathname.split("/")[2]) {
+      history.push("category/1");
+    }
+  }, []);
+
   return (
     <PageLayout>
       <PageLayout.Body className="u-flexColumn">
         <div className="Grid">
           <CategoryList isOpen={isOpen} />
           <Switch>
-            <Route path={`${path}/recent`}>
-              <RecentlyAdded />
-            </Route>
             <Route
               path={`${path}/:id`}
               render={(routeProps) => {
@@ -26,8 +31,6 @@ export default function HomePage({ isOpen }: Props) {
                 return <ItemList categoryId={categoryId} />;
               }}
             />
-            ;
-            <Redirect from="/" to="recent" />
           </Switch>
         </div>
       </PageLayout.Body>

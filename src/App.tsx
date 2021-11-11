@@ -31,7 +31,7 @@ function App() {
           <Route path="/signup">
             <Signup />
           </Route>
-          <Redirect from="*" to="/category/recent" />
+          <Redirect from="*" to="/category" />
         </Switch>
       </BrowserRouter>
     </div>

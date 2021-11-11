@@ -9,6 +9,7 @@ interface Props {
 export default function CategoryList({ isOpen }: Props) {
   const history = useHistory();
   const [selectedCategory, setSelectedCategory] = useState<string>(history.location.pathname.split("/")[2]);
+
   const onSelectCategory = (id: string) => {
     setSelectedCategory(id);
     history.push(id);
@@ -22,7 +23,6 @@ export default function CategoryList({ isOpen }: Props) {
     <div className={`Collapse ${isOpen ? "Show " : ""}sidenav u-sizeFull md:u-size2of10`}>
       <AddCategoryModal />
       <SidebarMenu size="small" current={selectedCategory} onSelect={onSelectCategory}>
-        <SidebarMenu.Item eventKey="recent">Recently added</SidebarMenu.Item>
         {[1, 2, 3, 4, 5].map((i) => (
           <SidebarMenu.Item key={i} eventKey={i}>
             Category {i}

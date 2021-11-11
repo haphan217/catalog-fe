@@ -37,7 +37,12 @@ export default function AddCategoryModal({ editingCategory }: Props) {
   };
 
   const renderButton = () => {
-    if (editingCategory) return <span onClick={onToggle}>Edit category</span>;
+    if (editingCategory)
+      return (
+        <span className="u-widthFull" onClick={onToggle}>
+          Edit category
+        </span>
+      );
     else
       return (
         <Button variant="primary" className="u-textTransformNone u-marginLeftSmall" onClick={onToggle}>

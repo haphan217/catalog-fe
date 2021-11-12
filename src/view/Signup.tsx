@@ -4,12 +4,12 @@ import { Card, Form, Button, Icon } from "@ahaui/react";
 import { useAppDispatch } from "store/store";
 import { useSelector } from "react-redux";
 import { registerUser, selectUser } from "store/slices/userSlice";
-import { LoginForm } from "utils/Types";
+import { SignupForm } from "utils/Types";
 
 export default function SignupPage() {
   const dispatch = useAppDispatch();
   const profile = useSelector(selectUser);
-  const [regForm, setRegForm] = useState<LoginForm>({ username: "", password: "", email: "" });
+  const [regForm, setRegForm] = useState<SignupForm>({ username: "", password: "", email: "" });
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { id, value } = event.target;

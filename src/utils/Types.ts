@@ -7,7 +7,12 @@ export interface Dictionary<T> {
 export type LoginForm = {
   username: string;
   password: string;
-  email?: string;
+};
+
+export type SignupForm = {
+  email: string;
+  username: string;
+  password: string;
 };
 
 export type Item = KeysToCamelCase<ItemDTO>;

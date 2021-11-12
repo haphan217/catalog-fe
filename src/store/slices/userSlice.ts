@@ -1,9 +1,9 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { User, LoginForm } from "utils/Types";
+import { User, LoginForm, SignupForm } from "utils/Types";
 import { login, register } from "services/AuthService";
 import { RootState } from "store/rootReducer";
 
-type SliceState = { isAuthenticated: boolean; loading: boolean; user: User; errorMessage: string };
+export type SliceState = { isAuthenticated: boolean; loading: boolean; user: User; errorMessage: string };
 
 const initialState: SliceState = {
   isAuthenticated: localStorage.getItem("token") ? true : false,
@@ -25,9 +25,9 @@ export const loginUser = createAsyncThunk<string, LoginForm, { rejectValue: Erro
   },
 );
 
-export const registerUser = createAsyncThunk<string, LoginForm, { rejectValue: Error }>(
+export const registerUser = createAsyncThunk<string, SignupForm, { rejectValue: Error }>(
   "user/register",
-  async (user: LoginForm, thunkAPI) => {
+  async (user: SignupForm, thunkAPI) => {
     try {
       const data = await register(user.username, user.password, user.email || "");
       return data;

@@ -30,7 +30,7 @@ export default function AddCategoryModal({ editingCategory }: Props) {
     }
   };
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { id, value } = event.target;
     setInvalidFields(invalidFields.filter((field) => field !== id));
     setCategory({ ...category, [id]: value });
@@ -66,7 +66,7 @@ export default function AddCategoryModal({ editingCategory }: Props) {
                 isInvalid={invalidFields.includes("name")}
                 type="text"
                 id="name"
-                onChange={handleChange}
+                onChange={handleInputChange}
                 value={category.name}
               ></Form.Input>
               <Form.Feedback type="invalid" visible={invalidFields.includes("name")}>

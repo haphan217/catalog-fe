@@ -1,13 +1,14 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link, Redirect } from "react-router-dom";
 import { Card, Form, Button, Icon } from "@ahaui/react";
-
-type LoginForm = {
-  username: string;
-  password: string;
-};
+import { useAppDispatch } from "store/store";
+import { useSelector } from "react-redux";
+import { loginUser, selectUser } from "store/slices/userSlice";
+import { LoginForm } from "utils/Types";
 
 export default function LoginPage() {
+  const dispatch = useAppDispatch();
+  const profile = useSelector(selectUser);
   const [loginForm, setLoginForm] = useState<LoginForm>({ username: "", password: "" });
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -16,10 +17,16 @@ export default function LoginPage() {
   };
 
   const handleLogin = () => {
-    console.log(loginForm);
+    dispatch(loginUser({ username: "ha", password: "123" }));
   };
 
-  return (
+  useEffect(() => {
+    console.log(profile);
+  }, [profile]);
+
+  return profile.isAuthenticated ? (
+    <Redirect to="/category" />
+  ) : (
     <div className="u-flex u-justifyContentCenter">
       <Card body size="large" className="u-paddingLarge u-textCenter">
         <h3>Login</h3>

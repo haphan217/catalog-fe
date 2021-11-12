@@ -2,11 +2,13 @@ import { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { SidebarMenu } from "@ahaui/react";
 import AddCategoryModal from "components/HomePage/AddCategoryModal";
+import { Category } from "utils/Types";
 interface Props {
   isOpen: boolean;
+  categoryList: Category[];
 }
 
-export default function CategoryList({ isOpen }: Props) {
+export default function CategoryList({ isOpen, categoryList }: Props) {
   const history = useHistory();
   const [selectedCategory, setSelectedCategory] = useState<string>(history.location.pathname.split("/")[2]);
 

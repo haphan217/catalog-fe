@@ -19,17 +19,12 @@ export default function ItemList({ categoryId }: Props) {
   const [category, setCategory] = useState<Category>();
   const [itemList, setItemList] = useState<Item[]>([]);
 
-  const onPageChange = (page: number) => {
-    setCurrentPage(page);
-    console.log(page);
-  };
-
   useEffect(() => {
-    //getItemByCategoryId, getCategoryDetails here
+    //getItemByCategoryId here
     setCategory({ name: "comedy" });
-  }, []);
+  }, [currentPage]);
 
-  const onDelete = () => {
+  const onDeleteCategory = () => {
     console.log(category?.name);
   };
 
@@ -47,7 +42,7 @@ export default function ItemList({ categoryId }: Props) {
                 <AddCategoryModal editingCategory={category} />
               </Dropdown.Item>
               <Dropdown.Item>
-                <DeleteModal type="category" item={category} onDelete={onDelete} />
+                <DeleteModal type="category" item={category} onDelete={onDeleteCategory} />
               </Dropdown.Item>
             </Dropdown.Container>
           </Dropdown>
@@ -62,7 +57,11 @@ export default function ItemList({ categoryId }: Props) {
         ))}
       </div>
       {totalPage > 1 && (
-        <PaginationCustom currentPage={currentPage} onPageChange={onPageChange} totalPage={totalPage} />
+        <PaginationCustom
+          currentPage={currentPage}
+          onPageChange={(page) => setCurrentPage(page)}
+          totalPage={totalPage}
+        />
       )}
     </div>
   );

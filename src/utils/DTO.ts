@@ -27,3 +27,9 @@ export type CategoryDTO = {
   created_at?: string;
   updated_at?: string;
 };
+
+export type UserDTO = {
+  id?: number;
+  name: string;
+  email?: string;
+};

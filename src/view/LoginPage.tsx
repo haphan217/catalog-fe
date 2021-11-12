@@ -17,7 +17,7 @@ export default function LoginPage() {
   };
 
   const handleLogin = () => {
-    dispatch(loginUser({ username: "ha", password: "123" }));
+    dispatch(loginUser(loginForm));
   };
 
   useEffect(() => {

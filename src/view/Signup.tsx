@@ -1,15 +1,15 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 import { Card, Form, Button, Icon } from "@ahaui/react";
-
-type RegForm = {
-  username: string;
-  password: string;
-  email: string;
-};
+import { useAppDispatch } from "store/store";
+import { useSelector } from "react-redux";
+import { registerUser, selectUser } from "store/slices/userSlice";
+import { LoginForm } from "utils/Types";
 
 export default function SignupPage() {
-  const [regForm, setRegForm] = useState<RegForm>({ username: "", password: "", email: "" });
+  const dispatch = useAppDispatch();
+  const profile = useSelector(selectUser);
+  const [regForm, setRegForm] = useState<LoginForm>({ username: "", password: "", email: "" });
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { id, value } = event.target;
@@ -17,10 +17,12 @@ export default function SignupPage() {
   };
 
   const handleRegister = () => {
-    console.log(regForm);
+    dispatch(registerUser(regForm));
   };
 
-  return (
+  return profile.isAuthenticated ? (
+    <Redirect to="/category" />
+  ) : (
     <div className="u-flex u-justifyContentCenter">
       <Card body size="large" className="u-paddingLarge u-textCenter">
         <h3>Sign Up</h3>

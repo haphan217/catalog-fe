@@ -5,7 +5,7 @@ import { Category, Item } from "utils/Types";
 interface Props {
   type: string;
   item: Category | Item;
-  onDelete: () => void;
+  onDelete: (item: Category | Item) => void;
 }
 
 export default function DeleteModal({ type, item, onDelete }: Props) {
@@ -16,12 +16,12 @@ export default function DeleteModal({ type, item, onDelete }: Props) {
   };
 
   const deleteItem = () => {
-    onDelete();
+    onDelete(item);
     onToggle();
   };
   return (
     <>
-      <span className="u-widthFull" onClick={onToggle}>
+      <span className="u-widthFull" onClick={onToggle} role="button">
         Delete {type}
       </span>
       {show && (
@@ -36,7 +36,7 @@ export default function DeleteModal({ type, item, onDelete }: Props) {
           </Modal.Body>
           <Modal.Footer>
             <Button variant="secondary" width="full" onClick={onToggle}>
-              Calcel
+              Cancel
             </Button>
             <Button variant="accent" width="full" onClick={deleteItem}>
               Delete

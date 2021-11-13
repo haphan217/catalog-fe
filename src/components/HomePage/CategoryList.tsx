@@ -17,13 +17,17 @@ export default function CategoryList({ isOpen, categoryList }: Props) {
     history.push(id);
   };
 
+  const onAddCategory = (c: Category) => {
+    console.log(c);
+  };
+
   useEffect(() => {
     setSelectedCategory(history.location.pathname.split("/")[2]);
   }, [history.location.pathname]);
 
   return (
     <div className={`Collapse ${isOpen ? "Show " : ""}sidenav u-sizeFull md:u-size2of10`}>
-      <AddCategoryModal />
+      <AddCategoryModal onSubmitCategory={onAddCategory} />
       <SidebarMenu size="small" current={selectedCategory} onSelect={onSelectCategory}>
         {[1, 2, 3, 4, 5].map((i) => (
           <SidebarMenu.Item key={i} eventKey={i}>

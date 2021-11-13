@@ -9,7 +9,7 @@ const BlankPage = () => {
       <EmptyState src="https://raw.githubusercontent.com/gotitinc/aha-assets/master/gotit/emptyState/general.svg">
         <EmptyState.Description>You have not created any categories.</EmptyState.Description>
         <EmptyState.Heading className="u-marginBottomSmall">Start creating one!</EmptyState.Heading>
-        <AddCategoryModal />
+        {/* <AddCategoryModal /> */}
       </EmptyState>
     </div>
   );

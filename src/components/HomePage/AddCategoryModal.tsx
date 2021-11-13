@@ -5,15 +5,16 @@ import { Category } from "utils/Types";
 interface Props {
   editingCategory?: Category;
   setShowDropdown?: React.Dispatch<React.SetStateAction<boolean>>;
+  onSubmitCategory: (c: Category) => void;
 }
 
-export default function AddCategoryModal({ editingCategory, setShowDropdown }: Props) {
+export default function AddCategoryModal({ editingCategory, setShowDropdown, onSubmitCategory }: Props) {
   const [show, setShow] = useState(false);
-  const [category, setCategory] = useState<Category>({ name: editingCategory ? editingCategory.name : "" });
+  const [category, setCategory] = useState<Category>(editingCategory || { name: "" });
 
   const onToggle = () => {
     if (show) {
-      setCategory({ name: editingCategory ? editingCategory.name : "" });
+      setCategory(editingCategory || { name: "" });
     } else {
       if (setShowDropdown) {
         setTimeout(() => {
@@ -26,6 +27,7 @@ export default function AddCategoryModal({ editingCategory, setShowDropdown }: P
 
   const onSubmit = () => {
     onToggle();
+    onSubmitCategory(category);
     console.log(category);
     return;
   };
@@ -37,7 +39,7 @@ export default function AddCategoryModal({ editingCategory, setShowDropdown }: P
   const renderButton = () => {
     if (editingCategory)
       return (
-        <span className="u-widthFull" onClick={onToggle}>
+        <span className="u-widthFull" onClick={onToggle} role="button">
           Edit category
         </span>
       );
@@ -55,12 +57,14 @@ export default function AddCategoryModal({ editingCategory, setShowDropdown }: P
       {show && (
         <Modal show={show} onHide={onToggle}>
           <Modal.Header closeButton>
-            <Modal.Title>{editingCategory ? "Edit" : "Add"} Category</Modal.Title>
+            <Modal.Title>
+              <h3 style={{ marginBottom: 0 }}>{editingCategory ? "Edit" : "Add"} Category</h3>
+            </Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <Form.Group>
+            <Form.Group controlId="name">
               <Form.Label>Category name</Form.Label>
-              <Form.Input type="text" id="name" onChange={handleInputChange} value={category.name}></Form.Input>
+              <Form.Input type="text" onChange={handleInputChange} value={category.name}></Form.Input>
             </Form.Group>
           </Modal.Body>
           <Modal.Footer>

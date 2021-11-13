@@ -32,6 +32,10 @@ export default function ItemList({ categoryId }: Props) {
     console.log(item);
   };
 
+  const onEditCategory = (c: Category) => {
+    console.log(c);
+  };
+
   return (
     <div className="u-sizeFull md:u-size8of10">
       {category && (
@@ -43,7 +47,11 @@ export default function ItemList({ categoryId }: Props) {
             </Dropdown.Toggle>
             <Dropdown.Container className="u-paddingVerticalExtraSmall">
               <Dropdown.Item>
-                <AddCategoryModal setShowDropdown={setShowDropdown} editingCategory={category} />
+                <AddCategoryModal
+                  setShowDropdown={setShowDropdown}
+                  editingCategory={category}
+                  onSubmitCategory={onEditCategory}
+                />
               </Dropdown.Item>
               <Dropdown.Item>
                 <DeleteModal type="category" item={category} onDelete={onDeleteCategory} />

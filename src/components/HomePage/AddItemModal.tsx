@@ -36,7 +36,7 @@ export default function AddItemModal({ editingItem, onSubmitItem }: Props) {
   const renderButton = () => {
     if (editingItem)
       return (
-        <span className="u-widthFull" onClick={onToggle}>
+        <span className="u-widthFull" onClick={onToggle} role="button">
           Edit item
         </span>
       );
@@ -54,22 +54,18 @@ export default function AddItemModal({ editingItem, onSubmitItem }: Props) {
       {show && (
         <Modal show={show} onHide={onToggle}>
           <Modal.Header closeButton>
-            <Modal.Title>{editingItem ? "Edit" : "Add"} Item</Modal.Title>
+            <Modal.Title>
+              <h3 style={{ marginBottom: 0 }}>{editingItem ? "Edit" : "Add"} Item</h3>
+            </Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <Form.Group>
+            <Form.Group controlId="name">
               <Form.Label>Item name</Form.Label>
-              <Form.Input type="text" id="name" onChange={handleChange} value={item.name}></Form.Input>
+              <Form.Input type="text" onChange={handleChange} value={item.name}></Form.Input>
             </Form.Group>
-            <Form.Group>
+            <Form.Group controlId="description">
               <Form.Label>Item description</Form.Label>
-              <Form.Input
-                as="textarea"
-                rows={3}
-                id="description"
-                onChange={handleChange}
-                value={item.description}
-              ></Form.Input>
+              <Form.Input as="textarea" rows={3} onChange={handleChange} value={item.description}></Form.Input>
             </Form.Group>
           </Modal.Body>
           <Modal.Footer>

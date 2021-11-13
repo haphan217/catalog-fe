@@ -28,6 +28,10 @@ export default function ItemList({ categoryId }: Props) {
     console.log(category?.name);
   };
 
+  const onAddItem = (item: Item) => {
+    console.log(item);
+  };
+
   return (
     <div className="u-sizeFull md:u-size8of10">
       {category && (
@@ -49,7 +53,7 @@ export default function ItemList({ categoryId }: Props) {
         </div>
       )}
       <div className="u-marginLeftSmall">
-        <AddItemModal categoryId={categoryId} />
+        <AddItemModal onSubmitItem={onAddItem} />
       </div>
       <div className="u-flex u-flexWrap u-marginTopSmall">
         {[1, 2, 3, 4].map((item) => (

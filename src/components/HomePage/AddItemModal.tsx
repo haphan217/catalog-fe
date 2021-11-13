@@ -4,28 +4,28 @@ import { Item } from "utils/Types";
 
 interface Props {
   editingItem?: Item;
-  categoryId: number;
+  onSubmitItem: (i: Item) => void;
 }
 
-export default function AddItemModal({ editingItem, categoryId }: Props) {
+export default function AddItemModal({ editingItem, onSubmitItem }: Props) {
   const [show, setShow] = useState(false);
-  const [item, setItem] = useState<Item>({
-    name: editingItem?.name || "",
-    description: editingItem?.description || "",
-  });
+  const [item, setItem] = useState<Item>(
+    editingItem || {
+      name: "",
+      description: "",
+    },
+  );
 
   const onToggle = () => {
     if (show) {
-      setItem({ name: editingItem?.name || "", description: editingItem?.description || "" });
+      setItem(editingItem || { name: "", description: "" });
     }
     setShow(!show);
   };
   const onSubmit = () => {
-    if (item.name && item.description) {
-      onToggle();
-      console.log(item);
-      return;
-    }
+    onSubmitItem(item);
+    onToggle();
+    console.log(item);
   };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {

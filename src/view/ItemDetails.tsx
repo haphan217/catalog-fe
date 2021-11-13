@@ -16,9 +16,15 @@ export default function ItemDetails({ itemId }: Props) {
     console.log(itemId);
     setItem({ categoryId: 1, description: "Awesome item with awesome description", name: "Awesome item" });
   }, []);
+
   const onDelete = () => {
     console.log(item?.name);
   };
+
+  const onEditItem = (editingItem: Item) => {
+    console.log(editingItem);
+  };
+
   return (
     <div className="Container">
       {item && (
@@ -30,7 +36,7 @@ export default function ItemDetails({ itemId }: Props) {
             </Dropdown.Toggle>
             <Dropdown.Container className="u-paddingVerticalExtraSmall">
               <Dropdown.Item>
-                <AddItemModal categoryId={item.categoryId || 0} editingItem={item} />
+                <AddItemModal onSubmitItem={onEditItem} editingItem={item} />
               </Dropdown.Item>
               <Dropdown.Item>
                 <DeleteModal type="item" item={item} onDelete={onDelete} />

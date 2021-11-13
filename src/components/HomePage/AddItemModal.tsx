@@ -13,12 +13,10 @@ export default function AddItemModal({ editingItem, categoryId }: Props) {
     name: editingItem?.name || "",
     description: editingItem?.description || "",
   });
-  const [invalidFields, setInvalidFields] = useState<string[]>([]);
 
   const onToggle = () => {
     if (show) {
       setItem({ name: editingItem?.name || "", description: editingItem?.description || "" });
-      setInvalidFields([]);
     }
     setShow(!show);
   };
@@ -28,17 +26,10 @@ export default function AddItemModal({ editingItem, categoryId }: Props) {
       console.log(item);
       return;
     }
-    if (!item.name && !invalidFields.includes("name")) {
-      setInvalidFields((prev) => [...prev, "name"]);
-    }
-    if (!item.description && !invalidFields.includes("description")) {
-      setInvalidFields((prev) => [...prev, "description"]);
-    }
   };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { id, value } = event.target;
-    setInvalidFields(invalidFields.filter((field) => field !== id));
     setItem({ ...item, [id]: value });
   };
 
@@ -68,18 +59,11 @@ export default function AddItemModal({ editingItem, categoryId }: Props) {
           <Modal.Body>
             <Form.Group>
               <Form.Label>Item name</Form.Label>
-              <Form.Input
-                isInvalid={invalidFields.includes("name")}
-                type="text"
-                id="name"
-                onChange={handleChange}
-                value={item.name}
-              ></Form.Input>
+              <Form.Input type="text" id="name" onChange={handleChange} value={item.name}></Form.Input>
             </Form.Group>
             <Form.Group>
               <Form.Label>Item description</Form.Label>
               <Form.Input
-                isInvalid={invalidFields.includes("description")}
                 as="textarea"
                 rows={3}
                 id="description"

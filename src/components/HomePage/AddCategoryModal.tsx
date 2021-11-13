@@ -14,16 +14,14 @@ export default function AddCategoryModal({ editingCategory, setShowDropdown }: P
   const onToggle = () => {
     if (show) {
       setCategory({ name: editingCategory ? editingCategory.name : "" });
-      setShow(false);
     } else {
-      setShow(true);
       if (setShowDropdown) {
         setTimeout(() => {
           setShowDropdown(false);
         }, 1000);
       }
     }
-    // setShow(!show);
+    setShow(!show);
   };
 
   const onSubmit = () => {

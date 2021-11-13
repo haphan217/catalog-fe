@@ -1,39 +1,39 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Button, Modal, Icon, Form } from "@ahaui/react";
 import { Category } from "utils/Types";
 
 interface Props {
   editingCategory?: Category;
+  setShowDropdown?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export default function AddCategoryModal({ editingCategory }: Props) {
+export default function AddCategoryModal({ editingCategory, setShowDropdown }: Props) {
   const [show, setShow] = useState(false);
   const [category, setCategory] = useState<Category>({ name: editingCategory ? editingCategory.name : "" });
-  const [invalidFields, setInvalidFields] = useState<string[]>([]);
 
   const onToggle = () => {
     if (show) {
       setCategory({ name: editingCategory ? editingCategory.name : "" });
-      setInvalidFields([]);
+      setShow(false);
+    } else {
+      setShow(true);
+      if (setShowDropdown) {
+        setTimeout(() => {
+          setShowDropdown(false);
+        }, 1000);
+      }
     }
-    setShow(!show);
+    // setShow(!show);
   };
 
   const onSubmit = () => {
-    if (category.name) {
-      onToggle();
-      console.log(category);
-      return;
-    }
-    if (!category.name && !invalidFields.includes("name")) {
-      setInvalidFields((prev) => [...prev, "name"]);
-    }
+    onToggle();
+    console.log(category);
+    return;
   };
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { id, value } = event.target;
-    setInvalidFields(invalidFields.filter((field) => field !== id));
-    setCategory({ ...category, [id]: value });
+    setCategory({ ...category, name: event.target.value });
   };
 
   const renderButton = () => {
@@ -62,23 +62,14 @@ export default function AddCategoryModal({ editingCategory }: Props) {
           <Modal.Body>
             <Form.Group>
               <Form.Label>Category name</Form.Label>
-              <Form.Input
-                isInvalid={invalidFields.includes("name")}
-                type="text"
-                id="name"
-                onChange={handleInputChange}
-                value={category.name}
-              ></Form.Input>
-              <Form.Feedback type="invalid" visible={invalidFields.includes("name")}>
-                Category name is required
-              </Form.Feedback>
+              <Form.Input type="text" id="name" onChange={handleInputChange} value={category.name}></Form.Input>
             </Form.Group>
           </Modal.Body>
           <Modal.Footer>
             <Button variant="secondary" onClick={onToggle}>
               Cancel
             </Button>
-            <Button variant="primary" onClick={onSubmit}>
+            <Button disabled={!category.name} variant="primary" onClick={onSubmit}>
               {editingCategory ? "Edit" : "Add"}
             </Button>
           </Modal.Footer>

@@ -75,9 +75,6 @@ export default function AddItemModal({ editingItem, categoryId }: Props) {
                 onChange={handleChange}
                 value={item.name}
               ></Form.Input>
-              <Form.Feedback type="invalid" visible={invalidFields.includes("name")}>
-                Item name is required
-              </Form.Feedback>
             </Form.Group>
             <Form.Group>
               <Form.Label>Item description</Form.Label>
@@ -89,16 +86,13 @@ export default function AddItemModal({ editingItem, categoryId }: Props) {
                 onChange={handleChange}
                 value={item.description}
               ></Form.Input>
-              <Form.Feedback type="invalid" visible={invalidFields.includes("description")}>
-                Item description is required
-              </Form.Feedback>
             </Form.Group>
           </Modal.Body>
           <Modal.Footer>
             <Button variant="secondary" onClick={onToggle}>
               Cancel
             </Button>
-            <Button variant="primary" onClick={onSubmit}>
+            <Button disabled={!item.name} variant="primary" onClick={onSubmit}>
               {editingItem ? "Edit" : "Add"}
             </Button>
           </Modal.Footer>

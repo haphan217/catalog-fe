@@ -15,7 +15,7 @@ export default function ItemList({ categoryId }: Props) {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [totalPage, setTotalPage] = useState<number>(10);
-
+  const [showDropdown, setShowDropdown] = useState<boolean>(false);
   const [category, setCategory] = useState<Category>();
   const [itemList, setItemList] = useState<Item[]>([]);
 
@@ -33,13 +33,13 @@ export default function ItemList({ categoryId }: Props) {
       {category && (
         <div className="u-flex u-justifyContentBetween u-marginRightMedium">
           <h3 className="u-marginLeftSmall">{category.name} items</h3>
-          <Dropdown alignRight>
+          <Dropdown show={showDropdown} alignRight onToggle={() => setShowDropdown(!showDropdown)}>
             <Dropdown.Toggle className="u-textLight u-lineHeightNone">
               <Icon name="more" size="medium" />
             </Dropdown.Toggle>
             <Dropdown.Container className="u-paddingVerticalExtraSmall">
               <Dropdown.Item>
-                <AddCategoryModal editingCategory={category} />
+                <AddCategoryModal setShowDropdown={setShowDropdown} editingCategory={category} />
               </Dropdown.Item>
               <Dropdown.Item>
                 <DeleteModal type="category" item={category} onDelete={onDeleteCategory} />

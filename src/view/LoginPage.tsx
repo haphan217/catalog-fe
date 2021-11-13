@@ -30,8 +30,6 @@ export default function LoginPage() {
       <Card body size="large" className="u-paddingLarge u-textCenter">
         <h3>Login</h3>
         <Form.Group>
-          <Form.Label htmlFor="username">Username</Form.Label>
-
           <Form.InputGroup className="u-marginBottomSmall">
             <Form.InputGroup.Prepend>
               <Button disabled>
@@ -42,7 +40,6 @@ export default function LoginPage() {
           </Form.InputGroup>
         </Form.Group>
         <Form.Group>
-          <Form.Label htmlFor="password">Password</Form.Label>
           <Form.InputGroup>
             <Form.InputGroup.Prepend>
               <Button disabled>

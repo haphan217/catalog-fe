@@ -83,6 +83,7 @@ export default function SignupPage() {
         <p>
           Already have an account?&nbsp; <Link to="/login">Login now</Link>
         </p>
+        {profile.loading && <p>Loading</p>}
       </Card>
     </div>
   );

@@ -1,24 +1,33 @@
-import { useState } from "react";
 import { Link, Redirect } from "react-router-dom";
 import { Card, Form, Button, Icon } from "@ahaui/react";
 import { useAppDispatch } from "store/store";
 import { useSelector } from "react-redux";
 import { registerUser, selectUser } from "store/slices/userSlice";
 import { SignupForm } from "utils/Types";
+import { useForm } from "utils/useForm";
 
 export default function SignupPage() {
   const dispatch = useAppDispatch();
   const profile = useSelector(selectUser);
-  const [regForm, setRegForm] = useState<SignupForm>({ username: "", password: "", email: "" });
-
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { id, value } = event.target;
-    setRegForm({ ...regForm, [id]: value });
+  const signupValidation = {
+    password: {
+      regex: {
+        value: "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[a-zA-Z\\d]{6,}$",
+        message:
+          "Password must have at least 6 characters, including at least one lowercase letter, one uppercase letter, one digit.",
+      },
+    },
+    email: {
+      regex: {
+        value: "^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$",
+        message: "Please enter a valid email address.",
+      },
+    },
   };
-
-  const handleRegister = () => {
-    dispatch(registerUser(regForm));
-  };
+  const { formData, handleChange, handleSubmit, errors } = useForm<SignupForm>({
+    onSubmit: () => dispatch(registerUser(formData)),
+    validations: signupValidation,
+  });
 
   return profile.isAuthenticated ? (
     <Redirect to="/category" />
@@ -33,7 +42,7 @@ export default function SignupPage() {
                 <Icon name="contact" className="u-textLight" />
               </Button>
             </Form.InputGroup.Prepend>
-            <Form.Input placeholder="Username" type="text" id="username" onChange={handleChange}></Form.Input>
+            <Form.Input placeholder="Username" type="text" onChange={handleChange("username")}></Form.Input>
           </Form.InputGroup>
         </Form.Group>
         <Form.Group>
@@ -43,8 +52,11 @@ export default function SignupPage() {
                 <Icon name="mail" className="u-textLight" />
               </Button>
             </Form.InputGroup.Prepend>
-            <Form.Input placeholder="Email" type="email" id="email" onChange={handleChange}></Form.Input>
+            <Form.Input placeholder="Email" type="email" onChange={handleChange("email")}></Form.Input>
           </Form.InputGroup>
+          <Form.Feedback visible={!!errors.email} type="invalid" role="alert">
+            {errors.email}
+          </Form.Feedback>
         </Form.Group>
         <Form.Group>
           <Form.InputGroup>
@@ -53,15 +65,18 @@ export default function SignupPage() {
                 <Icon name="lock" className="u-textLight" />
               </Button>
             </Form.InputGroup.Prepend>
-            <Form.Input placeholder="Password" type="password" id="password" onChange={handleChange} />
+            <Form.Input placeholder="Password" type="password" onChange={handleChange("password")} />
           </Form.InputGroup>
+          <Form.Feedback visible={!!errors.password} type="invalid" role="alert">
+            {errors.password}
+          </Form.Feedback>
         </Form.Group>
         <Button
           className="u-marginVerticalMedium"
           variant="primary"
           width="full"
-          onClick={handleRegister}
-          disabled={!regForm.password || !regForm.username}
+          onClick={handleSubmit}
+          disabled={!formData.password || !formData.username || !formData.email}
         >
           Sign up
         </Button>

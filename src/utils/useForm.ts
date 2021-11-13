@@ -31,7 +31,6 @@ export const useForm = <T extends Record<keyof T, any> = Record<string, unknown>
   const [errors, setErrors] = useState<Error<T>>({});
 
   const handleChange = (key: keyof T) => (event: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(formData);
     setFormData({ ...formData, [key]: event.target.value });
   };
 
@@ -40,7 +39,6 @@ export const useForm = <T extends Record<keyof T, any> = Record<string, unknown>
     if (validations) {
       let isValid = true;
       const newErrors = {} as Error<T>;
-      console.log("check");
       for (const key in validations) {
         const value = formData[key];
         const validation = validations[key];
@@ -53,7 +51,6 @@ export const useForm = <T extends Record<keyof T, any> = Record<string, unknown>
 
         //Regex field
         if (validation?.regex?.value && !RegExp(validation.regex?.value).test(value)) {
-          console.log("false reg");
           isValid = false;
           newErrors[key] = validation.regex.message;
         }

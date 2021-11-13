@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import { Link, Redirect } from "react-router-dom";
 import { Card, Form, Button, Icon } from "@ahaui/react";
 import { useAppDispatch } from "store/store";
@@ -23,10 +22,6 @@ export default function LoginPage() {
     onSubmit: () => dispatch(loginUser(formData)),
     validations: loginValidation,
   });
-
-  useEffect(() => {
-    console.log(formData);
-  }, [formData]);
 
   return profile.isAuthenticated ? (
     <Redirect to="/category" />

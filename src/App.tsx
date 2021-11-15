@@ -11,29 +11,29 @@ function App() {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   return (
     <div className="App">
-      <BrowserRouter>
-        <BackToTop />
-        <TopNav isOpen={isOpen} setIsOpen={setIsOpen} />
-        <Switch>
-          <Route path="/category">
-            <HomePage isOpen={isOpen} />
-          </Route>
-          <Route
-            path="/item/:id"
-            render={(routeProps) => {
-              const itemId = parseInt(routeProps.match.params.id);
-              return <ItemDetails itemId={itemId} />;
-            }}
-          />
-          <Route path="/login">
-            <Login />
-          </Route>
-          <Route path="/signup">
-            <Signup />
-          </Route>
-          <Redirect from="*" to="/category" />
-        </Switch>
-      </BrowserRouter>
+      {/* <BrowserRouter> */}
+      <BackToTop />
+      <TopNav isOpen={isOpen} setIsOpen={setIsOpen} />
+      <Switch>
+        <Route path="/category">
+          <HomePage isOpen={isOpen} />
+        </Route>
+        <Route
+          path="/item/:id"
+          render={(routeProps) => {
+            const itemId = parseInt(routeProps.match.params.id);
+            return <ItemDetails itemId={itemId} />;
+          }}
+        />
+        <Route path="/login">
+          <Login />
+        </Route>
+        <Route path="/signup">
+          <Signup />
+        </Route>
+        <Redirect from="*" to="/category" />
+      </Switch>
+      {/* </BrowserRouter> */}
     </div>
   );
 }

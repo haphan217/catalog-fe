@@ -5,14 +5,21 @@ import { rest } from "msw";
 import store from "store/store";
 import { Provider } from "react-redux";
 import { MemoryRouter } from "react-router-dom";
-import Signup from "view/Signup";
-const renderSignupInProvider = (): RenderResult =>
-  render(
+import HomePage from "view/HomePage";
+import SignupPage from "view/Signup";
+
+jest.mock("view/HomePage");
+
+const renderSignupInProvider = (): RenderResult => {
+  (HomePage as jest.Mock).mockImplementation(() => <div>HomePage</div>);
+  return render(
     <Provider store={store}>
-      <Signup />
+      <SignupPage />
+      <HomePage isOpen />
     </Provider>,
     { wrapper: MemoryRouter },
   );
+};
 
 const server = setupServer(
   rest.post("http://localhost:8080", async (req, res, ctx) => {
@@ -68,7 +75,7 @@ describe("SignupForm", () => {
     );
   });
 
-  test("signup form should be unmounted when signup successfully.", async () => {
+  test("redirect to home page when signup successfully.", async () => {
     const { container } = renderSignupInProvider();
     const signupBtn = screen.getByRole("button", { name: /sign up/i });
     userEvent.type(screen.getByPlaceholderText(/username/i), inputField.name);
@@ -76,6 +83,7 @@ describe("SignupForm", () => {
     userEvent.type(screen.getByPlaceholderText(/email/i), inputField.email);
     userEvent.click(signupBtn);
     await waitForElementToBeRemoved(() => screen.getByText(/loading/i));
-    expect(container.firstChild).toBeNull();
+    // expect(container.firstChild).toBeNull();
+    expect(screen.getByText("HomePage")).toBeInTheDocument();
   });
 });

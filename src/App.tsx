@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
+import { Route, Switch, Redirect } from "react-router-dom";
 import BackToTop from "components/layout/BackToTop";
 import TopNav from "components/layout/TopNav";
 import HomePage from "view/HomePage";

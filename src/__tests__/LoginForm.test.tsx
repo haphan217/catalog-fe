@@ -6,13 +6,20 @@ import { rest } from "msw";
 import store from "store/store";
 import { Provider } from "react-redux";
 import { MemoryRouter } from "react-router-dom";
-const renderLoginInProvider = (): RenderResult =>
-  render(
+import HomePage from "view/HomePage";
+
+jest.mock("view/HomePage");
+
+const renderLoginInProvider = (): RenderResult => {
+  (HomePage as jest.Mock).mockImplementation(() => <div>HomePage</div>);
+  return render(
     <Provider store={store}>
       <Login />
+      <HomePage isOpen />
     </Provider>,
     { wrapper: MemoryRouter },
   );
+};
 
 const server = setupServer(
   rest.post("http://localhost:8080", async (req, res, ctx) => {
@@ -22,7 +29,7 @@ const server = setupServer(
     // if (!req.body.username) {
     //   return res(ctx.status(400), ctx.json({ message: "username required" }));
     // }
-    return res(ctx.json(req.body));
+    return res(ctx.json(req.body), ctx.delay(1000));
   }),
 );
 
@@ -61,13 +68,14 @@ describe("LoginForm", () => {
     );
   });
 
-  test("login form should be unmounted when login successfully.", async () => {
+  test("redirect to home page when login successfully.", async () => {
     const { container } = renderLoginInProvider();
     const loginBtn = screen.getByRole("button", { name: /login/i });
     userEvent.type(screen.getByPlaceholderText(/username/i), inputField.name);
     userEvent.type(screen.getByPlaceholderText(/password/i), inputField.password);
     userEvent.click(loginBtn);
     await waitForElementToBeRemoved(() => screen.getByText(/loading/i));
-    expect(container.firstChild).toBeNull();
+    // expect(container.firstChild).toBeNull();
+    expect(screen.getByText("HomePage")).toBeInTheDocument();
   });
 });

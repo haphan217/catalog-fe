@@ -6,7 +6,6 @@ import Login from "view/LoginPage";
 import Signup from "view/Signup";
 import TopNav from "components/layout/TopNav";
 import { MemoryRouter } from "react-router-dom";
-import { createMemoryHistory } from "history";
 
 jest.mock("components/layout/TopNav");
 jest.mock("view/HomePage");
@@ -27,30 +26,30 @@ describe("test routing", () => {
   test("should render home page with nav bar by default", () => {
     (HomePage as jest.Mock).mockImplementation(() => <div>HomePage</div>);
     renderApp("/");
-    expect(screen.getByText("HomePage"));
+    expect(screen.getByText("HomePage")).toBeInTheDocument();
   });
 
   test("should render home page for invalid route", () => {
     (HomePage as jest.Mock).mockImplementation(() => <div>HomePage</div>);
     renderApp("/invalid");
-    expect(screen.getByText("HomePage"));
+    expect(screen.getByText("HomePage")).toBeInTheDocument();
   });
 
   test("should render login page for login route", () => {
     (Login as jest.Mock).mockImplementation(() => <div>Login Page</div>);
     renderApp("/login");
-    expect(screen.getByText("Login Page"));
+    expect(screen.getByText("Login Page")).toBeInTheDocument();
   });
 
   test("should render signup page for signup route", () => {
     (Signup as jest.Mock).mockImplementation(() => <div>Signup Page</div>);
     renderApp("/signup");
-    expect(screen.getByText("Signup Page"));
+    expect(screen.getByText("Signup Page")).toBeInTheDocument();
   });
 
   test("should render item details page for item route", () => {
     (ItemDetails as jest.Mock).mockImplementation(() => <div>Item Details</div>);
     renderApp("/item/1");
-    expect(screen.getByText("Item Details"));
+    expect(screen.getByText("Item Details")).toBeInTheDocument();
   });
 });

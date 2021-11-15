@@ -20,6 +20,7 @@ export const loginUser = createAsyncThunk<string, LoginForm, { rejectValue: Erro
       const data = await login(user.username, user.password);
       return data;
     } catch (error: any) {
+      console.log("ERROR");
       return thunkAPI.rejectWithValue(error.message);
     }
   },

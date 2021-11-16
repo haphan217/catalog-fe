@@ -6,11 +6,10 @@ import { useAppDispatch } from "store/store";
 import { hideModal } from "store/slices/modalSlice";
 
 export interface AddCateProps {
-  setShowDropdown?: React.Dispatch<React.SetStateAction<boolean>>;
   onSubmitCategory: (c: Category) => void;
 }
 
-export default function AddCategoryModal({ setShowDropdown, onSubmitCategory }: AddCateProps) {
+export default function AddCategoryModal({ onSubmitCategory }: AddCateProps) {
   const [category, setCategory] = useState<Category>({ name: "" });
 
   const dispatch = useAppDispatch();
@@ -39,6 +38,7 @@ export default function AddCategoryModal({ setShowDropdown, onSubmitCategory }: 
 
   return (
     <BaseModal
+      primaryBtnDisabled={!category.name}
       header="Add Category"
       body={modalBody}
       primaryBtn="Add"

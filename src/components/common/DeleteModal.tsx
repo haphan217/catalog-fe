@@ -31,6 +31,7 @@ export default function DeleteModal({ item, onDelete, type }: DeleteModalProps) 
       }
       primaryBtn="Delete"
       primaryBtnVariant="accent"
+      primaryBtnDisabled={false}
       onClickPrimary={deleteItem}
       onClose={closeModal}
       secondaryBtn="Cancel"

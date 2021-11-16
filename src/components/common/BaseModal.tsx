@@ -1,8 +1,17 @@
 import { Modal, Button } from "@ahaui/react";
 import { ModalProps } from "utils/Types";
 const BaseModal = (props: ModalProps) => {
-  const { header, body, primaryBtn, primaryBtnVariant, secondaryBtn, onClickPrimary, onClickSecondary, onClose } =
-    props;
+  const {
+    header,
+    body,
+    primaryBtn,
+    primaryBtnVariant,
+    primaryBtnDisabled,
+    secondaryBtn,
+    onClickPrimary,
+    onClickSecondary,
+    onClose,
+  } = props;
 
   return (
     <Modal show>
@@ -18,7 +27,7 @@ const BaseModal = (props: ModalProps) => {
             {secondaryBtn}
           </Button>
         )}
-        <Button variant={primaryBtnVariant || "primary"} onClick={onClickPrimary}>
+        <Button variant={primaryBtnVariant || "primary"} onClick={onClickPrimary} disabled={primaryBtnDisabled}>
           {primaryBtn}
         </Button>
       </Modal.Footer>

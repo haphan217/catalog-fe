@@ -20,6 +20,7 @@ export type ModalProps = {
   body: any;
   primaryBtn: string;
   primaryBtnVariant?: string;
+  primaryBtnDisabled: boolean;
   secondaryBtn?: string;
   onClickPrimary: () => void;
   onClickSecondary?: () => void;

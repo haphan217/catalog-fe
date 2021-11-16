@@ -10,8 +10,8 @@ import { useSelector } from "react-redux";
 import { selectUser } from "store/slices/userSlice";
 
 interface Props {
-  selectedCategory: Category;
-  onSelectCategory: (category: Category) => void;
+  selectedCategory: number;
+  onSelectCategory: (categoryId: number) => void;
   categories: Category[];
 }
 
@@ -55,8 +55,9 @@ export default function CategoryList({ onSelectCategory, selectedCategory, categ
       </div>
       <SidebarMenu
         size="small"
-        current={selectedCategory.id}
-        onSelect={(id: number) => onSelectCategory(categories.find((c) => c.id == id) || categories[0])}
+        current={selectedCategory}
+        // onSelect={(id: any) => onSelectCategory() || categories[0])}
+        onSelect={onSelectCategory}
       >
         {categories.map((c) => (
           <SidebarMenu.Item key={c.id} eventKey={c.id}>

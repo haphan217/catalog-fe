@@ -112,7 +112,7 @@ export default function ItemList({ category }: Props) {
       ) : (
         <div className="u-positionAbsolute u-positionLeft20 u-positionLeft50" style={{ top: "25%" }}>
           <EmptyState src="https://raw.githubusercontent.com/gotitinc/aha-assets/master/gotit/emptyState/general.svg">
-            <EmptyState.Description>Nothing to show :(</EmptyState.Description>
+            <EmptyState.Description>Nothing to show :&#40;</EmptyState.Description>
             {profile.isAuthenticated && (
               <Button onClick={showAddItemModal}>
                 <Icon name="plus" role="button" className="u-marginRightTiny" />

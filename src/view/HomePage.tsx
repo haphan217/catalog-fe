@@ -17,12 +17,13 @@ const sampleCategory: Category[] = [
 ];
 
 export default function HomePage() {
-  const [selectedCategory, setSelectedCategory] = useState<Category>({ name: "" });
+  const [selectedCategory, setSelectedCategory] = useState<number>(0);
   const [categories, setCategories] = useState<Category[]>([]);
   const dispatch = useAppDispatch();
   const profile = useSelector(selectUser);
 
-  const onSelectCategory = (category: Category) => {
+  const onSelectCategory = (category: number) => {
+    console.log(category);
     setSelectedCategory(category);
   };
 
@@ -44,12 +45,12 @@ export default function HomePage() {
   return categories[0] ? (
     <div className="Grid" style={{ margin: 0 }}>
       <CategoryList selectedCategory={selectedCategory} onSelectCategory={onSelectCategory} categories={categories} />
-      <ItemList category={selectedCategory} />
+      <ItemList category={categories.find((c) => c.id == selectedCategory) || categories[0]} />
     </div>
   ) : (
     <div className="u-positionAbsolute u-positionCenter">
       <EmptyState src="https://raw.githubusercontent.com/gotitinc/aha-assets/master/gotit/emptyState/general.svg">
-        <EmptyState.Description>Nothing to show :(</EmptyState.Description>
+        <EmptyState.Description>Nothing to show :&#40;</EmptyState.Description>
         {profile.isAuthenticated && (
           <Button variant="primary" className="u-textTransformNone" onClick={showAddCategoryModal}>
             <Icon name="plus" role="button" className="u-marginRightTiny" /> Category

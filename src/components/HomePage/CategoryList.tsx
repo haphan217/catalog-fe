@@ -49,7 +49,7 @@ export default function CategoryList({ onSelectCategory, selectedCategory, categ
         <Icon
           size="medium"
           name="close"
-          className="u-block md:u-hidden u-marginRightSmall"
+          className="u-block md:u-hidden u-marginHorizontalSmall"
           onClick={() => setIsOpen(false)}
         />
       </div>

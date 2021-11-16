@@ -1,9 +1,14 @@
-import { Route, Switch, useRouteMatch, useLocation, useHistory } from "react-router-dom";
-import { PageLayout } from "@ahaui/react";
 import CategoryList from "components/HomePage/CategoryList";
 import ItemList from "components/HomePage/ItemList";
 import { useEffect, useState } from "react";
 import { Category } from "utils/Types";
+import { EmptyState, Icon, Button } from "@ahaui/react";
+import { AddCateProps } from "components/HomePage/AddCategoryModal";
+import { useAppDispatch } from "store/store";
+import { ModalContent, showModal } from "store/slices/modalSlice";
+import { ModalKey } from "utils/constants";
+import { useSelector } from "react-redux";
+import { selectUser } from "store/slices/userSlice";
 
 const sampleCategory: Category[] = [
   { name: "Category 1", id: 1 },
@@ -13,16 +18,44 @@ const sampleCategory: Category[] = [
 
 export default function HomePage() {
   const [selectedCategory, setSelectedCategory] = useState<Category>({ name: "" });
-  const [categories, setCategories] = useState<Category[]>(sampleCategory);
+  const [categories, setCategories] = useState<Category[]>([]);
+  const dispatch = useAppDispatch();
+  const profile = useSelector(selectUser);
 
   const onSelectCategory = (category: Category) => {
     setSelectedCategory(category);
   };
 
-  return (
+  const onAddCategory = (c: Category) => {
+    console.log(c);
+  };
+
+  const showAddCategoryModal = () => {
+    const props: AddCateProps = {
+      onSubmitCategory: onAddCategory,
+    };
+    const content: ModalContent = {
+      modalName: ModalKey.ADD_CATEGORY,
+      modalProps: props,
+    };
+    dispatch(showModal(content));
+  };
+
+  return categories[0] ? (
     <div className="Grid" style={{ margin: 0 }}>
       <CategoryList selectedCategory={selectedCategory} onSelectCategory={onSelectCategory} categories={categories} />
       <ItemList category={selectedCategory} />
+    </div>
+  ) : (
+    <div className="u-positionAbsolute u-positionCenter">
+      <EmptyState src="https://raw.githubusercontent.com/gotitinc/aha-assets/master/gotit/emptyState/general.svg">
+        <EmptyState.Description>Nothing to show :(</EmptyState.Description>
+        {profile.isAuthenticated && (
+          <Button variant="primary" className="u-textTransformNone" onClick={showAddCategoryModal}>
+            <Icon name="plus" role="button" className="u-marginRightTiny" /> Category
+          </Button>
+        )}
+      </EmptyState>
     </div>
   );
 }

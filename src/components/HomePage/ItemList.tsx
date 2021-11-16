@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Dropdown, Icon, Button } from "@ahaui/react";
+import { Dropdown, Icon, Button, EmptyState } from "@ahaui/react";
 import { Category, Item } from "utils/Types";
 import { DeleteModalProps } from "components/common/DeleteModal";
 import PaginationCustom from "components/common/CustomPagination";
@@ -86,25 +86,41 @@ export default function ItemList({ category }: Props) {
           )}
         </div>
       )}
-      <div className="u-marginLeftSmall">
-        {profile.isAuthenticated && (
-          <Button onClick={showAddItemModal}>
-            <Icon name="plus" role="button" className="u-marginRightTiny" />
-            Item
-          </Button>
-        )}
-      </div>
-      <div className="u-flex u-flexWrap u-marginTopSmall">
-        {[1, 2, 3, 4].map((item) => (
-          <ItemCard key={item} item={sampleItem} />
-        ))}
-      </div>
-      {totalPage > 1 && (
-        <PaginationCustom
-          currentPage={currentPage}
-          onPageChange={(page) => setCurrentPage(page)}
-          totalPage={totalPage}
-        />
+      {itemList[0] ? (
+        <div>
+          <div className="u-marginLeftSmall">
+            {profile.isAuthenticated && (
+              <Button onClick={showAddItemModal}>
+                <Icon name="plus" role="button" className="u-marginRightTiny" />
+                Item
+              </Button>
+            )}
+          </div>
+          <div className="u-flex u-flexWrap u-marginTopSmall">
+            {itemList.map((item) => (
+              <ItemCard key={item.id} item={item} />
+            ))}
+          </div>
+          {totalPage > 1 && (
+            <PaginationCustom
+              currentPage={currentPage}
+              onPageChange={(page) => setCurrentPage(page)}
+              totalPage={totalPage}
+            />
+          )}
+        </div>
+      ) : (
+        <div className="u-positionAbsolute u-positionLeft20 u-positionLeft50" style={{ top: "25%" }}>
+          <EmptyState src="https://raw.githubusercontent.com/gotitinc/aha-assets/master/gotit/emptyState/general.svg">
+            <EmptyState.Description>Nothing to show :(</EmptyState.Description>
+            {profile.isAuthenticated && (
+              <Button onClick={showAddItemModal}>
+                <Icon name="plus" role="button" className="u-marginRightTiny" />
+                Item
+              </Button>
+            )}
+          </EmptyState>
+        </div>
       )}
     </div>
   );

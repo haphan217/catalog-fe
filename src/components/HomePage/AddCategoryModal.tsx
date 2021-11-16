@@ -6,13 +6,12 @@ import { useAppDispatch } from "store/store";
 import { hideModal } from "store/slices/modalSlice";
 
 export interface AddCateProps {
-  editingCategory?: Category;
   setShowDropdown?: React.Dispatch<React.SetStateAction<boolean>>;
   onSubmitCategory: (c: Category) => void;
 }
 
-export default function AddCategoryModal({ editingCategory, setShowDropdown, onSubmitCategory }: AddCateProps) {
-  const [category, setCategory] = useState<Category>(editingCategory || { name: "" });
+export default function AddCategoryModal({ setShowDropdown, onSubmitCategory }: AddCateProps) {
+  const [category, setCategory] = useState<Category>({ name: "" });
 
   const dispatch = useAppDispatch();
 

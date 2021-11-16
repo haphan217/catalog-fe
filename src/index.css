@@ -12,17 +12,59 @@ code {
 
 @media (min-width: 768px) {
   .sidenav {
-    position: sticky;
-    top: 0;
-    z-index: 1;
-    height: 100vh;
-    border-right: 1px solid #ececec;
     display: block !important;
+    position: sticky;
   }
 }
 
-@media (max-width: 767px) {
-  .Collapse:not(.Show) {
-    display: none;
+@-webkit-keyframes fadeIn {
+  from {
+    opacity: 0.9;
   }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes fadeIn {
+  from {
+    opacity: 0.9;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.sidenav {
+  top: 0;
+  left: 0;
+  z-index: 1;
+  height: 100vh;
+  overflow-x: hidden;
+  border-right: 1px solid #ececec;
+  background-color: #fff;
+  transition: 0.3s;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
+@media (max-width: 767px) {
+  .sidenav {
+    position: fixed;
+    padding-top: 20px;
+    width: 0;
+  }
+  .sidenav.Show {
+    width: 100%;
+  }
+  .sidenav:not(.Show) .toggler {
+    display: block;
+  }
+}
+
+.toggler {
+  position: fixed;
+  top: 15px;
+  left: 20px;
+  display: none;
+  transition: 1s;
 }

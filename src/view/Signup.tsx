@@ -34,7 +34,7 @@ export default function SignupPage() {
   ) : (
     <div className="u-flex u-justifyContentCenter">
       <Card body size="large" className="u-paddingLarge u-textCenter">
-        <h3>Sign Up</h3>
+        <h3>Register</h3>
         <Form.Group>
           <Form.InputGroup className="u-marginBottomSmall">
             <Form.InputGroup.Prepend>
@@ -78,7 +78,7 @@ export default function SignupPage() {
           onClick={handleSubmit}
           disabled={!formData.password || !formData.username || !formData.email}
         >
-          Sign up
+          Register
         </Button>
         <p>
           Already have an account?&nbsp; <Link to="/login">Login now</Link>

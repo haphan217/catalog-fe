@@ -1,28 +1,22 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { Header, Icon, Button, Dropdown } from "@ahaui/react";
 import { useAppDispatch } from "store/store";
 import { useSelector } from "react-redux";
 import { selectUser, logout } from "store/slices/userSlice";
 
-interface Props {
-  isOpen: boolean;
-  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
-}
-
-export default function TopNav({ isOpen, setIsOpen }: Props) {
+export default function TopNav() {
   const dispatch = useAppDispatch();
   const profile = useSelector(selectUser);
+  const location = useLocation();
   return (
     <Header className=" u-backgroundPrimaryLighter u-marginBottomSmall">
-      <Header.Left className="md:u-hidden">
-        <Icon
-          className={isOpen ? "u-textPrimary" : ""}
-          size="medium"
-          name="menu"
-          role="button"
-          onClick={() => setIsOpen(!isOpen)}
-        />
-      </Header.Left>
+      {(location.pathname === "/login" || location.pathname === "/register") && (
+        <Header.Left>
+          <Link to="/">
+            <Icon size="medium" name="arrowBack" className="u-textPrimary" />
+          </Link>
+        </Header.Left>
+      )}
       <Header.Right>
         {profile.isAuthenticated ? (
           <Dropdown alignRight>
@@ -45,6 +39,8 @@ export default function TopNav({ isOpen, setIsOpen }: Props) {
               </Dropdown.Item>
             </Dropdown.Container>
           </Dropdown>
+        ) : location.pathname === "/login" || location.pathname === "/register" ? (
+          ""
         ) : (
           <Link to="/login">
             <Button size="small">Login</Button>

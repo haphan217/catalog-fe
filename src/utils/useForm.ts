@@ -9,10 +9,6 @@ interface Validation {
     value: string;
     message: string;
   };
-  custom?: {
-    isValid: (val: string) => boolean;
-    message: string;
-  };
 }
 
 type Validations<T> = Partial<Record<keyof T, Validation>>;
@@ -53,12 +49,6 @@ export const useForm = <T extends Record<keyof T, any> = Record<string, unknown>
         if (validation?.regex?.value && !RegExp(validation.regex?.value).test(value)) {
           isValid = false;
           newErrors[key] = validation.regex.message;
-        }
-
-        //Custom check
-        if (validation?.custom?.isValid && !validation.custom?.isValid(value)) {
-          isValid = false;
-          newErrors[key] = validation.custom.message;
         }
       }
       if (!isValid) {

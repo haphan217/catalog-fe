@@ -5,40 +5,24 @@ import ItemList from "components/HomePage/ItemList";
 import { useEffect, useState } from "react";
 import { Category } from "utils/Types";
 
-interface Props {
-  isOpen: boolean;
-}
+const sampleCategory: Category[] = [
+  { name: "Category 1", id: 1 },
+  { name: "Category 2", id: 2 },
+  { name: "Category 3", id: 3 },
+];
 
-export default function HomePage({ isOpen }: Props) {
-  const { path } = useRouteMatch();
-  const location = useLocation();
-  const history = useHistory();
-  const [categories, setCategories] = useState<Category[]>();
+export default function HomePage() {
+  const [selectedCategory, setSelectedCategory] = useState<Category>({ name: "" });
+  const [categories, setCategories] = useState<Category[]>(sampleCategory);
 
-  useEffect(() => {
-    //fetch categories
-    if (!location.pathname.split("/")[2]) {
-      history.push("category/1");
-    }
-  }, []);
+  const onSelectCategory = (category: Category) => {
+    setSelectedCategory(category);
+  };
 
   return (
-    <PageLayout>
-      <PageLayout.Body className="u-flexColumn">
-        <div className="Grid">
-          <CategoryList isOpen={isOpen} categoryList={[]} />
-          <Switch>
-            <Route
-              path={`${path}/:id`}
-              render={(routeProps) => {
-                //get the category in the category list that match the route
-                const categoryId = parseInt(routeProps.match.params.id);
-                return <ItemList categoryId={categoryId} />;
-              }}
-            />
-          </Switch>
-        </div>
-      </PageLayout.Body>
-    </PageLayout>
+    <div className="Grid" style={{ margin: 0 }}>
+      <CategoryList selectedCategory={selectedCategory} onSelectCategory={onSelectCategory} categories={categories} />
+      <ItemList category={selectedCategory} />
+    </div>
   );
 }

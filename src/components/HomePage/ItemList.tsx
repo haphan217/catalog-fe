@@ -8,20 +8,23 @@ import AddItemModal from "./AddItemModal";
 import ItemCard from "./ItemCard";
 
 interface Props {
-  categoryId: number;
+  category: Category;
 }
 
-export default function ItemList({ categoryId }: Props) {
+export default function ItemList({ category }: Props) {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [totalPage, setTotalPage] = useState<number>(10);
   const [showDropdown, setShowDropdown] = useState<boolean>(false);
-  const [category, setCategory] = useState<Category>();
   const [itemList, setItemList] = useState<Item[]>([]);
+
+  const sampleItem: Item = {
+    name: "awesome item",
+    description: "awesome description",
+  };
 
   useEffect(() => {
     //getItemByCategoryId here
-    setCategory({ name: "comedy" });
   }, [currentPage]);
 
   const onDeleteCategory = () => {
@@ -30,10 +33,6 @@ export default function ItemList({ categoryId }: Props) {
 
   const onAddItem = (item: Item) => {
     console.log(item);
-  };
-
-  const onEditCategory = (c: Category) => {
-    console.log(c);
   };
 
   return (
@@ -47,11 +46,11 @@ export default function ItemList({ categoryId }: Props) {
             </Dropdown.Toggle>
             <Dropdown.Container className="u-paddingVerticalExtraSmall">
               <Dropdown.Item>
-                <AddCategoryModal
+                {/* <AddCategoryModal
                   setShowDropdown={setShowDropdown}
                   editingCategory={category}
                   onSubmitCategory={onEditCategory}
-                />
+                /> */}
               </Dropdown.Item>
               <Dropdown.Item>
                 <DeleteModal type="category" item={category} onDelete={onDeleteCategory} />
@@ -65,7 +64,7 @@ export default function ItemList({ categoryId }: Props) {
       </div>
       <div className="u-flex u-flexWrap u-marginTopSmall">
         {[1, 2, 3, 4].map((item) => (
-          <ItemCard key={item} itemId={item} />
+          <ItemCard key={item} item={sampleItem} />
         ))}
       </div>
       {totalPage > 1 && (

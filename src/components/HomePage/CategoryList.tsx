@@ -1,37 +1,43 @@
 import { useEffect, useState } from "react";
-import { useHistory } from "react-router-dom";
 import { SidebarMenu } from "@ahaui/react";
 import AddCategoryModal from "components/HomePage/AddCategoryModal";
 import { Category } from "utils/Types";
+import { Icon } from "@ahaui/react";
 interface Props {
-  isOpen: boolean;
-  categoryList: Category[];
+  selectedCategory: Category;
+  onSelectCategory: (category: Category) => void;
+  categories: Category[];
 }
 
-export default function CategoryList({ isOpen, categoryList }: Props) {
-  const history = useHistory();
-  const [selectedCategory, setSelectedCategory] = useState<string>(history.location.pathname.split("/")[2]);
-
-  const onSelectCategory = (id: string) => {
-    setSelectedCategory(id);
-    history.push(id);
-  };
+export default function CategoryList({ onSelectCategory, selectedCategory, categories }: Props) {
+  const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const onAddCategory = (c: Category) => {
     console.log(c);
   };
 
-  useEffect(() => {
-    setSelectedCategory(history.location.pathname.split("/")[2]);
-  }, [history.location.pathname]);
-
   return (
-    <div className={`Collapse ${isOpen ? "Show " : ""}sidenav u-sizeFull md:u-size2of10`}>
-      <AddCategoryModal onSubmitCategory={onAddCategory} />
-      <SidebarMenu size="small" current={selectedCategory} onSelect={onSelectCategory}>
-        {[1, 2, 3, 4, 5].map((i) => (
-          <SidebarMenu.Item key={i} eventKey={i}>
-            Category {i}
+    <div className={`sidenav ${isOpen ? "Show " : ""} md:u-size2of10`}>
+      <div className="toggler md:u-hidden">
+        <Icon size="medium" name="menu" role="button" onClick={() => setIsOpen(true)} />
+      </div>
+      <div className="u-flex u-justifyContentBetween">
+        <AddCategoryModal onSubmitCategory={onAddCategory} />
+        <Icon
+          size="medium"
+          name="close"
+          className="u-block md:u-hidden u-marginRightSmall"
+          onClick={() => setIsOpen(false)}
+        />
+      </div>
+      <SidebarMenu
+        size="small"
+        current={selectedCategory.id}
+        onSelect={(id: number) => onSelectCategory(categories.find((c) => c.id == id) || categories[0])}
+      >
+        {categories.map((c) => (
+          <SidebarMenu.Item key={c.id} eventKey={c.id}>
+            {c.name}
           </SidebarMenu.Item>
         ))}
       </SidebarMenu>

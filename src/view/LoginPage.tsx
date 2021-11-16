@@ -62,7 +62,7 @@ export default function LoginPage() {
           Login
         </Button>
         <p>
-          Are you new?&nbsp; <Link to="/signup">Signup now</Link>
+          Are you new?&nbsp; <Link to="/register">Register now</Link>
         </p>
         {profile.loading && <p>Loading</p>}
       </Card>

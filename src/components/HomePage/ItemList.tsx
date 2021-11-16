@@ -16,7 +16,6 @@ export default function ItemList({ category }: Props) {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [totalPage, setTotalPage] = useState<number>(10);
-  const [showDropdown, setShowDropdown] = useState<boolean>(false);
   const [itemList, setItemList] = useState<Item[]>([]);
 
   const sampleItem: Item = {
@@ -67,7 +66,7 @@ export default function ItemList({ category }: Props) {
       {category && (
         <div className="u-flex u-justifyContentBetween u-marginRightMedium">
           <h3 className="u-marginLeftSmall">{category.name} items</h3>
-          <Dropdown show={showDropdown} alignRight onToggle={() => setShowDropdown(!showDropdown)}>
+          <Dropdown alignRight>
             <Dropdown.Toggle className="u-textLight u-lineHeightNone">
               <Icon name="more" size="medium" />
             </Dropdown.Toggle>

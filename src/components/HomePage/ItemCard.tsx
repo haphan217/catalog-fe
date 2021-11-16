@@ -43,12 +43,7 @@ export default function ItemCard({ item }: { item: Item }) {
   };
 
   return (
-    <Card
-      style={{ width: 300 }}
-      size="medium"
-      className="u-marginHorizontalSmall u-shadowSmall hover:u-shadowMedium"
-      role="button"
-    >
+    <Card style={{ width: 300 }} size="medium" className="u-marginHorizontalSmall u-shadowSmall">
       <Card.Body>
         <div className="u-flex u-justifyContentBetween">
           <div>

@@ -1,12 +1,14 @@
 import { useEffect, useState } from "react";
-import { Dropdown, Icon } from "@ahaui/react";
+import { Dropdown, Icon, Button } from "@ahaui/react";
 import { Category, Item } from "utils/Types";
 import DeleteModal from "components/common/DeleteModal";
 import PaginationCustom from "components/common/CustomPagination";
 import AddCategoryModal from "./AddCategoryModal";
-import AddItemModal from "./AddItemModal";
+import AddItemModal, { AddItemProps } from "./AddItemModal";
 import ItemCard from "./ItemCard";
-
+import { useAppDispatch } from "store/store";
+import { showModal, ModalContent } from "store/slices/modalSlice";
+import { ModalKey } from "utils/constants";
 interface Props {
   category: Category;
 }
@@ -23,6 +25,8 @@ export default function ItemList({ category }: Props) {
     description: "awesome description",
   };
 
+  const dispatch = useAppDispatch();
+
   useEffect(() => {
     //getItemByCategoryId here
   }, [currentPage]);
@@ -33,6 +37,17 @@ export default function ItemList({ category }: Props) {
 
   const onAddItem = (item: Item) => {
     console.log(item);
+  };
+
+  const showAddItemModal = () => {
+    const props: AddItemProps = {
+      onSubmitItem: onAddItem,
+    };
+    const content: ModalContent = {
+      modalName: ModalKey.ADD_ITEM,
+      modalProps: props,
+    };
+    dispatch(showModal(content));
   };
 
   return (
@@ -46,13 +61,6 @@ export default function ItemList({ category }: Props) {
             </Dropdown.Toggle>
             <Dropdown.Container className="u-paddingVerticalExtraSmall">
               <Dropdown.Item>
-                {/* <AddCategoryModal
-                  setShowDropdown={setShowDropdown}
-                  editingCategory={category}
-                  onSubmitCategory={onEditCategory}
-                /> */}
-              </Dropdown.Item>
-              <Dropdown.Item>
                 <DeleteModal type="category" item={category} onDelete={onDeleteCategory} />
               </Dropdown.Item>
             </Dropdown.Container>
@@ -60,7 +68,10 @@ export default function ItemList({ category }: Props) {
         </div>
       )}
       <div className="u-marginLeftSmall">
-        <AddItemModal onSubmitItem={onAddItem} />
+        <Button onClick={showAddItemModal}>
+          <Icon name="plus" role="button" className="u-marginRightTiny" />
+          Item
+        </Button>
       </div>
       <div className="u-flex u-flexWrap u-marginTopSmall">
         {[1, 2, 3, 4].map((item) => (

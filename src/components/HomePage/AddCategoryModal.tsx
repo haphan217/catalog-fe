@@ -2,13 +2,13 @@ import { useState } from "react";
 import { Button, Modal, Icon, Form } from "@ahaui/react";
 import { Category } from "utils/Types";
 
-interface Props {
+export interface AddCateProps {
   editingCategory?: Category;
   setShowDropdown?: React.Dispatch<React.SetStateAction<boolean>>;
   onSubmitCategory: (c: Category) => void;
 }
 
-export default function AddCategoryModal({ editingCategory, setShowDropdown, onSubmitCategory }: Props) {
+export default function AddCategoryModal({ editingCategory, setShowDropdown, onSubmitCategory }: AddCateProps) {
   const [show, setShow] = useState(false);
   const [category, setCategory] = useState<Category>(editingCategory || { name: "" });
 

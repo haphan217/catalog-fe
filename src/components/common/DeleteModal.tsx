@@ -2,13 +2,13 @@ import { useState } from "react";
 import { Modal, Button } from "@ahaui/react";
 import { Category, Item } from "utils/Types";
 
-interface Props {
+export interface DeleteModalProps {
   type: string;
   item: Category | Item;
   onDelete: (item: Category | Item) => void;
 }
 
-export default function DeleteModal({ type, item, onDelete }: Props) {
+export default function DeleteModal({ type, item, onDelete }: DeleteModalProps) {
   const [show, setShow] = useState(false);
 
   const onToggle = () => {

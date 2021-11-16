@@ -1,13 +1,16 @@
 import { useState } from "react";
-import { Button, Modal, Icon, Form } from "@ahaui/react";
+import { Button, Icon, Form } from "@ahaui/react";
 import { Item } from "utils/Types";
+import BaseModal from "components/common/BaseModal";
+import { useAppDispatch } from "store/store";
+import { hideModal } from "store/slices/modalSlice";
 
-interface Props {
+export interface AddItemProps {
   editingItem?: Item;
   onSubmitItem: (i: Item) => void;
 }
 
-export default function AddItemModal({ editingItem, onSubmitItem }: Props) {
+export default function AddItemModal({ editingItem, onSubmitItem }: AddItemProps) {
   const [show, setShow] = useState(false);
   const [item, setItem] = useState<Item>(
     editingItem || {
@@ -15,6 +18,11 @@ export default function AddItemModal({ editingItem, onSubmitItem }: Props) {
       description: "",
     },
   );
+  const dispatch = useAppDispatch();
+
+  const closeModal = () => {
+    dispatch(hideModal());
+  };
 
   const onToggle = () => {
     if (show) {
@@ -24,8 +32,8 @@ export default function AddItemModal({ editingItem, onSubmitItem }: Props) {
   };
   const onSubmit = () => {
     onSubmitItem(item);
-    onToggle();
     console.log(item);
+    closeModal();
   };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -48,36 +56,27 @@ export default function AddItemModal({ editingItem, onSubmitItem }: Props) {
       );
   };
 
-  return (
+  const modalBody = (
     <>
-      {renderButton()}
-      {show && (
-        <Modal show={show} onHide={onToggle}>
-          <Modal.Header closeButton>
-            <Modal.Title>
-              <h3 style={{ marginBottom: 0 }}>{editingItem ? "Edit" : "Add"} Item</h3>
-            </Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <Form.Group controlId="name">
-              <Form.Label>Item name</Form.Label>
-              <Form.Input type="text" onChange={handleChange} value={item.name}></Form.Input>
-            </Form.Group>
-            <Form.Group controlId="description">
-              <Form.Label>Item description</Form.Label>
-              <Form.Input as="textarea" rows={3} onChange={handleChange} value={item.description}></Form.Input>
-            </Form.Group>
-          </Modal.Body>
-          <Modal.Footer>
-            <Button variant="secondary" onClick={onToggle}>
-              Cancel
-            </Button>
-            <Button disabled={!item.name} variant="primary" onClick={onSubmit}>
-              {editingItem ? "Edit" : "Add"}
-            </Button>
-          </Modal.Footer>
-        </Modal>
-      )}
+      <Form.Group controlId="name">
+        <Form.Label>Item name</Form.Label>
+        <Form.Input type="text" onChange={handleChange} value={item.name}></Form.Input>
+      </Form.Group>
+      <Form.Group controlId="description">
+        <Form.Label>Item description</Form.Label>
+        <Form.Input as="textarea" rows={3} onChange={handleChange} value={item.description}></Form.Input>
+      </Form.Group>
     </>
+  );
+
+  return (
+    <BaseModal
+      header="Add Item"
+      body={modalBody}
+      primaryBtn="Add"
+      onClickPrimary={onSubmit}
+      onClose={closeModal}
+      secondaryBtn="Cancel"
+    />
   );
 }

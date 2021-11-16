@@ -15,6 +15,16 @@ export type SignupForm = {
   password: string;
 };
 
+export type ModalProps = {
+  header: string;
+  body: any;
+  primaryBtn: string;
+  secondaryBtn?: string;
+  onClickPrimary: () => void;
+  onClickSecondary?: () => void;
+  onClose: () => void;
+};
+
 export type Item = KeysToCamelCase<ItemDTO>;
 export type Category = KeysToCamelCase<CategoryDTO>;
 export type User = KeysToCamelCase<UserDTO>;

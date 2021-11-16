@@ -18,7 +18,7 @@ const sampleCategory: Category[] = [
 
 export default function HomePage() {
   const [selectedCategory, setSelectedCategory] = useState<number>(0);
-  const [categories, setCategories] = useState<Category[]>([]);
+  const [categories, setCategories] = useState<Category[]>();
   const dispatch = useAppDispatch();
   const profile = useSelector(selectUser);
 
@@ -51,10 +51,12 @@ export default function HomePage() {
     <div className="u-positionAbsolute u-positionCenter">
       <EmptyState src="https://raw.githubusercontent.com/gotitinc/aha-assets/master/gotit/emptyState/general.svg">
         <EmptyState.Description>Nothing to show :&#40;</EmptyState.Description>
-        {profile.isAuthenticated && (
+        {profile.isAuthenticated ? (
           <Button variant="primary" className="u-textTransformNone" onClick={showAddCategoryModal}>
             <Icon name="plus" role="button" className="u-marginRightTiny" /> Category
           </Button>
+        ) : (
+          <EmptyState.Description>Please login to add contents</EmptyState.Description>
         )}
       </EmptyState>
     </div>

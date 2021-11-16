@@ -48,7 +48,7 @@ export const keysToSnake = (o: any) => {
   return o;
 };
 
-export const getHeaders = (name: string) => {
+export const getHeaders = () => {
   return {
     Authorization: "Bearer " + localStorage.getItem("token"),
     accept: "application/json",

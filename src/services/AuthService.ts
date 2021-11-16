@@ -1,17 +1,19 @@
 import axios from "axios";
+import { API } from "utils/constants";
 
 export const register = (username: string, password: string, email: string) => {
-  const res = axios.post("http://localhost:8080");
-  console.log("register user", username, password, email);
-  localStorage.setItem("token", username);
-  return username;
+  return axios.post(`${API}/users`, {
+    username,
+    password,
+    email,
+  });
 };
 
 export const login = (username: string, password: string) => {
-  const res = axios.post("http://localhost:8080");
-  console.log("login user", username, password);
-  localStorage.setItem("token", username);
-  return username;
+  return axios.post(`${API}/auth`, {
+    username,
+    password,
+  });
 };
 
 export const logout = () => {

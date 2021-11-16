@@ -3,3 +3,5 @@ export const ModalKey = {
   ADD_CATEGORY: "addCategory",
   DELETE_ITEM: "deleteItem",
 };
+
+export const API = "http://192.168.131.100:5001/";

@@ -1,49 +1,39 @@
 import { useState } from "react";
 import { Modal, Button } from "@ahaui/react";
 import { Category, Item } from "utils/Types";
-
+import BaseModal from "./BaseModal";
+import { useAppDispatch } from "store/store";
+import { hideModal } from "store/slices/modalSlice";
 export interface DeleteModalProps {
-  type: string;
   item: Category | Item;
+  type: string;
   onDelete: (item: Category | Item) => void;
 }
 
-export default function DeleteModal({ type, item, onDelete }: DeleteModalProps) {
-  const [show, setShow] = useState(false);
+export default function DeleteModal({ item, onDelete, type }: DeleteModalProps) {
+  const dispatch = useAppDispatch();
 
-  const onToggle = () => {
-    setShow(!show);
+  const closeModal = () => {
+    dispatch(hideModal());
   };
 
   const deleteItem = () => {
     onDelete(item);
-    onToggle();
+    closeModal();
   };
   return (
-    <>
-      <span className="u-widthFull" onClick={onToggle} role="button">
-        Delete {type}
-      </span>
-      {show && (
-        <Modal size="small" show={show} onHide={onToggle}>
-          <Modal.Header closeButton>
-            <Modal.Title>Delete {type}</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <p>
-              Are you sure you want to delete {type} {item.name}?
-            </p>
-          </Modal.Body>
-          <Modal.Footer>
-            <Button variant="secondary" width="full" onClick={onToggle}>
-              Cancel
-            </Button>
-            <Button variant="accent" width="full" onClick={deleteItem}>
-              Delete
-            </Button>
-          </Modal.Footer>
-        </Modal>
-      )}
-    </>
+    <BaseModal
+      header={`Delete ${type}`}
+      body={
+        <p>
+          Are you sure you want to delete <b>{item.name}</b>?
+        </p>
+      }
+      primaryBtn="Delete"
+      primaryBtnVariant="accent"
+      onClickPrimary={deleteItem}
+      onClose={closeModal}
+      secondaryBtn="Cancel"
+    />
   );
 }

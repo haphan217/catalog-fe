@@ -33,9 +33,7 @@ export default function ItemCard({ item }: { item: Item }) {
               <Dropdown.Item>
                 <AddItemModal onSubmitItem={onEditItem} editingItem={item} />
               </Dropdown.Item>
-              <Dropdown.Item>
-                <DeleteModal type="item" item={item} onDelete={onDelete} />
-              </Dropdown.Item>
+              <Dropdown.Item>{/* <DeleteModal type="item" item={item} onDelete={onDelete} /> */}</Dropdown.Item>
             </Dropdown.Container>
           </Dropdown>
         </div>

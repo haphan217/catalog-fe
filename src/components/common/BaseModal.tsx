@@ -1,10 +1,8 @@
 import { Modal, Button } from "@ahaui/react";
-import { hideModal } from "store/slices/modalSlice";
-import { useAppDispatch } from "store/store";
 import { ModalProps } from "utils/Types";
 const BaseModal = (props: ModalProps) => {
-  const { header, body, primaryBtn, secondaryBtn, onClickPrimary, onClickSecondary, onClose } = props;
-  const dispatch = useAppDispatch();
+  const { header, body, primaryBtn, primaryBtnVariant, secondaryBtn, onClickPrimary, onClickSecondary, onClose } =
+    props;
 
   return (
     <Modal show>
@@ -20,7 +18,9 @@ const BaseModal = (props: ModalProps) => {
             {secondaryBtn}
           </Button>
         )}
-        <Button onClick={onClickPrimary}>{primaryBtn}</Button>
+        <Button variant={primaryBtnVariant || "primary"} onClick={onClickPrimary}>
+          {primaryBtn}
+        </Button>
       </Modal.Footer>
     </Modal>
   );

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Dropdown, Icon, Button } from "@ahaui/react";
 import { Category, Item } from "utils/Types";
-import DeleteModal from "components/common/DeleteModal";
+import DeleteModal, { DeleteModalProps } from "components/common/DeleteModal";
 import PaginationCustom from "components/common/CustomPagination";
 import AddCategoryModal from "./AddCategoryModal";
 import AddItemModal, { AddItemProps } from "./AddItemModal";
@@ -50,6 +50,19 @@ export default function ItemList({ category }: Props) {
     dispatch(showModal(content));
   };
 
+  const showDeleteCategoryModal = () => {
+    const props: DeleteModalProps = {
+      item: category,
+      onDelete: onDeleteCategory,
+      type: "Category",
+    };
+    const content: ModalContent = {
+      modalName: ModalKey.DELETE_ITEM,
+      modalProps: props,
+    };
+    dispatch(showModal(content));
+  };
+
   return (
     <div className="u-sizeFull md:u-size8of10">
       {category && (
@@ -61,7 +74,10 @@ export default function ItemList({ category }: Props) {
             </Dropdown.Toggle>
             <Dropdown.Container className="u-paddingVerticalExtraSmall">
               <Dropdown.Item>
-                <DeleteModal type="category" item={category} onDelete={onDeleteCategory} />
+                {/* <DeleteModal type="category" item={category} onDelete={onDeleteCategory} /> */}
+                <span className="u-widthFull" role="button" onClick={showDeleteCategoryModal}>
+                  Delete category
+                </span>
               </Dropdown.Item>
             </Dropdown.Container>
           </Dropdown>

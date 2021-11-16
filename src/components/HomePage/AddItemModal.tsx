@@ -11,7 +11,6 @@ export interface AddItemProps {
 }
 
 export default function AddItemModal({ editingItem, onSubmitItem }: AddItemProps) {
-  const [show, setShow] = useState(false);
   const [item, setItem] = useState<Item>(
     editingItem || {
       name: "",
@@ -24,12 +23,6 @@ export default function AddItemModal({ editingItem, onSubmitItem }: AddItemProps
     dispatch(hideModal());
   };
 
-  const onToggle = () => {
-    if (show) {
-      setItem(editingItem || { name: "", description: "" });
-    }
-    setShow(!show);
-  };
   const onSubmit = () => {
     onSubmitItem(item);
     console.log(item);
@@ -39,21 +32,6 @@ export default function AddItemModal({ editingItem, onSubmitItem }: AddItemProps
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { id, value } = event.target;
     setItem({ ...item, [id]: value });
-  };
-
-  const renderButton = () => {
-    if (editingItem)
-      return (
-        <span className="u-widthFull" onClick={onToggle} role="button">
-          Edit item
-        </span>
-      );
-    else
-      return (
-        <Button variant="primary" className="u-textTransformNone" onClick={onToggle}>
-          <Icon name="plus" role="button" className="u-marginRightTiny" /> Item
-        </Button>
-      );
   };
 
   const modalBody = (

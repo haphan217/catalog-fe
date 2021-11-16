@@ -1,8 +1,11 @@
 import { useEffect, useState } from "react";
 import { SidebarMenu } from "@ahaui/react";
-import AddCategoryModal from "components/HomePage/AddCategoryModal";
+import AddCategoryModal, { AddCateProps } from "components/HomePage/AddCategoryModal";
 import { Category } from "utils/Types";
-import { Icon } from "@ahaui/react";
+import { Icon, Button } from "@ahaui/react";
+import { useAppDispatch } from "store/store";
+import { ModalContent, showModal } from "store/slices/modalSlice";
+import { ModalKey } from "utils/constants";
 interface Props {
   selectedCategory: Category;
   onSelectCategory: (category: Category) => void;
@@ -11,9 +14,21 @@ interface Props {
 
 export default function CategoryList({ onSelectCategory, selectedCategory, categories }: Props) {
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  const dispatch = useAppDispatch();
 
   const onAddCategory = (c: Category) => {
     console.log(c);
+  };
+
+  const showAddCategoryModal = () => {
+    const props: AddCateProps = {
+      onSubmitCategory: onAddCategory,
+    };
+    const content: ModalContent = {
+      modalName: ModalKey.ADD_CATEGORY,
+      modalProps: props,
+    };
+    dispatch(showModal(content));
   };
 
   return (
@@ -22,7 +37,9 @@ export default function CategoryList({ onSelectCategory, selectedCategory, categ
         <Icon size="medium" name="menu" role="button" onClick={() => setIsOpen(true)} />
       </div>
       <div className="u-flex u-justifyContentBetween">
-        <AddCategoryModal onSubmitCategory={onAddCategory} />
+        <Button variant="primary" className="u-textTransformNone u-marginLeftSmall" onClick={showAddCategoryModal}>
+          <Icon name="plus" role="button" className="u-marginRightTiny" /> Category
+        </Button>
         <Icon
           size="medium"
           name="close"

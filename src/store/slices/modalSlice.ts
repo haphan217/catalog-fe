@@ -7,20 +7,19 @@ export type ModalContent = {
 };
 
 export type ModalSliceState = {
-  isOpen: boolean;
   modalContent: ModalContent | null;
 };
-const initialState: ModalSliceState = { isOpen: false, modalContent: null };
+const initialState: ModalSliceState = { modalContent: null };
 
 const modaleSlice = createSlice({
   name: "modal",
   initialState,
   reducers: {
     showModal(state, action: PayloadAction<ModalContent>) {
-      return { isOpen: true, modalContent: action.payload };
+      return { modalContent: action.payload };
     },
     hideModal() {
-      return { isOpen: false, modalContent: null };
+      return { modalContent: null };
     },
   },
 });

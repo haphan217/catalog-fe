@@ -1,5 +1,5 @@
 import { Link, Redirect } from "react-router-dom";
-import { Card, Form, Button, Icon } from "@ahaui/react";
+import { Card, Form, Button, Icon, Loader } from "@ahaui/react";
 import { useAppDispatch } from "store/store";
 import { useSelector } from "react-redux";
 import { registerUser, selectUser } from "store/slices/userSlice";
@@ -83,7 +83,8 @@ export default function SignupPage() {
         <p>
           Already have an account?&nbsp; <Link to="/login">Login now</Link>
         </p>
-        {profile.loading && <p>Loading</p>}
+        {profile.loading && <Loader size="small" />}
+        {profile.errorMessage && <p className="u-textAccent">{profile.errorMessage}</p>}
       </Card>
     </div>
   );

@@ -1,5 +1,5 @@
 import { Link, Redirect } from "react-router-dom";
-import { Card, Form, Button, Icon } from "@ahaui/react";
+import { Card, Form, Button, Icon, Loader } from "@ahaui/react";
 import { useAppDispatch } from "store/store";
 import { useSelector } from "react-redux";
 import { loginUser, selectUser } from "store/slices/userSlice";
@@ -18,6 +18,7 @@ export default function LoginPage() {
       },
     },
   };
+
   const { formData, handleChange, handleSubmit, errors } = useForm<LoginForm>({
     onSubmit: () => dispatch(loginUser(formData)),
     validations: loginValidation,
@@ -64,7 +65,8 @@ export default function LoginPage() {
         <p>
           Are you new?&nbsp; <Link to="/register">Register now</Link>
         </p>
-        {profile.loading && <p>Loading</p>}
+        {profile.loading && <Loader size="small" />}
+        {profile.errorMessage && <p className="u-textAccent">{profile.errorMessage}</p>}
       </Card>
     </div>
   );

@@ -8,6 +8,9 @@ import ItemCard from "./ItemCard";
 import { useAppDispatch } from "store/store";
 import { showModal, ModalContent } from "store/slices/modalSlice";
 import { ModalKey } from "utils/constants";
+import { useSelector } from "react-redux";
+import { selectUser } from "store/slices/userSlice";
+
 interface Props {
   category: Category;
 }
@@ -18,6 +21,7 @@ export default function ItemList({ category }: Props) {
   const [totalPage, setTotalPage] = useState<number>(10);
   const [showDropdown, setShowDropdown] = useState<boolean>(false);
   const [itemList, setItemList] = useState<Item[]>([]);
+  const profile = useSelector(selectUser);
 
   const sampleItem: Item = {
     name: "awesome item",
@@ -67,25 +71,29 @@ export default function ItemList({ category }: Props) {
       {category && (
         <div className="u-flex u-justifyContentBetween u-marginRightMedium">
           <h3 className="u-marginLeftSmall">{category.name} items</h3>
-          <Dropdown show={showDropdown} alignRight onToggle={() => setShowDropdown(!showDropdown)}>
-            <Dropdown.Toggle className="u-textLight u-lineHeightNone">
-              <Icon name="more" size="medium" />
-            </Dropdown.Toggle>
-            <Dropdown.Container className="u-paddingVerticalExtraSmall">
-              <Dropdown.Item>
-                <span className="u-widthFull" role="button" onClick={showDeleteCategoryModal}>
-                  Delete category
-                </span>
-              </Dropdown.Item>
-            </Dropdown.Container>
-          </Dropdown>
+          {profile.isAuthenticated && (
+            <Dropdown show={showDropdown} alignRight onToggle={() => setShowDropdown(!showDropdown)}>
+              <Dropdown.Toggle className="u-textLight u-lineHeightNone">
+                <Icon name="more" size="medium" />
+              </Dropdown.Toggle>
+              <Dropdown.Container className="u-paddingVerticalExtraSmall">
+                <Dropdown.Item>
+                  <span className="u-widthFull" role="button" onClick={showDeleteCategoryModal}>
+                    Delete category
+                  </span>
+                </Dropdown.Item>
+              </Dropdown.Container>
+            </Dropdown>
+          )}
         </div>
       )}
       <div className="u-marginLeftSmall">
-        <Button onClick={showAddItemModal}>
-          <Icon name="plus" role="button" className="u-marginRightTiny" />
-          Item
-        </Button>
+        {profile.isAuthenticated && (
+          <Button onClick={showAddItemModal}>
+            <Icon name="plus" role="button" className="u-marginRightTiny" />
+            Item
+          </Button>
+        )}
       </div>
       <div className="u-flex u-flexWrap u-marginTopSmall">
         {[1, 2, 3, 4].map((item) => (

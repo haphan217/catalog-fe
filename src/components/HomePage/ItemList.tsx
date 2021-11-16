@@ -1,10 +1,9 @@
 import { useEffect, useState } from "react";
 import { Dropdown, Icon, Button } from "@ahaui/react";
 import { Category, Item } from "utils/Types";
-import DeleteModal, { DeleteModalProps } from "components/common/DeleteModal";
+import { DeleteModalProps } from "components/common/DeleteModal";
 import PaginationCustom from "components/common/CustomPagination";
-import AddCategoryModal from "./AddCategoryModal";
-import AddItemModal, { AddItemProps } from "./AddItemModal";
+import { AddItemProps } from "./AddItemModal";
 import ItemCard from "./ItemCard";
 import { useAppDispatch } from "store/store";
 import { showModal, ModalContent } from "store/slices/modalSlice";
@@ -74,7 +73,6 @@ export default function ItemList({ category }: Props) {
             </Dropdown.Toggle>
             <Dropdown.Container className="u-paddingVerticalExtraSmall">
               <Dropdown.Item>
-                {/* <DeleteModal type="category" item={category} onDelete={onDeleteCategory} /> */}
                 <span className="u-widthFull" role="button" onClick={showDeleteCategoryModal}>
                   Delete category
                 </span>

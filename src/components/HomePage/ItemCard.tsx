@@ -1,17 +1,47 @@
 import { Card, Dropdown, Icon } from "@ahaui/react";
 import { Item } from "utils/Types";
-
-import AddItemModal from "components/HomePage/AddItemModal";
-import DeleteModal from "components/common/DeleteModal";
+import { useAppDispatch } from "store/store";
+import { AddItemProps } from "./AddItemModal";
+import { showModal, ModalContent } from "store/slices/modalSlice";
+import { ModalKey } from "utils/constants";
+import { DeleteModalProps } from "components/common/DeleteModal";
 
 export default function ItemCard({ item }: { item: Item }) {
-  const onDelete = () => {
+  const dispatch = useAppDispatch();
+
+  const onDeleteItem = () => {
     console.log(item?.name);
   };
 
   const onEditItem = (editingItem: Item) => {
     console.log(editingItem);
   };
+
+  const showEditItemModal = () => {
+    const props: AddItemProps = {
+      onSubmitItem: onEditItem,
+      editingItem: item,
+    };
+    const content: ModalContent = {
+      modalName: ModalKey.ADD_ITEM,
+      modalProps: props,
+    };
+    dispatch(showModal(content));
+  };
+
+  const showDeleteItemModal = () => {
+    const props: DeleteModalProps = {
+      item: item,
+      onDelete: onDeleteItem,
+      type: "Item",
+    };
+    const content: ModalContent = {
+      modalName: ModalKey.DELETE_ITEM,
+      modalProps: props,
+    };
+    dispatch(showModal(content));
+  };
+
   return (
     <Card
       style={{ width: 300 }}
@@ -31,9 +61,15 @@ export default function ItemCard({ item }: { item: Item }) {
             </Dropdown.Toggle>
             <Dropdown.Container className="u-paddingVerticalExtraSmall">
               <Dropdown.Item>
-                <AddItemModal onSubmitItem={onEditItem} editingItem={item} />
+                <span className="u-widthFull" role="button" onClick={showEditItemModal}>
+                  Edit Item
+                </span>
               </Dropdown.Item>
-              <Dropdown.Item>{/* <DeleteModal type="item" item={item} onDelete={onDelete} /> */}</Dropdown.Item>
+              <Dropdown.Item>
+                <span className="u-widthFull" role="button" onClick={showDeleteItemModal}>
+                  Delete Item
+                </span>
+              </Dropdown.Item>
             </Dropdown.Container>
           </Dropdown>
         </div>

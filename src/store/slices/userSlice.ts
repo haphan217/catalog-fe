@@ -17,11 +17,12 @@ export const loginUser = createAsyncThunk<string, LoginForm, { rejectValue: Erro
   "user/login",
   async (user: LoginForm, thunkAPI) => {
     try {
-      const data = await login(user.username, user.password);
-      return data;
+      const { data } = await login(user.username, user.password);
+      localStorage.setItem("token", data.access_token);
+      return user.username;
     } catch (error: any) {
-      console.log("ERROR");
-      return thunkAPI.rejectWithValue(error.message);
+      console.log("ERROR LOGIN", error);
+      return thunkAPI.rejectWithValue(error as Error);
     }
   },
 );
@@ -30,8 +31,9 @@ export const registerUser = createAsyncThunk<string, SignupForm, { rejectValue: 
   "user/register",
   async (user: SignupForm, thunkAPI) => {
     try {
-      const data = await register(user.username, user.password, user.email || "");
-      return data;
+      const { data } = await register(user.username, user.password, user.email || "");
+      localStorage.setItem("token", data.access_token);
+      return user.username;
     } catch (error: any) {
       return thunkAPI.rejectWithValue(error as Error);
     }
@@ -52,6 +54,7 @@ const userSlice = createSlice({
       state.loading = false;
       state.isAuthenticated = true;
       state.user = { name: payload };
+      state.errorMessage = "";
     });
     builder.addCase(loginUser.rejected, (state, { payload }) => {
       state.loading = false;
@@ -63,6 +66,7 @@ const userSlice = createSlice({
     builder.addCase(registerUser.fulfilled, (state, { payload }) => {
       state.loading = false;
       state.isAuthenticated = true;
+      state.errorMessage = "";
       state.user = { name: payload };
     });
     builder.addCase(registerUser.rejected, (state, { payload }) => {

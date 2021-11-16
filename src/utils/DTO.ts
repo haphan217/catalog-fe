@@ -33,3 +33,9 @@ export type UserDTO = {
   name: string;
   email?: string;
 };
+
+export type CategoryResponseDTO = {
+  item_per_page: number;
+  total_items: number;
+  items: KeysToCamelCase<CategoryDTO>[];
+};

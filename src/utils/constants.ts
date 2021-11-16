@@ -4,4 +4,4 @@ export const ModalKey = {
   DELETE_ITEM: "deleteItem",
 };
 
-export const API = "http://192.168.131.100:5001/";
+export const API = "http://192.168.131.100:5001";

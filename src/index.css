@@ -15,6 +15,15 @@ code {
     display: block !important;
     position: sticky;
   }
+  .w50 {
+    width: 50vw;
+  }
+}
+
+@media (min-width: 1024px) {
+  .w50 {
+    width: 30%;
+  }
 }
 
 @-webkit-keyframes fadeIn {
@@ -62,6 +71,9 @@ code {
   }
   .u-positionLeft20 {
     left: 20% !important;
+  }
+  .border0 {
+    border: none !important;
   }
 }
 

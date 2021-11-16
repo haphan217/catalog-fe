@@ -28,7 +28,7 @@ export default function LoginPage() {
     <Redirect to="/category" />
   ) : (
     <div className="u-flex u-justifyContentCenter">
-      <Card body size="large" className="u-paddingLarge u-textCenter">
+      <Card body size="large" className="u-paddingLarge u-textCenter border0 w50">
         <h3>Login</h3>
         <Form.Group>
           <Form.InputGroup className="u-marginBottomSmall">

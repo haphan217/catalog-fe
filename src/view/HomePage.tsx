@@ -18,7 +18,7 @@ const sampleCategory: Category[] = [
 
 export default function HomePage() {
   const [selectedCategory, setSelectedCategory] = useState<number>(0);
-  const [categories, setCategories] = useState<Category[]>();
+  const [categories, setCategories] = useState<Category[]>([]);
   const dispatch = useAppDispatch();
   const profile = useSelector(selectUser);
 

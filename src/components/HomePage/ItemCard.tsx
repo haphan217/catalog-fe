@@ -8,6 +8,7 @@ import { DeleteModalProps } from "components/common/DeleteModal";
 import { useSelector } from "react-redux";
 import { selectUser } from "store/slices/userSlice";
 import { useState } from "react";
+import { notifyPositive } from "components/common/ToastSuccess";
 
 interface CardProps {
   initItem: Item;
@@ -20,6 +21,7 @@ export default function ItemCard({ initItem, onDeleteItem }: CardProps) {
   const [item, setItem] = useState<Item>(initItem);
 
   const onEditItem = (editingItem: Item) => {
+    notifyPositive(`Item ${editingItem.name} succesfully updated`);
     setItem(editingItem);
   };
 

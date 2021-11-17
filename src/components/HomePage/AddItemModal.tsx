@@ -4,7 +4,7 @@ import { Item } from "utils/Types";
 import BaseModal from "components/common/BaseModal";
 import { useAppDispatch } from "store/store";
 import { hideModal } from "store/slices/modalSlice";
-import { createItem } from "services/ItemService";
+import { createItem, updateItem } from "services/ItemService";
 import { keysToCamel } from "utils/functions";
 import { ItemDTO } from "utils/DTO";
 
@@ -31,8 +31,13 @@ export default function AddItemModal({ categoryId, editingItem, onSubmitItem }: 
 
   const onSubmit = async () => {
     try {
-      const { data } = await createItem(categoryId, item.name, item.description);
-      const camelData: Item = keysToCamel(data as ItemDTO);
+      let res;
+      if (editingItem) {
+        res = await updateItem(categoryId, editingItem.id || 1, item.name, item.description);
+      } else {
+        res = await createItem(categoryId, item.name, item.description);
+      }
+      const camelData: Item = keysToCamel(res.data as ItemDTO);
       onSubmitItem(camelData);
       closeModal();
     } catch (error: any) {

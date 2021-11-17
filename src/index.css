@@ -10,6 +10,14 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
 }
 
+.truncate {
+  display: inline-block;
+  /* width: 100px; */
+  white-space: nowrap;
+  overflow: hidden !important;
+  text-overflow: ellipsis;
+}
+
 @media (min-width: 768px) {
   .sidenav {
     display: block !important;
@@ -18,11 +26,20 @@ code {
   .w50 {
     width: 50vw;
   }
+  .truncate {
+    width: 200px;
+  }
 }
 
 @media (min-width: 1024px) {
   .w50 {
     width: 30%;
+  }
+}
+
+@media (min-width: 1280px) {
+  .truncate {
+    width: 250px;
   }
 }
 

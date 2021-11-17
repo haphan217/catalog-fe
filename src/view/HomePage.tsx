@@ -12,6 +12,7 @@ import { selectUser } from "store/slices/userSlice";
 import { getCategoryList } from "services/CategoryService";
 import { ListResponseDTO } from "utils/DTO";
 import { keysToCamel } from "utils/functions";
+import { notifyPositive } from "components/common/ToastSuccess";
 
 const sampleCategory: Category[] = [
   { name: "Category 1", id: 1 },
@@ -23,6 +24,8 @@ export default function HomePage() {
   const [loading, setLoading] = useState<boolean>(false);
   const [selectedCategory, setSelectedCategory] = useState<number>();
   const [categories, setCategories] = useState<Category[]>([]);
+  const [total, setTotal] = useState<number>(0);
+  const [page, setPage] = useState<number>(2);
   const dispatch = useAppDispatch();
   const profile = useSelector(selectUser);
 
@@ -30,17 +33,21 @@ export default function HomePage() {
     (async () => {
       try {
         setLoading(true);
-        const { data } = await getCategoryList();
+        const { data } = await getCategoryList(page);
         const camelData: ListResponse = keysToCamel(data as ListResponseDTO);
+        // setCategories((prevList) => {
+        //   return [...prevList, ...camelData.items];
+        // });
         setCategories(camelData.items);
         setSelectedCategory(camelData.items[0].id || 0);
+        setTotal(camelData.totalItems);
       } catch (error) {
         console.error(error);
       } finally {
         setLoading(false);
       }
     })();
-  }, []);
+  }, [page]);
 
   const onSelectCategory = (category: number) => {
     // console.log(selectedCategory);
@@ -48,6 +55,7 @@ export default function HomePage() {
   };
 
   const onAddCategorySuccess = (category: Category) => {
+    notifyPositive(`Category ${category.name} succesfully added`);
     setCategories([...categories, category]);
   };
 
@@ -62,14 +70,10 @@ export default function HomePage() {
     dispatch(showModal(content));
   };
 
-  // useEffect(() => {
-  //   console.log(selectedCategory);
-  // }, [selectedCategory]);
-
   const onDeleteCategory = (cate: Category) => {
+    notifyPositive(`Category ${cate.name} succesfully deleted`);
     const filteredCateList = categories.filter((c) => c.id !== cate.id);
     setCategories(filteredCateList);
-    // console.log(filteredCateList[0].id);
     setSelectedCategory(filteredCateList[0].id || 1);
   };
 
@@ -81,6 +85,9 @@ export default function HomePage() {
           onSelectCategory={onSelectCategory}
           categories={categories}
           onAddCategory={onAddCategorySuccess}
+          loading
+          totalCategories={total}
+          setPage={setPage}
         />
         <ItemList
           category={categories.find((c) => c.id == selectedCategory) || categories[0]}

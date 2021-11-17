@@ -2,9 +2,9 @@ import axios from "axios";
 import { API } from "utils/constants";
 import { getHeaders } from "utils/functions";
 
-export const getCategoryList = (page?: number) => {
+export const getCategoryList = (page: number) => {
   return axios.get(`${API}/categories`, {
-    params: { page: page || 2 },
+    params: { page },
   });
 };
 

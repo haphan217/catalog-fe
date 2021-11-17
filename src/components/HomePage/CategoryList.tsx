@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { SidebarMenu } from "@ahaui/react";
 import { AddCateProps } from "components/HomePage/AddCategoryModal";
 import { Category } from "utils/Types";
@@ -14,10 +14,48 @@ interface Props {
   onSelectCategory: (categoryId: number) => void;
   categories: Category[];
   onAddCategory: (c: Category) => void;
+  loading: boolean;
+  totalCategories: number;
+  setPage: React.Dispatch<React.SetStateAction<number>>;
 }
 
-export default function CategoryList({ onSelectCategory, selectedCategory, categories, onAddCategory }: Props) {
+export default function CategoryList({
+  onSelectCategory,
+  selectedCategory,
+  categories,
+  onAddCategory,
+  loading,
+  totalCategories,
+  setPage,
+}: Props) {
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [isVisible, setIsVisible] = useState(true);
+
+  // Hide toggle button when page is scorlled upto given distance
+  const toggleVisibility = () => {
+    if (window.pageYOffset > 5) {
+      setIsVisible(false);
+    } else {
+      setIsVisible(true);
+    }
+  };
+  useEffect(() => {
+    window.addEventListener("scroll", toggleVisibility);
+  }, []);
+
+  // const observer = useRef<any>();
+  // const lastCategoryRef = useCallback((lastCategory) => {
+  //   // if (loading) return;
+  //   if (observer.current) observer.current.disconnect();
+  //   observer.current = new IntersectionObserver((entries) => {
+  //     if (entries[0].isIntersecting && categories.length < totalCategories) {
+  //       console.log("into view");
+  //       setPage((prevPage) => prevPage + 1);
+  //     }
+  //   });
+  //   if (lastCategory) observer.current.observe(lastCategory);
+  // }, []);
+
   const dispatch = useAppDispatch();
   const profile = useSelector(selectUser);
 
@@ -34,9 +72,11 @@ export default function CategoryList({ onSelectCategory, selectedCategory, categ
 
   return (
     <div className={`sidenav ${isOpen ? "Show " : ""} md:u-size2of10`}>
-      <div className="toggler md:u-hidden">
-        <Icon size="medium" name="menu" role="button" onClick={() => setIsOpen(true)} />
-      </div>
+      {isVisible && (
+        <div className="toggler md:u-hidden">
+          <Icon size="medium" name="menu" role="button" onClick={() => setIsOpen(true)} />
+        </div>
+      )}
       <div className="u-flex u-justifyContentBetween">
         {profile.isAuthenticated && (
           <Button variant="primary" className="u-textTransformNone u-marginLeftSmall" onClick={showAddCategoryModal}>
@@ -58,9 +98,9 @@ export default function CategoryList({ onSelectCategory, selectedCategory, categ
           setIsOpen(false);
         }}
       >
-        {categories.map((c) => (
+        {categories.map((c, i) => (
           <SidebarMenu.Item key={c.id} eventKey={c.id}>
-            {c.name}
+            <span className="truncate">{c.name}</span>
           </SidebarMenu.Item>
         ))}
       </SidebarMenu>

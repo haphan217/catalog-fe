@@ -13,6 +13,7 @@ import { selectUser } from "store/slices/userSlice";
 import { getItemList } from "services/ItemService";
 import { keysToCamel } from "utils/functions";
 import { ListResponseDTO } from "utils/DTO";
+import { notifyPositive } from "components/common/ToastSuccess";
 
 interface Props {
   category: Category;
@@ -46,7 +47,8 @@ export default function ItemList({ category, onDeleteCategory }: Props) {
     fetchItems();
   }, [currentPage, category]);
 
-  const onAddItem = () => {
+  const onAddItem = (item: Item) => {
+    notifyPositive(`Item ${item.name} succesfully added`);
     //fetch item list after adding new item
     if (currentPage === 1) {
       fetchItems();
@@ -54,6 +56,7 @@ export default function ItemList({ category, onDeleteCategory }: Props) {
   };
 
   const onDeleteItem = (item: Item | Category) => {
+    notifyPositive(`Item ${item.name} succesfully deleted`);
     const filteredItemList = itemList.filter((i) => i.id !== item.id);
     if (filteredItemList[0] || currentPage === 1) {
       setItemList(filteredItemList);

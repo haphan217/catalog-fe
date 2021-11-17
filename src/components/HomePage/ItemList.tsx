@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { Dropdown, Icon, Button, EmptyState } from "@ahaui/react";
-import { Category, Item } from "utils/Types";
+import { Dropdown, Icon, Button, EmptyState, Loader } from "@ahaui/react";
+import { Category, Item, ListResponse } from "utils/Types";
 import { DeleteModalProps } from "components/common/DeleteModal";
 import PaginationCustom from "components/common/CustomPagination";
 import { AddItemProps } from "./AddItemModal";
@@ -10,6 +10,9 @@ import { showModal, ModalContent } from "store/slices/modalSlice";
 import { ModalKey } from "utils/constants";
 import { useSelector } from "react-redux";
 import { selectUser } from "store/slices/userSlice";
+import { getItemList } from "services/ItemService";
+import { keysToCamel } from "utils/functions";
+import { ListResponseDTO } from "utils/DTO";
 
 interface Props {
   category: Category;
@@ -31,7 +34,19 @@ export default function ItemList({ category, onDeleteCategory }: Props) {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    //getItemByCategoryId here
+    (async () => {
+      try {
+        setIsLoading(true);
+        const { data } = await getItemList(category.id || 1, currentPage);
+        const camelData: ListResponse = keysToCamel(data as ListResponseDTO);
+        setItemList(camelData.items as Item[]);
+        setTotalPage(camelData.totalItems);
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setIsLoading(false);
+      }
+    })();
   }, [currentPage]);
 
   const onAddItem = (item: Item) => {
@@ -83,7 +98,11 @@ export default function ItemList({ category, onDeleteCategory }: Props) {
           )}
         </div>
       )}
-      {itemList[0] ? (
+      {isLoading ? (
+        <div className="u-positionAbsolute u-positionLeft20 u-positionLeft50" style={{ top: "25%" }}>
+          <Loader size="medium" duration={500} />
+        </div>
+      ) : itemList[0] ? (
         <div>
           <div className="u-marginLeftSmall">
             {profile.isAuthenticated && (

@@ -1,7 +1,7 @@
 import CategoryList from "components/HomePage/CategoryList";
 import ItemList from "components/HomePage/ItemList";
 import { useEffect, useState } from "react";
-import { Category, CategoryResponse } from "utils/Types";
+import { Category, ListResponse } from "utils/Types";
 import { EmptyState, Icon, Button, Loader } from "@ahaui/react";
 import { AddCateProps } from "components/HomePage/AddCategoryModal";
 import { useAppDispatch } from "store/store";
@@ -10,7 +10,7 @@ import { ModalKey } from "utils/constants";
 import { useSelector } from "react-redux";
 import { selectUser } from "store/slices/userSlice";
 import { getCategoryList } from "services/CategoryService";
-import { CategoryDTO, CategoryResponseDTO } from "utils/DTO";
+import { ListResponseDTO } from "utils/DTO";
 import { keysToCamel } from "utils/functions";
 
 const sampleCategory: Category[] = [
@@ -31,7 +31,7 @@ export default function HomePage() {
       try {
         setLoading(true);
         const { data } = await getCategoryList();
-        const camelData: CategoryResponse = keysToCamel(data as CategoryResponseDTO);
+        const camelData: ListResponse = keysToCamel(data as ListResponseDTO);
         setCategories(camelData.items);
       } catch (error) {
         console.error(error);

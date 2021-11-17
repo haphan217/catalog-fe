@@ -1,4 +1,4 @@
-import { CategoryDTO, KeysToCamelCase, ItemDTO, UserDTO, CategoryResponseDTO } from "./DTO";
+import { CategoryDTO, KeysToCamelCase, ItemDTO, UserDTO, ListResponseDTO } from "./DTO";
 
 export interface Dictionary<T> {
   [Key: string]: T;
@@ -29,5 +29,5 @@ export type ModalProps = {
 
 export type Item = KeysToCamelCase<ItemDTO>;
 export type Category = KeysToCamelCase<CategoryDTO>;
-export type CategoryResponse = KeysToCamelCase<CategoryResponseDTO>;
+export type ListResponse = KeysToCamelCase<ListResponseDTO>;
 export type User = KeysToCamelCase<UserDTO>;

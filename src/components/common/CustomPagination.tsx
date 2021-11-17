@@ -25,7 +25,7 @@ export default function PaginationCustom({ currentPage, totalPage, onPageChange 
         //always render page 1
         //render from page 1-5 if current page is less than 5
         paginationItems.push(
-          <Pagination.Item onClick={() => onPageChange(i)} active={i === currentPage}>
+          <Pagination.Item key={i} onClick={() => onPageChange(i)} active={i === currentPage}>
             {i}
           </Pagination.Item>,
         );
@@ -33,7 +33,7 @@ export default function PaginationCustom({ currentPage, totalPage, onPageChange 
         //always render last page
         //render from last page to last - 4 if current page is less than total - 4
         paginationItems.push(
-          <Pagination.Item onClick={() => onPageChange(i)} active={i === currentPage}>
+          <Pagination.Item key={i} onClick={() => onPageChange(i)} active={i === currentPage}>
             {i}
           </Pagination.Item>,
         );
@@ -44,7 +44,7 @@ export default function PaginationCustom({ currentPage, totalPage, onPageChange 
         const twoPagesAfter = currentPage + 3;
         for (let j: number = twoPagesBefore; j < twoPagesAfter; j++) {
           paginationItems.push(
-            <Pagination.Item onClick={() => onPageChange(j)} active={j === currentPage}>
+            <Pagination.Item key={i} onClick={() => onPageChange(j)} active={j === currentPage}>
               {j}
             </Pagination.Item>,
           );

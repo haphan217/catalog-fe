@@ -25,6 +25,7 @@ export type ModalProps = {
   onClickPrimary: () => void;
   onClickSecondary?: () => void;
   onClose: () => void;
+  loading: boolean;
 };
 
 export type Item = KeysToCamelCase<ItemDTO>;

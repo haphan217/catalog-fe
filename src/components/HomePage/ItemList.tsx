@@ -49,10 +49,14 @@ export default function ItemList({ category, onDeleteCategory }: Props) {
 
   const onAddItem = (item: Item) => {
     notifyPositive(`Item ${item.name} succesfully added`);
-    //fetch item list after adding new item
-    if (currentPage === 1) {
-      fetchItems();
-    } else setCurrentPage(1);
+    if (itemList.length < 20) {
+      setItemList([...itemList, item]);
+    } else {
+      //fetch item list after adding new item
+      if (currentPage === 1) {
+        fetchItems();
+      } else setCurrentPage(1);
+    }
   };
 
   const onDeleteItem = (item: Item | Category) => {
@@ -95,7 +99,6 @@ export default function ItemList({ category, onDeleteCategory }: Props) {
       {category && (
         <div className="u-flex u-justifyContentBetween u-marginRightMedium">
           <h3 className="u-marginLeftSmall">{category.name} items</h3>
-          {console.log(category.authorId, profile.user.id)}
           {profile.isAuthenticated && category.authorId === profile.user.id && (
             <Dropdown alignRight>
               <Dropdown.Toggle className="u-textLight u-lineHeightNone">
@@ -113,7 +116,7 @@ export default function ItemList({ category, onDeleteCategory }: Props) {
         </div>
       )}
       {isLoading ? (
-        <div className="u-positionAbsolute u-positionLeft20 u-positionLeft50" style={{ top: "25%" }}>
+        <div className="u-positionAbsolute u-positionLeft60 u-positionTop50">
           <Loader size="medium" duration={500} />
         </div>
       ) : itemList[0] ? (

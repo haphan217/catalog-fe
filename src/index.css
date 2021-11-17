@@ -12,7 +12,6 @@ code {
 
 .truncate {
   display: inline-block;
-  /* width: 100px; */
   white-space: nowrap;
   overflow: hidden !important;
   text-overflow: ellipsis;
@@ -27,7 +26,7 @@ code {
     width: 50vw;
   }
   .truncate {
-    width: 150px;
+    width: 140px;
   }
 }
 
@@ -64,8 +63,9 @@ code {
   top: 0;
   left: 0;
   z-index: 1;
-  height: 100%;
+  height: calc(100vh - 76px);
   overflow-x: hidden;
+  overflow-y: scroll;
   border-right: 1px solid #ececec;
   background-color: #fff;
   transition: 0.3s;
@@ -94,6 +94,10 @@ code {
   }
 }
 
+.u-positionLeft60 {
+  left: 60% !important;
+}
+
 .toggler {
   position: fixed;
   top: 15px;
@@ -102,7 +106,7 @@ code {
   transition: 1s;
 }
 
-.is-active::before {
+.menu-item.is-active::before {
   content: "";
   background-color: #375de7;
   width: 5px;

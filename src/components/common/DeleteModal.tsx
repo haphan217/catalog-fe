@@ -13,6 +13,8 @@ export interface DeleteModalProps {
 
 export default function DeleteModal({ item, onDelete, type }: DeleteModalProps) {
   const [serverErr, setServerErr] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
+
   const dispatch = useAppDispatch();
 
   const closeModal = () => {
@@ -21,6 +23,7 @@ export default function DeleteModal({ item, onDelete, type }: DeleteModalProps) 
 
   const onDeleteItem = async () => {
     try {
+      setLoading(true);
       if (type === "Item") {
         await deleteItem((item as Item).categoryId, item.id);
       } else {
@@ -30,6 +33,8 @@ export default function DeleteModal({ item, onDelete, type }: DeleteModalProps) 
       closeModal();
     } catch (error: any) {
       setServerErr(error.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -52,6 +57,7 @@ export default function DeleteModal({ item, onDelete, type }: DeleteModalProps) 
       onClickPrimary={onDeleteItem}
       onClose={closeModal}
       secondaryBtn="Cancel"
+      loading={loading}
     />
   );
 }

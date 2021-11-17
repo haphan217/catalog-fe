@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Button, Modal, Icon, Form } from "@ahaui/react";
+import { Form } from "@ahaui/react";
 import { Category } from "utils/Types";
 import BaseModal from "components/common/BaseModal";
 import { useAppDispatch } from "store/store";
@@ -15,6 +15,7 @@ export interface AddCateProps {
 export default function AddCategoryModal({ onSubmitCategory }: AddCateProps) {
   const [category, setCategory] = useState<Partial<Category>>({ name: "" });
   const [serverErr, setServerErr] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
   const dispatch = useAppDispatch();
 
   const closeModal = () => {
@@ -23,13 +24,15 @@ export default function AddCategoryModal({ onSubmitCategory }: AddCateProps) {
 
   const onSubmit = async () => {
     try {
+      setLoading(true);
       const { data } = await createCategory(category.name || "");
       const camelData: Category = keysToCamel(data as CategoryDTO);
       onSubmitCategory(camelData);
       closeModal();
     } catch (error: any) {
-      console.log(error);
       setServerErr(error.response.data.error_message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -58,6 +61,7 @@ export default function AddCategoryModal({ onSubmitCategory }: AddCateProps) {
       onClickPrimary={onSubmit}
       onClose={closeModal}
       secondaryBtn="Cancel"
+      loading={loading}
     />
   );
 }

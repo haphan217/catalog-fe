@@ -43,12 +43,12 @@ export default function HomePage() {
   }, [page]);
 
   const onSelectCategory = (category: number) => {
-    // console.log(selectedCategory);
     setSelectedCategory(category);
   };
 
   const onAddCategorySuccess = (category: Category) => {
     notifyPositive(`Category ${category.name} succesfully added`);
+    setTotal(total + 1);
     setCategories([...categories, category]);
   };
 
@@ -65,44 +65,39 @@ export default function HomePage() {
 
   const onDeleteCategory = (cate: Category) => {
     notifyPositive(`Category ${cate.name} succesfully deleted`);
+    setTotal(total - 1);
     const filteredCateList = categories.filter((c) => c.id !== cate.id);
     setCategories(filteredCateList);
     setSelectedCategory(filteredCateList[0].id);
   };
 
-  return !loading ? (
-    categories[0] && selectedCategory ? (
-      <div className="Grid" style={{ margin: 0 }}>
-        <CategoryList
-          selectedCategory={selectedCategory}
-          onSelectCategory={onSelectCategory}
-          categories={categories}
-          onAddCategory={onAddCategorySuccess}
-          totalCategories={total}
-          setPage={setPage}
-        />
-        <ItemList
-          category={categories.find((c) => c.id == selectedCategory) || categories[0]}
-          onDeleteCategory={onDeleteCategory}
-        />
-      </div>
-    ) : (
-      <div className="u-positionAbsolute u-positionCenter">
-        <EmptyState src="https://raw.githubusercontent.com/gotitinc/aha-assets/master/gotit/emptyState/general.svg">
-          <EmptyState.Description>Nothing to show :&#40;</EmptyState.Description>
-          {profile.isAuthenticated ? (
-            <Button variant="primary" className="u-textTransformNone" onClick={showAddCategoryModal}>
-              <Icon name="plus" role="button" className="u-marginRightTiny" /> Category
-            </Button>
-          ) : (
-            <EmptyState.Description>Please login to add contents</EmptyState.Description>
-          )}
-        </EmptyState>
-      </div>
-    )
+  return categories[0] && selectedCategory ? (
+    <div className="Grid" style={{ margin: 0 }}>
+      <CategoryList
+        selectedCategory={selectedCategory}
+        onSelectCategory={onSelectCategory}
+        categories={categories}
+        onAddCategory={onAddCategorySuccess}
+        totalCategories={total}
+        onScrollToEnd={() => setPage((prev) => prev + 1)}
+      />
+      <ItemList
+        category={categories.find((c) => c.id == selectedCategory) || categories[0]}
+        onDeleteCategory={onDeleteCategory}
+      />
+    </div>
   ) : (
     <div className="u-positionAbsolute u-positionCenter">
-      <Loader size="medium" duration={500} />
+      <EmptyState src="https://raw.githubusercontent.com/gotitinc/aha-assets/master/gotit/emptyState/general.svg">
+        <EmptyState.Description>Nothing to show :&#40;</EmptyState.Description>
+        {profile.isAuthenticated ? (
+          <Button variant="primary" className="u-textTransformNone" onClick={showAddCategoryModal}>
+            <Icon name="plus" role="button" className="u-marginRightTiny" /> Category
+          </Button>
+        ) : (
+          <EmptyState.Description>Please login to add contents</EmptyState.Description>
+        )}
+      </EmptyState>
     </div>
   );
 }

@@ -15,7 +15,7 @@ interface Props {
   categories: Category[];
   onAddCategory: (c: Category) => void;
   totalCategories: number;
-  setPage: React.Dispatch<React.SetStateAction<number>>;
+  onScrollToEnd: () => void;
 }
 
 export default function CategoryList({
@@ -24,7 +24,7 @@ export default function CategoryList({
   categories,
   onAddCategory,
   totalCategories,
-  setPage,
+  onScrollToEnd,
 }: Props) {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [isVisible, setIsVisible] = useState(true);
@@ -56,7 +56,7 @@ export default function CategoryList({
   };
 
   return (
-    <div className={`sidenav ${isOpen ? "Show " : ""} md:u-size2of10`}>
+    <div className={`sidenav ${isOpen ? "Show " : ""} md:u-size2of10`} id="scrollableDiv">
       {isVisible && (
         <div className="toggler md:u-hidden">
           <Icon size="medium" name="menu" role="button" onClick={() => setIsOpen(true)} />
@@ -78,9 +78,20 @@ export default function CategoryList({
       <div className="u-marginTopSmall u-positionRelative">
         <InfiniteScroll
           dataLength={categories.length}
-          next={() => setPage((prevPage) => prevPage + 1)}
+          next={onScrollToEnd}
           hasMore={categories.length < totalCategories}
-          loader={<Loader />}
+          loader={
+            <div className="u-textCenter">
+              <Loader />
+            </div>
+          }
+          endMessage={
+            <p className="u-textCenter">
+              <small className="u-textLight">{`${totalCategories} ${
+                totalCategories > 1 ? "categories" : "category"
+              }`}</small>
+            </p>
+          }
           scrollableTarget="scrollableDiv"
         >
           {categories.map((c) => (

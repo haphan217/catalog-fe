@@ -16,6 +16,7 @@ export interface AddItemProps {
 
 export default function AddItemModal({ categoryId, editingItem, onSubmitItem }: AddItemProps) {
   const [serverErr, setServerErr] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
 
   const [item, setItem] = useState<Partial<Item>>(
     editingItem || {
@@ -42,6 +43,8 @@ export default function AddItemModal({ categoryId, editingItem, onSubmitItem }: 
       closeModal();
     } catch (error: any) {
       setServerErr(error.response.data.error_message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -75,6 +78,7 @@ export default function AddItemModal({ categoryId, editingItem, onSubmitItem }: 
       onClickPrimary={onSubmit}
       onClose={closeModal}
       secondaryBtn="Cancel"
+      loading={loading}
     />
   );
 }

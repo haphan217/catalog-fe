@@ -1,4 +1,4 @@
-import { Modal, Button } from "@ahaui/react";
+import { Modal, Button, Loader } from "@ahaui/react";
 import { ModalProps } from "utils/Types";
 const BaseModal = (props: ModalProps) => {
   const {
@@ -11,6 +11,7 @@ const BaseModal = (props: ModalProps) => {
     onClickPrimary,
     onClickSecondary,
     onClose,
+    loading,
   } = props;
 
   return (
@@ -22,6 +23,7 @@ const BaseModal = (props: ModalProps) => {
       </Modal.Header>
       <Modal.Body>{body}</Modal.Body>
       <Modal.Footer>
+        {loading && <Loader size="small" />}
         {secondaryBtn && (
           <Button variant="secondary" onClick={onClickSecondary || onClose}>
             {secondaryBtn}

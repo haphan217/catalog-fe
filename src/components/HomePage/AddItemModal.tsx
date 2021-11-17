@@ -1,16 +1,22 @@
 import { useState } from "react";
-import { Button, Icon, Form } from "@ahaui/react";
+import { Form } from "@ahaui/react";
 import { Item } from "utils/Types";
 import BaseModal from "components/common/BaseModal";
 import { useAppDispatch } from "store/store";
 import { hideModal } from "store/slices/modalSlice";
+import { createItem } from "services/ItemService";
+import { keysToCamel } from "utils/functions";
+import { ItemDTO } from "utils/DTO";
 
 export interface AddItemProps {
+  categoryId: number;
   editingItem?: Item;
   onSubmitItem: (i: Item) => void;
 }
 
-export default function AddItemModal({ editingItem, onSubmitItem }: AddItemProps) {
+export default function AddItemModal({ categoryId, editingItem, onSubmitItem }: AddItemProps) {
+  const [serverErr, setServerErr] = useState<string>("");
+
   const [item, setItem] = useState<Item>(
     editingItem || {
       name: "",
@@ -23,10 +29,16 @@ export default function AddItemModal({ editingItem, onSubmitItem }: AddItemProps
     dispatch(hideModal());
   };
 
-  const onSubmit = () => {
-    onSubmitItem(item);
-    console.log(item);
-    closeModal();
+  const onSubmit = async () => {
+    try {
+      const { data } = await createItem(categoryId, item.name, item.description);
+      const camelData: Item = keysToCamel(data as ItemDTO);
+      onSubmitItem(camelData);
+      closeModal();
+    } catch (error: any) {
+      console.log(error);
+      setServerErr(error.message);
+    }
   };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -38,7 +50,10 @@ export default function AddItemModal({ editingItem, onSubmitItem }: AddItemProps
     <>
       <Form.Group controlId="name">
         <Form.Label>Item name</Form.Label>
-        <Form.Input type="text" onChange={handleChange} value={item.name}></Form.Input>
+        <Form.Input isInvalid={!!serverErr} type="text" onChange={handleChange} value={item.name}></Form.Input>
+        <Form.Feedback type="invalid" role="alert" visible={!!serverErr}>
+          {serverErr}
+        </Form.Feedback>
       </Form.Group>
       <Form.Group controlId="description">
         <Form.Label>Item description</Form.Label>

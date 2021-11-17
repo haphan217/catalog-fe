@@ -33,28 +33,41 @@ export default function ItemList({ category, onDeleteCategory }: Props) {
 
   const dispatch = useAppDispatch();
 
+  const fetchItems = async () => {
+    try {
+      setIsLoading(true);
+      const { data } = await getItemList(category.id || 1, currentPage);
+      const camelData: ListResponse = keysToCamel(data as ListResponseDTO);
+      setItemList(camelData.items as Item[]);
+      setTotalPage(Math.ceil(camelData.totalItems / 20));
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   useEffect(() => {
-    (async () => {
-      try {
-        setIsLoading(true);
-        const { data } = await getItemList(category.id || 1, currentPage);
-        const camelData: ListResponse = keysToCamel(data as ListResponseDTO);
-        setItemList(camelData.items as Item[]);
-        setTotalPage(camelData.totalItems);
-      } catch (error) {
-        console.error(error);
-      } finally {
-        setIsLoading(false);
-      }
-    })();
+    fetchItems();
   }, [currentPage]);
 
-  const onAddItem = (item: Item) => {
-    console.log(item);
+  const onAddItem = () => {
+    //fetch item list after adding new item
+    if (currentPage === 1) {
+      fetchItems();
+    } else setCurrentPage(1);
+  };
+
+  const onDeleteItem = (item: Item | Category) => {
+    const filteredItemList = itemList.filter((i) => i.id !== item.id);
+    if (filteredItemList[0]) {
+      setItemList(filteredItemList);
+    } else setCurrentPage(1);
   };
 
   const showAddItemModal = () => {
     const props: AddItemProps = {
+      categoryId: category.id || 1,
       onSubmitItem: onAddItem,
     };
     const content: ModalContent = {
@@ -114,7 +127,7 @@ export default function ItemList({ category, onDeleteCategory }: Props) {
           </div>
           <div className="u-flex u-flexWrap u-marginTopSmall">
             {itemList.map((item) => (
-              <ItemCard key={item.id} item={item} />
+              <ItemCard key={item.id} initItem={item} onDeleteItem={onDeleteItem} />
             ))}
           </div>
           {totalPage > 1 && (

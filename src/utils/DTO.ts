@@ -15,8 +15,6 @@ export type ItemDTO = {
   name: string;
   description: string;
   category_id?: number;
-  created_at?: string;
-  updated_at?: string;
   author_id?: number;
 };
 
@@ -24,8 +22,6 @@ export type CategoryDTO = {
   id?: number;
   name: string;
   author_id?: number;
-  created_at?: string;
-  updated_at?: string;
 };
 
 export type UserDTO = {

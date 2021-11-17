@@ -1,5 +1,5 @@
 import { Card, Dropdown, Icon } from "@ahaui/react";
-import { Item } from "utils/Types";
+import { Item, Category } from "utils/Types";
 import { useAppDispatch } from "store/store";
 import { AddItemProps } from "./AddItemModal";
 import { showModal, ModalContent } from "store/slices/modalSlice";
@@ -7,21 +7,25 @@ import { ModalKey } from "utils/constants";
 import { DeleteModalProps } from "components/common/DeleteModal";
 import { useSelector } from "react-redux";
 import { selectUser } from "store/slices/userSlice";
+import { useState } from "react";
 
-export default function ItemCard({ item }: { item: Item }) {
+interface CardProps {
+  initItem: Item;
+  onDeleteItem: (i: Item | Category) => void;
+}
+
+export default function ItemCard({ initItem, onDeleteItem }: CardProps) {
   const dispatch = useAppDispatch();
   const profile = useSelector(selectUser);
-
-  const onDeleteItem = () => {
-    console.log(item?.name);
-  };
+  const [item, setItem] = useState<Item>(initItem);
 
   const onEditItem = (editingItem: Item) => {
-    console.log(editingItem);
+    setItem(editingItem);
   };
 
   const showEditItemModal = () => {
     const props: AddItemProps = {
+      categoryId: item.id || 1,
       onSubmitItem: onEditItem,
       editingItem: item,
     };

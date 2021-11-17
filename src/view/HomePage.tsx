@@ -14,18 +14,12 @@ import { ListResponseDTO } from "utils/DTO";
 import { keysToCamel } from "utils/functions";
 import { notifyPositive } from "components/common/ToastSuccess";
 
-const sampleCategory: Category[] = [
-  { name: "Category 1", id: 1 },
-  { name: "Category 2", id: 2 },
-  { name: "Category 3", id: 3 },
-];
-
 export default function HomePage() {
   const [loading, setLoading] = useState<boolean>(false);
   const [selectedCategory, setSelectedCategory] = useState<number>();
   const [categories, setCategories] = useState<Category[]>([]);
   const [total, setTotal] = useState<number>(0);
-  const [page, setPage] = useState<number>(2);
+  const [page, setPage] = useState<number>(1);
   const dispatch = useAppDispatch();
   const profile = useSelector(selectUser);
 
@@ -35,11 +29,10 @@ export default function HomePage() {
         setLoading(true);
         const { data } = await getCategoryList(page);
         const camelData: ListResponse = keysToCamel(data as ListResponseDTO);
-        // setCategories((prevList) => {
-        //   return [...prevList, ...camelData.items];
-        // });
-        setCategories(camelData.items);
-        setSelectedCategory(camelData.items[0].id || 0);
+        setCategories((prevList) => {
+          return [...prevList, ...camelData.items];
+        });
+        page === 1 && setSelectedCategory(camelData.items[0].id);
         setTotal(camelData.totalItems);
       } catch (error) {
         console.error(error);
@@ -74,7 +67,7 @@ export default function HomePage() {
     notifyPositive(`Category ${cate.name} succesfully deleted`);
     const filteredCateList = categories.filter((c) => c.id !== cate.id);
     setCategories(filteredCateList);
-    setSelectedCategory(filteredCateList[0].id || 1);
+    setSelectedCategory(filteredCateList[0].id);
   };
 
   return !loading ? (
@@ -85,7 +78,6 @@ export default function HomePage() {
           onSelectCategory={onSelectCategory}
           categories={categories}
           onAddCategory={onAddCategorySuccess}
-          loading
           totalCategories={total}
           setPage={setPage}
         />

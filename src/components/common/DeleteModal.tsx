@@ -22,9 +22,9 @@ export default function DeleteModal({ item, onDelete, type }: DeleteModalProps) 
   const onDeleteItem = async () => {
     try {
       if (type === "Item") {
-        await deleteItem((item as Item).categoryId || 0, item.id || 0);
+        await deleteItem((item as Item).categoryId, item.id);
       } else {
-        await deleteCategory(item.id || 0);
+        await deleteCategory(item.id);
       }
       onDelete(item);
       closeModal();

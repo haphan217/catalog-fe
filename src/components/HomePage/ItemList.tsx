@@ -32,7 +32,7 @@ export default function ItemList({ category, onDeleteCategory }: Props) {
   const fetchItems = async () => {
     try {
       setIsLoading(true);
-      const { data } = await getItemList(category.id || 1, currentPage);
+      const { data } = await getItemList(category.id, currentPage);
       const camelData: ListResponse = keysToCamel(data as ListResponseDTO);
       setItemList(camelData.items as Item[]);
       setTotalPage(Math.ceil(camelData.totalItems / 20));
@@ -67,7 +67,7 @@ export default function ItemList({ category, onDeleteCategory }: Props) {
 
   const showAddItemModal = () => {
     const props: AddItemProps = {
-      categoryId: category.id || 1,
+      categoryId: category.id,
       onSubmitItem: onAddItem,
     };
     const content: ModalContent = {
@@ -95,6 +95,7 @@ export default function ItemList({ category, onDeleteCategory }: Props) {
       {category && (
         <div className="u-flex u-justifyContentBetween u-marginRightMedium">
           <h3 className="u-marginLeftSmall">{category.name} items</h3>
+          {console.log(category.authorId, profile.user.id)}
           {profile.isAuthenticated && category.authorId === profile.user.id && (
             <Dropdown alignRight>
               <Dropdown.Toggle className="u-textLight u-lineHeightNone">

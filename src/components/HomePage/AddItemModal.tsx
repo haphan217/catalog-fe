@@ -17,7 +17,7 @@ export interface AddItemProps {
 export default function AddItemModal({ categoryId, editingItem, onSubmitItem }: AddItemProps) {
   const [serverErr, setServerErr] = useState<string>("");
 
-  const [item, setItem] = useState<Item>(
+  const [item, setItem] = useState<Partial<Item>>(
     editingItem || {
       name: "",
       description: "",
@@ -33,9 +33,9 @@ export default function AddItemModal({ categoryId, editingItem, onSubmitItem }: 
     try {
       let res;
       if (editingItem) {
-        res = await updateItem(categoryId, editingItem.id || 1, item.name, item.description);
+        res = await updateItem(categoryId, editingItem.id, item.name || "", item.description || "");
       } else {
-        res = await createItem(categoryId, item.name, item.description);
+        res = await createItem(categoryId, item.name || "", item.description || "");
       }
       const camelData: Item = keysToCamel(res.data as ItemDTO);
       onSubmitItem(camelData);

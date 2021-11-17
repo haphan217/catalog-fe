@@ -13,7 +13,7 @@ export interface AddCateProps {
 }
 
 export default function AddCategoryModal({ onSubmitCategory }: AddCateProps) {
-  const [category, setCategory] = useState<Category>({ name: "" });
+  const [category, setCategory] = useState<Partial<Category>>({ name: "" });
   const [serverErr, setServerErr] = useState<string>("");
   const dispatch = useAppDispatch();
 
@@ -23,7 +23,7 @@ export default function AddCategoryModal({ onSubmitCategory }: AddCateProps) {
 
   const onSubmit = async () => {
     try {
-      const { data } = await createCategory(category.name);
+      const { data } = await createCategory(category.name || "");
       const camelData: Category = keysToCamel(data as CategoryDTO);
       onSubmitCategory(camelData);
       closeModal();

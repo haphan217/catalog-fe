@@ -24,19 +24,21 @@ export const loginUser = createAsyncThunk<User, LoginForm, { rejectValue: Error 
       localStorage.setItem("user", JSON.stringify(tmpUser));
       return tmpUser;
     } catch (error: any) {
-      console.log("ERROR LOGIN", error.response.data);
       return thunkAPI.rejectWithValue(error.response.data);
     }
   },
 );
 
-export const registerUser = createAsyncThunk<string, SignupForm, { rejectValue: Error }>(
+export const registerUser = createAsyncThunk<User, SignupForm, { rejectValue: Error }>(
   "user/register",
   async (user: SignupForm, thunkAPI) => {
     try {
       const { data } = await register(user.username, user.password, user.email || "");
       localStorage.setItem("token", data.access_token);
-      return user.username;
+      const res = await getUser();
+      const tmpUser: User = res.data;
+      localStorage.setItem("user", JSON.stringify(tmpUser));
+      return tmpUser;
     } catch (error: any) {
       return thunkAPI.rejectWithValue(error.response.data);
     }
@@ -73,7 +75,7 @@ const userSlice = createSlice({
       state.loading = false;
       state.isAuthenticated = true;
       state.errorMessage = "";
-      state.user = { name: payload };
+      state.user = payload;
     });
     builder.addCase(registerUser.rejected, (state, { payload }) => {
       state.loading = false;

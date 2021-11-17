@@ -11,17 +11,17 @@ export type KeysToCamelCase<T> = {
 };
 
 export type ItemDTO = {
-  id?: number;
+  id: number;
   name: string;
   description: string;
-  category_id?: number;
-  author_id?: number;
+  category_id: number;
+  author_id: number;
 };
 
 export type CategoryDTO = {
-  id?: number;
+  id: number;
   name: string;
-  author_id?: number;
+  author_id: number;
 };
 
 export type UserDTO = {

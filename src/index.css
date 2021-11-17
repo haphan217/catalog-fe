@@ -27,7 +27,7 @@ code {
     width: 50vw;
   }
   .truncate {
-    width: 200px;
+    width: 150px;
   }
 }
 
@@ -64,7 +64,7 @@ code {
   top: 0;
   left: 0;
   z-index: 1;
-  height: calc(100vh - 76px);
+  height: 100%;
   overflow-x: hidden;
   border-right: 1px solid #ececec;
   background-color: #fff;
@@ -100,4 +100,15 @@ code {
   left: 20px;
   display: none;
   transition: 1s;
+}
+
+.is-active::before {
+  content: "";
+  background-color: #375de7;
+  width: 5px;
+  height: 46px;
+  position: absolute;
+  margin-top: -8px;
+  left: -2px;
+  display: inline-block;
 }

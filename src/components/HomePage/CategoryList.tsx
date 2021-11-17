@@ -1,20 +1,19 @@
-import { useState, useEffect, useRef, useCallback } from "react";
-import { SidebarMenu } from "@ahaui/react";
+import { useState, useEffect } from "react";
 import { AddCateProps } from "components/HomePage/AddCategoryModal";
 import { Category } from "utils/Types";
-import { Icon, Button } from "@ahaui/react";
+import { Icon, Button, Loader } from "@ahaui/react";
 import { useAppDispatch } from "store/store";
 import { ModalContent, showModal } from "store/slices/modalSlice";
 import { ModalKey } from "utils/constants";
 import { useSelector } from "react-redux";
 import { selectUser } from "store/slices/userSlice";
+import InfiniteScroll from "react-infinite-scroll-component";
 
 interface Props {
   selectedCategory: number;
   onSelectCategory: (categoryId: number) => void;
   categories: Category[];
   onAddCategory: (c: Category) => void;
-  loading: boolean;
   totalCategories: number;
   setPage: React.Dispatch<React.SetStateAction<number>>;
 }
@@ -24,7 +23,6 @@ export default function CategoryList({
   selectedCategory,
   categories,
   onAddCategory,
-  loading,
   totalCategories,
   setPage,
 }: Props) {
@@ -42,19 +40,6 @@ export default function CategoryList({
   useEffect(() => {
     window.addEventListener("scroll", toggleVisibility);
   }, []);
-
-  // const observer = useRef<any>();
-  // const lastCategoryRef = useCallback((lastCategory) => {
-  //   // if (loading) return;
-  //   if (observer.current) observer.current.disconnect();
-  //   observer.current = new IntersectionObserver((entries) => {
-  //     if (entries[0].isIntersecting && categories.length < totalCategories) {
-  //       console.log("into view");
-  //       setPage((prevPage) => prevPage + 1);
-  //     }
-  //   });
-  //   if (lastCategory) observer.current.observe(lastCategory);
-  // }, []);
 
   const dispatch = useAppDispatch();
   const profile = useSelector(selectUser);
@@ -90,20 +75,31 @@ export default function CategoryList({
           onClick={() => setIsOpen(false)}
         />
       </div>
-      <SidebarMenu
-        size="small"
-        current={selectedCategory}
-        onSelect={(id: number) => {
-          onSelectCategory(id);
-          setIsOpen(false);
-        }}
-      >
-        {categories.map((c, i) => (
-          <SidebarMenu.Item key={c.id} eventKey={c.id}>
-            <span className="truncate">{c.name}</span>
-          </SidebarMenu.Item>
-        ))}
-      </SidebarMenu>
+      <div className="u-marginTopSmall u-positionRelative">
+        <InfiniteScroll
+          dataLength={categories.length}
+          next={() => setPage((prevPage) => prevPage + 1)}
+          hasMore={categories.length < totalCategories}
+          loader={<Loader />}
+          scrollableTarget="scrollableDiv"
+        >
+          {categories.map((c) => (
+            <div
+              role="button"
+              key={c.id}
+              onClick={() => {
+                onSelectCategory(c.id);
+                setIsOpen(false);
+              }}
+              className={`menu-item ${
+                selectedCategory === c.id ? "is-active u-backgroundLightest" : ""
+              } u-paddingExtraSmall hover:u-backgroundLightest`}
+            >
+              <span className="truncate">{c.name}</span>
+            </div>
+          ))}
+        </InfiniteScroll>
+      </div>
     </div>
   );
 }

@@ -27,7 +27,7 @@ export default function ItemCard({ initItem, onDeleteItem }: CardProps) {
 
   const showEditItemModal = () => {
     const props: AddItemProps = {
-      categoryId: item.categoryId || 1,
+      categoryId: item.categoryId,
       onSubmitItem: onEditItem,
       editingItem: item,
     };

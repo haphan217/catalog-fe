@@ -86,6 +86,10 @@ export default function HomePage() {
         onDeleteCategory={onDeleteCategory}
       />
     </div>
+  ) : loading ? (
+    <div className="u-positionAbsolute u-positionCenter">
+      <Loader size="medium" duration={500} />
+    </div>
   ) : (
     <div className="u-positionAbsolute u-positionCenter">
       <EmptyState src="https://raw.githubusercontent.com/gotitinc/aha-assets/master/gotit/emptyState/general.svg">

@@ -32,6 +32,7 @@ export default function AddItemModal({ categoryId, editingItem, onSubmitItem }: 
 
   const onSubmit = async () => {
     try {
+      setLoading(true);
       let res;
       if (editingItem) {
         res = await updateItem(categoryId, editingItem.id, item.name || "", item.description || "");

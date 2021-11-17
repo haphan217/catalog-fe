@@ -21,7 +21,7 @@ const sampleCategory: Category[] = [
 
 export default function HomePage() {
   const [loading, setLoading] = useState<boolean>(false);
-  const [selectedCategory, setSelectedCategory] = useState<number>(0);
+  const [selectedCategory, setSelectedCategory] = useState<number>();
   const [categories, setCategories] = useState<Category[]>([]);
   const dispatch = useAppDispatch();
   const profile = useSelector(selectUser);
@@ -33,6 +33,7 @@ export default function HomePage() {
         const { data } = await getCategoryList();
         const camelData: ListResponse = keysToCamel(data as ListResponseDTO);
         setCategories(camelData.items);
+        setSelectedCategory(camelData.items[0].id || 0);
       } catch (error) {
         console.error(error);
       } finally {
@@ -42,6 +43,7 @@ export default function HomePage() {
   }, []);
 
   const onSelectCategory = (category: number) => {
+    // console.log(selectedCategory);
     setSelectedCategory(category);
   };
 
@@ -60,16 +62,26 @@ export default function HomePage() {
     dispatch(showModal(content));
   };
 
+  // useEffect(() => {
+  //   console.log(selectedCategory);
+  // }, [selectedCategory]);
+
   const onDeleteCategory = (cate: Category) => {
     const filteredCateList = categories.filter((c) => c.id !== cate.id);
     setCategories(filteredCateList);
+    // console.log(filteredCateList[0].id);
     setSelectedCategory(filteredCateList[0].id || 1);
   };
 
   return !loading ? (
-    categories[0] ? (
+    categories[0] && selectedCategory ? (
       <div className="Grid" style={{ margin: 0 }}>
-        <CategoryList selectedCategory={selectedCategory} onSelectCategory={onSelectCategory} categories={categories} />
+        <CategoryList
+          selectedCategory={selectedCategory}
+          onSelectCategory={onSelectCategory}
+          categories={categories}
+          onAddCategory={onAddCategorySuccess}
+        />
         <ItemList
           category={categories.find((c) => c.id == selectedCategory) || categories[0]}
           onDeleteCategory={onDeleteCategory}

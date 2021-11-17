@@ -17,6 +17,12 @@ export default function LoginPage() {
           "Password must have at least 6 characters, including at least one lowercase letter, one uppercase letter, one digit.",
       },
     },
+    email: {
+      regex: {
+        value: "^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$",
+        message: "Please enter a valid email address.",
+      },
+    },
   };
 
   const { formData, handleChange, handleSubmit, errors } = useForm<LoginForm>({
@@ -37,8 +43,11 @@ export default function LoginPage() {
                 <Icon name="contact" className="u-textLight" />
               </Button>
             </Form.InputGroup.Prepend>
-            <Form.Input placeholder="Username" type="text" onChange={handleChange("username")}></Form.Input>
+            <Form.Input placeholder="Email" type="email" onChange={handleChange("email")}></Form.Input>
           </Form.InputGroup>
+          <Form.Feedback visible={!!errors.email} type="invalid" role="alert">
+            {errors.email}
+          </Form.Feedback>
         </Form.Group>
         <Form.Group>
           <Form.InputGroup>
@@ -58,7 +67,7 @@ export default function LoginPage() {
           variant="primary"
           width="full"
           onClick={handleSubmit}
-          disabled={!formData.password || !formData.username}
+          disabled={!formData.password || !formData.email}
         >
           Login
         </Button>

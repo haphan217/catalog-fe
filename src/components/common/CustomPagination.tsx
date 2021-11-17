@@ -57,24 +57,26 @@ export default function PaginationCustom({ currentPage, totalPage, onPageChange 
   }
 
   return (
-    <Pagination>
-      <Pagination.Prev
-        disabled={currentPage <= 1}
-        onClick={() => {
-          if (currentPage > 1) {
-            onPageChange(currentPage - 1);
-          }
-        }}
-      />
-      {paginationItems}
-      <Pagination.Next
-        disabled={currentPage >= totalPage}
-        onClick={() => {
-          if (currentPage < totalPage) {
-            onPageChange(currentPage + 1);
-          }
-        }}
-      />
-    </Pagination>
+    <div className="u-textCenter lg:u-textRight lg:u-marginRightSmall">
+      <Pagination>
+        <Pagination.Prev
+          disabled={currentPage <= 1}
+          onClick={() => {
+            if (currentPage > 1) {
+              onPageChange(currentPage - 1);
+            }
+          }}
+        />
+        {paginationItems}
+        <Pagination.Next
+          disabled={currentPage >= totalPage}
+          onClick={() => {
+            if (currentPage < totalPage) {
+              onPageChange(currentPage + 1);
+            }
+          }}
+        />
+      </Pagination>
+    </div>
   );
 }

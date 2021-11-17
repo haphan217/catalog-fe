@@ -26,11 +26,6 @@ export default function ItemList({ category, onDeleteCategory }: Props) {
   const [itemList, setItemList] = useState<Item[]>([]);
   const profile = useSelector(selectUser);
 
-  const sampleItem: Item = {
-    name: "awesome item",
-    description: "awesome description",
-  };
-
   const dispatch = useAppDispatch();
 
   const fetchItems = async () => {
@@ -49,7 +44,7 @@ export default function ItemList({ category, onDeleteCategory }: Props) {
 
   useEffect(() => {
     fetchItems();
-  }, [currentPage]);
+  }, [currentPage, category]);
 
   const onAddItem = () => {
     //fetch item list after adding new item
@@ -60,9 +55,11 @@ export default function ItemList({ category, onDeleteCategory }: Props) {
 
   const onDeleteItem = (item: Item | Category) => {
     const filteredItemList = itemList.filter((i) => i.id !== item.id);
-    if (filteredItemList[0]) {
+    if (filteredItemList[0] || currentPage === 1) {
       setItemList(filteredItemList);
-    } else setCurrentPage(1);
+    } else {
+      setCurrentPage(1);
+    }
   };
 
   const showAddItemModal = () => {
@@ -95,7 +92,7 @@ export default function ItemList({ category, onDeleteCategory }: Props) {
       {category && (
         <div className="u-flex u-justifyContentBetween u-marginRightMedium">
           <h3 className="u-marginLeftSmall">{category.name} items</h3>
-          {profile.isAuthenticated && (
+          {profile.isAuthenticated && category.authorId === profile.user.id && (
             <Dropdown alignRight>
               <Dropdown.Toggle className="u-textLight u-lineHeightNone">
                 <Icon name="more" size="medium" />

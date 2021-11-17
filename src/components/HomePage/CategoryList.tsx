@@ -13,16 +13,13 @@ interface Props {
   selectedCategory: number;
   onSelectCategory: (categoryId: number) => void;
   categories: Category[];
+  onAddCategory: (c: Category) => void;
 }
 
-export default function CategoryList({ onSelectCategory, selectedCategory, categories }: Props) {
+export default function CategoryList({ onSelectCategory, selectedCategory, categories, onAddCategory }: Props) {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const dispatch = useAppDispatch();
   const profile = useSelector(selectUser);
-
-  const onAddCategory = (c: Category) => {
-    console.log(c);
-  };
 
   const showAddCategoryModal = () => {
     const props: AddCateProps = {
@@ -53,7 +50,14 @@ export default function CategoryList({ onSelectCategory, selectedCategory, categ
           onClick={() => setIsOpen(false)}
         />
       </div>
-      <SidebarMenu size="small" current={selectedCategory} onSelect={onSelectCategory}>
+      <SidebarMenu
+        size="small"
+        current={selectedCategory}
+        onSelect={(id: number) => {
+          onSelectCategory(id);
+          setIsOpen(false);
+        }}
+      >
         {categories.map((c) => (
           <SidebarMenu.Item key={c.id} eventKey={c.id}>
             {c.name}

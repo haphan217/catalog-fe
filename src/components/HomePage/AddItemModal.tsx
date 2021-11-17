@@ -36,8 +36,7 @@ export default function AddItemModal({ categoryId, editingItem, onSubmitItem }: 
       onSubmitItem(camelData);
       closeModal();
     } catch (error: any) {
-      console.log(error);
-      setServerErr(error.message);
+      setServerErr(error.response.data.error_message);
     }
   };
 

@@ -4,7 +4,7 @@ import { getHeaders } from "utils/functions";
 
 export const getCategoryList = (page?: number) => {
   return axios.get(`${API}/categories`, {
-    params: { page: page || 1 },
+    params: { page: page || 2 },
   });
 };
 

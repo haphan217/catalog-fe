@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { User, LoginForm, SignupForm } from "utils/Types";
-import { login, register } from "services/AuthService";
+import { getUser, login, register } from "services/AuthService";
 import { RootState } from "store/rootReducer";
 
 export type SliceState = { isAuthenticated: boolean; loading: boolean; user: User; errorMessage: string };
@@ -8,21 +8,24 @@ export type SliceState = { isAuthenticated: boolean; loading: boolean; user: Use
 const initialState: SliceState = {
   isAuthenticated: localStorage.getItem("token") ? true : false,
   loading: false,
-  user: { name: localStorage.getItem("token") || "" },
+  user: JSON.parse(localStorage.getItem("user") || "{}"),
   errorMessage: "",
 };
 
-type Error = { message: string };
-export const loginUser = createAsyncThunk<string, LoginForm, { rejectValue: Error }>(
+type Error = { error_message: string }; //eslint-disable-line
+export const loginUser = createAsyncThunk<User, LoginForm, { rejectValue: Error }>(
   "user/login",
   async (user: LoginForm, thunkAPI) => {
     try {
-      const { data } = await login(user.username, user.password);
+      const { data } = await login(user.email, user.password);
       localStorage.setItem("token", data.access_token);
-      return user.username;
+      const res = await getUser();
+      const tmpUser: User = res.data;
+      localStorage.setItem("user", JSON.stringify(tmpUser));
+      return tmpUser;
     } catch (error: any) {
-      console.log("ERROR LOGIN", error);
-      return thunkAPI.rejectWithValue(error as Error);
+      console.log("ERROR LOGIN", error.response.data);
+      return thunkAPI.rejectWithValue(error.response.data);
     }
   },
 );
@@ -35,7 +38,7 @@ export const registerUser = createAsyncThunk<string, SignupForm, { rejectValue: 
       localStorage.setItem("token", data.access_token);
       return user.username;
     } catch (error: any) {
-      return thunkAPI.rejectWithValue(error as Error);
+      return thunkAPI.rejectWithValue(error.response.data);
     }
   },
 );
@@ -56,12 +59,12 @@ const userSlice = createSlice({
     builder.addCase(loginUser.fulfilled, (state, { payload }) => {
       state.loading = false;
       state.isAuthenticated = true;
-      state.user = { name: payload };
+      state.user = payload;
       state.errorMessage = "";
     });
     builder.addCase(loginUser.rejected, (state, { payload }) => {
       state.loading = false;
-      if (payload) state.errorMessage = payload.message;
+      if (payload) state.errorMessage = payload.error_message;
     });
     builder.addCase(registerUser.pending, (state) => {
       state.loading = true;
@@ -74,7 +77,7 @@ const userSlice = createSlice({
     });
     builder.addCase(registerUser.rejected, (state, { payload }) => {
       state.loading = false;
-      if (payload) state.errorMessage = payload.message;
+      if (payload) state.errorMessage = payload.error_message;
     });
   },
 });

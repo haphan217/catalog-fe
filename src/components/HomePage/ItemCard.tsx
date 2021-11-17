@@ -25,7 +25,7 @@ export default function ItemCard({ initItem, onDeleteItem }: CardProps) {
 
   const showEditItemModal = () => {
     const props: AddItemProps = {
-      categoryId: item.id || 1,
+      categoryId: item.categoryId || 1,
       onSubmitItem: onEditItem,
       editingItem: item,
     };
@@ -57,7 +57,7 @@ export default function ItemCard({ initItem, onDeleteItem }: CardProps) {
             <h3>{item.name}</h3>
             <p>{item.description}</p>
           </div>
-          {profile.isAuthenticated && (
+          {profile.isAuthenticated && profile.user.id === item.authorId && (
             <Dropdown alignRight>
               <Dropdown.Toggle className="u-textLight u-lineHeightNone">
                 <Icon name="more" size="small" />

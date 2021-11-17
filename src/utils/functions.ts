@@ -52,6 +52,6 @@ export const getHeaders = () => {
   return {
     Authorization: "Bearer " + localStorage.getItem("token"),
     accept: "application/json",
-    "Content-Type": "application/x-www-form-urlencoded",
+    "Content-Type": "application/json",
   };
 };

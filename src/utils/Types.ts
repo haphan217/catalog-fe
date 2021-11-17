@@ -5,7 +5,7 @@ export interface Dictionary<T> {
 }
 
 export type LoginForm = {
-  username: string;
+  email: string;
   password: string;
 };
 

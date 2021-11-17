@@ -1,17 +1,24 @@
 import axios from "axios";
 import { API } from "utils/constants";
+import { getHeaders } from "utils/functions";
 
 export const register = (username: string, password: string, email: string) => {
   return axios.post(`${API}/users`, {
-    username,
+    name: username,
     password,
     email,
   });
 };
 
-export const login = (username: string, password: string) => {
+export const login = (email: string, password: string) => {
   return axios.post(`${API}/auth`, {
-    username,
+    email,
     password,
+  });
+};
+
+export const getUser = () => {
+  return axios.get(`${API}/users/me`, {
+    headers: getHeaders(),
   });
 };

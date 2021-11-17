@@ -51,7 +51,7 @@ const userSlice = createSlice({
   reducers: {
     logout: (state) => {
       localStorage.removeItem("token");
-      return { ...state, isAuthenticated: false, user: { name: "" } };
+      return { isAuthenticated: false, user: { name: "" }, errorMessage: "", loading: false };
     },
   },
   extraReducers: (builder) => {

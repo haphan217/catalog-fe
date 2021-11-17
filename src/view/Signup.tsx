@@ -2,7 +2,7 @@ import { Link, Redirect } from "react-router-dom";
 import { Card, Form, Button, Icon, Loader } from "@ahaui/react";
 import { useAppDispatch } from "store/store";
 import { useSelector } from "react-redux";
-import { registerUser, selectUser } from "store/slices/userSlice";
+import { logout, registerUser, selectUser } from "store/slices/userSlice";
 import { SignupForm } from "utils/Types";
 import { useForm } from "utils/useForm";
 
@@ -81,7 +81,17 @@ export default function SignupPage() {
           Register
         </Button>
         <p>
-          Already have an account?&nbsp; <Link to="/login">Login now</Link>
+          Already have an account?&nbsp;{" "}
+          <Link
+            to="/login"
+            onClick={() => {
+              if (profile.errorMessage) {
+                dispatch(logout());
+              }
+            }}
+          >
+            Login now
+          </Link>
         </p>
         {profile.loading && <Loader size="small" />}
         {profile.errorMessage && <p className="u-textAccent">{profile.errorMessage}</p>}

@@ -1,9 +1,10 @@
-import { useState } from "react";
-import { Modal, Button } from "@ahaui/react";
 import { Category, Item } from "utils/Types";
 import BaseModal from "./BaseModal";
 import { useAppDispatch } from "store/store";
 import { hideModal } from "store/slices/modalSlice";
+import { useState } from "react";
+import { deleteCategory } from "services/CategoryService";
+import { deleteItem } from "services/ItemService";
 export interface DeleteModalProps {
   item: Category | Item;
   type: string;
@@ -11,28 +12,44 @@ export interface DeleteModalProps {
 }
 
 export default function DeleteModal({ item, onDelete, type }: DeleteModalProps) {
+  const [serverErr, setServerErr] = useState<string>("");
   const dispatch = useAppDispatch();
 
   const closeModal = () => {
     dispatch(hideModal());
   };
 
-  const deleteItem = () => {
-    onDelete(item);
-    closeModal();
+  const onDeleteItem = async () => {
+    try {
+      if (type === "Item") {
+        await deleteItem((item as Item).categoryId || 0, item.id || 0);
+      } else {
+        await deleteCategory(item.id || 0);
+      }
+      onDelete(item);
+      closeModal();
+    } catch (error: any) {
+      setServerErr(error.message);
+    }
   };
+
+  const modalBody = (
+    <>
+      <p>
+        Are you sure you want to delete <b>{item.name}</b>?
+      </p>
+      {serverErr && <p className="u-textAccent">{serverErr}</p>}
+    </>
+  );
+
   return (
     <BaseModal
       header={`Delete ${type}`}
-      body={
-        <p>
-          Are you sure you want to delete <b>{item.name}</b>?
-        </p>
-      }
+      body={modalBody}
       primaryBtn="Delete"
       primaryBtnVariant="accent"
       primaryBtnDisabled={false}
-      onClickPrimary={deleteItem}
+      onClickPrimary={onDeleteItem}
       onClose={closeModal}
       secondaryBtn="Cancel"
     />

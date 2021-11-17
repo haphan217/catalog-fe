@@ -53,12 +53,7 @@ export default function CategoryList({ onSelectCategory, selectedCategory, categ
           onClick={() => setIsOpen(false)}
         />
       </div>
-      <SidebarMenu
-        size="small"
-        current={selectedCategory}
-        // onSelect={(id: any) => onSelectCategory() || categories[0])}
-        onSelect={onSelectCategory}
-      >
+      <SidebarMenu size="small" current={selectedCategory} onSelect={onSelectCategory}>
         {categories.map((c) => (
           <SidebarMenu.Item key={c.id} eventKey={c.id}>
             {c.name}

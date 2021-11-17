@@ -13,9 +13,10 @@ import { selectUser } from "store/slices/userSlice";
 
 interface Props {
   category: Category;
+  onDeleteCategory: (cat: Category) => void;
 }
 
-export default function ItemList({ category }: Props) {
+export default function ItemList({ category, onDeleteCategory }: Props) {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [totalPage, setTotalPage] = useState<number>(10);
@@ -32,10 +33,6 @@ export default function ItemList({ category }: Props) {
   useEffect(() => {
     //getItemByCategoryId here
   }, [currentPage]);
-
-  const onDeleteCategory = () => {
-    console.log(category?.name);
-  };
 
   const onAddItem = (item: Item) => {
     console.log(item);

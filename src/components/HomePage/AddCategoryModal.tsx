@@ -4,6 +4,9 @@ import { Category } from "utils/Types";
 import BaseModal from "components/common/BaseModal";
 import { useAppDispatch } from "store/store";
 import { hideModal } from "store/slices/modalSlice";
+import { createCategory } from "services/CategoryService";
+import { keysToCamel } from "utils/functions";
+import { CategoryDTO } from "utils/DTO";
 
 export interface AddCateProps {
   onSubmitCategory: (c: Category) => void;
@@ -11,16 +14,23 @@ export interface AddCateProps {
 
 export default function AddCategoryModal({ onSubmitCategory }: AddCateProps) {
   const [category, setCategory] = useState<Category>({ name: "" });
-
+  const [serverErr, setServerErr] = useState<string>("");
   const dispatch = useAppDispatch();
 
   const closeModal = () => {
     dispatch(hideModal());
   };
 
-  const onSubmit = () => {
-    onSubmitCategory(category);
-    closeModal();
+  const onSubmit = async () => {
+    try {
+      const { data } = await createCategory(category.name);
+      const camelData: Category = keysToCamel(data as CategoryDTO);
+      onSubmitCategory(camelData);
+      closeModal();
+    } catch (error: any) {
+      console.log(error);
+      setServerErr(error.message);
+    }
   };
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -31,7 +41,10 @@ export default function AddCategoryModal({ onSubmitCategory }: AddCateProps) {
     <>
       <Form.Group controlId="name">
         <Form.Label>Category name</Form.Label>
-        <Form.Input type="text" onChange={handleInputChange} value={category.name}></Form.Input>
+        <Form.Input isInvalid={!!serverErr} type="text" onChange={handleInputChange} value={category.name}></Form.Input>
+        <Form.Feedback type="invalid" role="alert" visible={!!serverErr}>
+          {serverErr}
+        </Form.Feedback>
       </Form.Group>
     </>
   );

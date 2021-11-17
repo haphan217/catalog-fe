@@ -10,7 +10,7 @@ import { ModalKey } from "utils/constants";
 import { useSelector } from "react-redux";
 import { selectUser } from "store/slices/userSlice";
 import { getCategoryList } from "services/CategoryService";
-import { CategoryResponseDTO } from "utils/DTO";
+import { CategoryDTO, CategoryResponseDTO } from "utils/DTO";
 import { keysToCamel } from "utils/functions";
 
 const sampleCategory: Category[] = [
@@ -45,13 +45,13 @@ export default function HomePage() {
     setSelectedCategory(category);
   };
 
-  const onAddCategory = (c: Category) => {
-    console.log(c);
+  const onAddCategorySuccess = (category: Category) => {
+    setCategories([...categories, category]);
   };
 
   const showAddCategoryModal = () => {
     const props: AddCateProps = {
-      onSubmitCategory: onAddCategory,
+      onSubmitCategory: onAddCategorySuccess,
     };
     const content: ModalContent = {
       modalName: ModalKey.ADD_CATEGORY,
@@ -60,11 +60,20 @@ export default function HomePage() {
     dispatch(showModal(content));
   };
 
+  const onDeleteCategory = (cate: Category) => {
+    const filteredCateList = categories.filter((c) => c.id !== cate.id);
+    setCategories(filteredCateList);
+    setSelectedCategory(filteredCateList[0].id || 1);
+  };
+
   return !loading ? (
     categories[0] ? (
       <div className="Grid" style={{ margin: 0 }}>
         <CategoryList selectedCategory={selectedCategory} onSelectCategory={onSelectCategory} categories={categories} />
-        <ItemList category={categories.find((c) => c.id == selectedCategory) || categories[0]} />
+        <ItemList
+          category={categories.find((c) => c.id == selectedCategory) || categories[0]}
+          onDeleteCategory={onDeleteCategory}
+        />
       </div>
     ) : (
       <div className="u-positionAbsolute u-positionCenter">

@@ -34,7 +34,7 @@ export const updateItem = (cateId: number, itemId: number, name: string, descrip
   );
 };
 
-export const deleteCategory = (cateId: number, itemId: number) => {
+export const deleteItem = (cateId: number, itemId: number) => {
   return axios.delete(`${API}/categories/${cateId}/items/${itemId}`, {
     headers: getHeaders(),
   });

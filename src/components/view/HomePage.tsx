@@ -1,6 +1,6 @@
 import CategoryList from "components/HomePage/CategoryList";
 import ItemList from "components/HomePage/ItemList";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Category, ListResponse } from "utils/Types";
 import { EmptyState, Icon, Button, Loader } from "@ahaui/react";
 import { AddCateProps } from "components/HomePage/AddCategoryModal";
@@ -42,16 +42,15 @@ export default function HomePage() {
     })();
   }, [page]);
 
-  const onSelectCategory = (category: number) => {
-    setSelectedCategory(category);
-  };
-
-  const onAddCategorySuccess = (category: Category) => {
-    notifyPositive(`Category ${category.name} succesfully added`);
-    setTotal(total + 1);
-    setCategories([...categories, category]);
-    setSelectedCategory(category.id);
-  };
+  const onAddCategorySuccess = useCallback(
+    (category: Category) => {
+      notifyPositive(`Category ${category.name} succesfully added`);
+      setTotal(total + 1);
+      setCategories([...categories, category]);
+      setSelectedCategory(category.id);
+    },
+    [selectedCategory, total],
+  );
 
   const showAddCategoryModal = () => {
     const props: AddCateProps = {
@@ -76,7 +75,7 @@ export default function HomePage() {
     <div className="Grid" style={{ margin: 0 }}>
       <CategoryList
         selectedCategory={selectedCategory}
-        onSelectCategory={onSelectCategory}
+        onSelectCategory={setSelectedCategory}
         categories={categories}
         onAddCategory={onAddCategorySuccess}
         totalCategories={total}

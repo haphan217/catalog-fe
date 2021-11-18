@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { AddCateProps } from "components/HomePage/AddCategoryModal";
 import { Category } from "utils/Types";
 import { Icon, Button, Loader } from "@ahaui/react";
@@ -18,7 +18,7 @@ interface Props {
   onScrollToEnd: () => void;
 }
 
-export default function CategoryList({
+const CategoryList = React.memo(function CategoryList({
   onSelectCategory,
   selectedCategory,
   categories,
@@ -37,9 +37,9 @@ export default function CategoryList({
       setIsVisible(true);
     }
   };
-  useEffect(() => {
-    window.addEventListener("scroll", toggleVisibility);
-  }, []);
+  // useEffect(() => {
+  //   window.addEventListener("scroll", toggleVisibility);
+  // }, []);
 
   const dispatch = useAppDispatch();
   const profile = useSelector(selectUser);
@@ -113,4 +113,5 @@ export default function CategoryList({
       </div>
     </div>
   );
-}
+});
+export default CategoryList;

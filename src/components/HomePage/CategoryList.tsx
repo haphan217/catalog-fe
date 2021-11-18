@@ -18,14 +18,14 @@ interface Props {
   onScrollToEnd: () => void;
 }
 
-const CategoryList = React.memo(function CategoryList({
+const CategoryList = ({
   onSelectCategory,
   selectedCategory,
   categories,
   onAddCategory,
   totalCategories,
   onScrollToEnd,
-}: Props) {
+}: Props) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [isVisible, setIsVisible] = useState(true);
 
@@ -37,9 +37,9 @@ const CategoryList = React.memo(function CategoryList({
       setIsVisible(true);
     }
   };
-  // useEffect(() => {
-  //   window.addEventListener("scroll", toggleVisibility);
-  // }, []);
+  useEffect(() => {
+    window.addEventListener("scroll", toggleVisibility);
+  }, []);
 
   const dispatch = useAppDispatch();
   const profile = useSelector(selectUser);
@@ -113,5 +113,5 @@ const CategoryList = React.memo(function CategoryList({
       </div>
     </div>
   );
-});
+};
 export default CategoryList;

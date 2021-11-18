@@ -6,7 +6,7 @@ interface Props {
   onPageChange: (page: number) => void;
 }
 
-const CustomPagination = React.memo(function CustomPagination({ currentPage, totalPage, onPageChange }: Props) {
+const CustomPagination = ({ currentPage, totalPage, onPageChange }: Props) => {
   const paginationItems = [];
 
   if (totalPage <= 7) {
@@ -79,5 +79,5 @@ const CustomPagination = React.memo(function CustomPagination({ currentPage, tot
       </Pagination>
     </div>
   );
-});
-export default CustomPagination;
+};
+export default React.memo(CustomPagination);

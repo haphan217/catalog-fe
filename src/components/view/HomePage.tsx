@@ -1,6 +1,6 @@
 import CategoryList from "components/HomePage/CategoryList";
 import ItemList from "components/HomePage/ItemList";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Category, ListResponse } from "utils/Types";
 import { EmptyState, Icon, Button, Loader } from "@ahaui/react";
 import { AddCateProps } from "components/HomePage/AddCategoryModal";
@@ -42,15 +42,12 @@ export default function HomePage() {
     })();
   }, [page]);
 
-  const onAddCategorySuccess = useCallback(
-    (category: Category) => {
-      notifyPositive(`Category ${category.name} succesfully added`);
-      setTotal(total + 1);
-      setCategories([...categories, category]);
-      setSelectedCategory(category.id);
-    },
-    [selectedCategory, total],
-  );
+  const onAddCategorySuccess = (category: Category) => {
+    notifyPositive(`Category ${category.name} succesfully added`);
+    setTotal(total + 1);
+    setCategories([...categories, category]);
+    setSelectedCategory(category.id);
+  };
 
   const showAddCategoryModal = () => {
     const props: AddCateProps = {

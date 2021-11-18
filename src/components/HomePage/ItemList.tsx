@@ -1,8 +1,8 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Dropdown, Icon, Button, EmptyState, Loader } from "@ahaui/react";
 import { Category, Item, ListResponse } from "utils/Types";
 import { DeleteModalProps } from "components/common/DeleteModal";
-import PaginationCustom from "components/common/CustomPagination";
+import CustomPagination from "components/common/CustomPagination";
 import { AddItemProps } from "./AddItemModal";
 import ItemCard from "./ItemCard";
 import { useAppDispatch } from "store/store";
@@ -104,13 +104,6 @@ export default function ItemList({ category, onDeleteCategory }: Props) {
     return Math.ceil(totalItems / 20);
   }, [totalItems]);
 
-  const onPageChange = useCallback(
-    (newPage) => {
-      setCurrentPage(newPage);
-    },
-    [currentPage],
-  );
-
   return (
     <div className="u-sizeFull md:u-size8of10">
       {category && (
@@ -152,7 +145,7 @@ export default function ItemList({ category, onDeleteCategory }: Props) {
             ))}
           </div>
           {totalPage > 1 && (
-            <PaginationCustom currentPage={currentPage} onPageChange={setCurrentPage} totalPage={totalPage} />
+            <CustomPagination currentPage={currentPage} onPageChange={setCurrentPage} totalPage={totalPage} />
           )}
         </div>
       ) : (

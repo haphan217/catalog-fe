@@ -1,61 +1,62 @@
-import { render, screen } from "@testing-library/react";
+import { render, RenderResult, screen, act, waitForElementToBeRemoved } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import AddCategoryModal from "components/HomePage/AddCategoryModal";
 import { Category } from "utils/Types";
+import { setupServer } from "msw/node";
+import { rest } from "msw";
+import { API } from "utils/constants";
+import { Provider } from "react-redux";
+import store from "store/store";
+import ModalContainer from "components/layout/ModalContainer";
 
 const sampleCategory: Category = {
-  name: "sample category",
+  name: "category",
+  id: 1,
+  authorId: 1,
 };
-const renderEditModal = (onSubmitCategory: (c: Category) => void) => {
-  render(<AddCategoryModal editingCategory={sampleCategory} onSubmitCategory={onSubmitCategory} />);
+
+const server = setupServer(
+  rest.post(`${API}/categories`, async (req: any, res, ctx) => {
+    return res(ctx.json(sampleCategory));
+  }),
+);
+
+beforeAll(() => server.listen());
+afterAll(() => server.close());
+
+const renderModalInProvider = (handleSubmitCategory: (c: Category) => void): RenderResult => {
+  return render(
+    <Provider store={store}>
+      <ModalContainer />
+      <AddCategoryModal onSubmitCategory={handleSubmitCategory} />
+    </Provider>,
+  );
 };
+
 describe("AddCategoryModal", () => {
   const handleSubmitCategory = jest.fn();
 
-  test("should open modal when user clicks on button", () => {
-    render(<AddCategoryModal onSubmitCategory={handleSubmitCategory} />);
-    const toggleBtn = screen.getByRole("button", { name: /category/i });
-    userEvent.click(toggleBtn);
-    const modalHeader = screen.getByRole("heading", { name: /add category/i });
-    expect(modalHeader).toBeInTheDocument();
+  test("should show correct input field", () => {
+    renderModalInProvider(handleSubmitCategory);
+    const categoryField = screen.getByRole("textbox", { name: /category name/i });
+    expect(categoryField).toBeInTheDocument();
   });
 
   test("should be able to submit form after input category name", () => {
-    render(<AddCategoryModal onSubmitCategory={handleSubmitCategory} />);
-    const toggleBtn = screen.getByRole("button", { name: /category/i });
-    userEvent.click(toggleBtn);
+    renderModalInProvider(handleSubmitCategory);
     const addButton = screen.getByRole("button", { name: /add/i });
     expect(addButton).toBeDisabled();
-    userEvent.type(screen.getByLabelText(/name/i), sampleCategory.name);
+    userEvent.type(screen.getByRole("textbox", { name: /category name/i }), sampleCategory.name);
     expect(addButton).toBeEnabled();
   });
 
-  test("submit form with correct input category then close modal", () => {
-    render(<AddCategoryModal onSubmitCategory={handleSubmitCategory} />);
-    const toggleBtn = screen.getByRole("button", { name: /category/i });
-    userEvent.click(toggleBtn);
+  test("submit form with correct input category", async () => {
+    renderModalInProvider(handleSubmitCategory);
     const addButton = screen.getByRole("button", { name: /add/i });
-    userEvent.type(screen.getByLabelText(/name/i), sampleCategory.name);
-    userEvent.click(addButton);
+    await act(async () => userEvent.type(screen.getByRole("textbox", { name: /category name/i }), sampleCategory.name));
+    await act(async () => userEvent.click(addButton));
+    await waitForElementToBeRemoved(() => screen.getByTestId(/loader/i));
     expect(handleSubmitCategory).toHaveBeenCalledTimes(1);
     expect(handleSubmitCategory).toHaveBeenCalledWith(sampleCategory);
-    expect(addButton).not.toBeInTheDocument();
-  });
-
-  test("should close the modal when user clicks cancel", () => {
-    render(<AddCategoryModal onSubmitCategory={handleSubmitCategory} />);
-    const toggleBtn = screen.getByRole("button", { name: /category/i });
-    userEvent.click(toggleBtn);
-    const cancelBtn = screen.getByRole("button", { name: /cancel/i });
-    userEvent.click(cancelBtn);
-    expect(cancelBtn).not.toBeInTheDocument();
-  });
-
-  test("should open edit modal when user clicks edit button", () => {
-    renderEditModal(handleSubmitCategory);
-    const toggleBtn = screen.getByRole("button", { name: /edit category/i });
-    userEvent.click(toggleBtn);
-    const modalHeader = screen.getByRole("heading", { name: /edit category/i });
-    expect(modalHeader).toBeInTheDocument();
   });
 });

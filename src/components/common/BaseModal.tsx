@@ -23,7 +23,7 @@ const BaseModal = (props: ModalProps) => {
       </Modal.Header>
       <Modal.Body>{body}</Modal.Body>
       <Modal.Footer>
-        {loading && <Loader size="small" />}
+        {loading && <Loader data-testid="loader" size="small" />}
         {secondaryBtn && (
           <Button variant="secondary" onClick={onClickSecondary || onClose}>
             {secondaryBtn}

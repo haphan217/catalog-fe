@@ -65,7 +65,7 @@ code {
   z-index: 1;
   height: calc(100vh - 76px);
   overflow-x: hidden;
-  overflow-y: scroll;
+  overflow-y: auto;
   border-right: 1px solid #ececec;
   background-color: #fff;
   transition: 0.3s;

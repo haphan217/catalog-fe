@@ -16,5 +16,5 @@ export const AuthTestData = {
   TOKEN: "Ey123",
 };
 
-// export const API = "http://192.168.131.100:5001";
-export const API = "http://2a2d-42-113-36-65.ngrok.io";
+export const API = "http://192.168.131.100:5001";
+// export const API = "http://2a2d-42-113-36-65.ngrok.io";

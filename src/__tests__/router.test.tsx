@@ -1,7 +1,6 @@
 import { render, RenderResult, screen } from "@testing-library/react";
 import HomePage from "view/HomePage";
 import App from "App";
-import ItemDetails from "view/ItemDetails";
 import Login from "view/LoginPage";
 import Signup from "view/Signup";
 import TopNav from "components/layout/TopNav";
@@ -9,7 +8,6 @@ import { MemoryRouter } from "react-router-dom";
 
 jest.mock("components/layout/TopNav");
 jest.mock("view/HomePage");
-jest.mock("view/ItemDetails");
 jest.mock("view/LoginPage");
 jest.mock("view/Signup");
 
@@ -42,14 +40,8 @@ describe("test routing", () => {
   });
 
   test("should render signup page for signup route", () => {
-    (Signup as jest.Mock).mockImplementation(() => <div>Signup Page</div>);
-    renderApp("/signup");
-    expect(screen.getByText("Signup Page")).toBeInTheDocument();
-  });
-
-  test("should render item details page for item route", () => {
-    (ItemDetails as jest.Mock).mockImplementation(() => <div>Item Details</div>);
-    renderApp("/item/1");
-    expect(screen.getByText("Item Details")).toBeInTheDocument();
+    (Signup as jest.Mock).mockImplementation(() => <div>Register Page</div>);
+    renderApp("/register");
+    expect(screen.getByText("Register Page")).toBeInTheDocument();
   });
 });

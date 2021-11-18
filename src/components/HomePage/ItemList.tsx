@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { Dropdown, Icon, Button, EmptyState, Loader } from "@ahaui/react";
 import { Category, Item, ListResponse } from "utils/Types";
 import { DeleteModalProps } from "components/common/DeleteModal";
@@ -23,7 +23,7 @@ interface Props {
 export default function ItemList({ category, onDeleteCategory }: Props) {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const [totalPage, setTotalPage] = useState<number>(10);
+  const [totalItems, setTotalItems] = useState<number>(0);
   const [itemList, setItemList] = useState<Item[]>([]);
   const profile = useSelector(selectUser);
 
@@ -35,7 +35,7 @@ export default function ItemList({ category, onDeleteCategory }: Props) {
       const { data } = await getItemList(category.id, currentPage);
       const camelData: ListResponse = keysToCamel(data as ListResponseDTO);
       setItemList(camelData.items as Item[]);
-      setTotalPage(Math.ceil(camelData.totalItems / 20));
+      setTotalItems(camelData.totalItems);
     } catch (error) {
       console.error(error);
     } finally {
@@ -50,6 +50,7 @@ export default function ItemList({ category, onDeleteCategory }: Props) {
   const onAddItem = (item: Item) => {
     notifyPositive(`Item ${item.name} succesfully added`);
     if (itemList.length < 20) {
+      setTotalItems((prev) => prev + 1);
       setItemList([...itemList, item]);
     } else {
       //fetch item list after adding new item
@@ -60,6 +61,11 @@ export default function ItemList({ category, onDeleteCategory }: Props) {
   };
 
   const onDeleteItem = (item: Item | Category) => {
+    if (totalItems - 1 <= currentPage * 20) {
+      fetchItems();
+      return;
+    }
+    setTotalItems((prev) => prev - 1);
     notifyPositive(`Item ${item.name} succesfully deleted`);
     const filteredItemList = itemList.filter((i) => i.id !== item.id);
     if (filteredItemList[0] || currentPage === 1) {
@@ -93,6 +99,17 @@ export default function ItemList({ category, onDeleteCategory }: Props) {
     };
     dispatch(showModal(content));
   };
+
+  const totalPage = useMemo(() => {
+    return Math.ceil(totalItems / 20);
+  }, [totalItems]);
+
+  const onPageChange = useCallback(
+    (newPage) => {
+      setCurrentPage(newPage);
+    },
+    [currentPage],
+  );
 
   return (
     <div className="u-sizeFull md:u-size8of10">
@@ -135,11 +152,7 @@ export default function ItemList({ category, onDeleteCategory }: Props) {
             ))}
           </div>
           {totalPage > 1 && (
-            <PaginationCustom
-              currentPage={currentPage}
-              onPageChange={(page) => setCurrentPage(page)}
-              totalPage={totalPage}
-            />
+            <PaginationCustom currentPage={currentPage} onPageChange={setCurrentPage} totalPage={totalPage} />
           )}
         </div>
       ) : (

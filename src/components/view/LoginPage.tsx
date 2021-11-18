@@ -70,25 +70,27 @@ export default function LoginPage() {
         >
           Login
         </Button>
-        <p>
-          Are you new?&nbsp;{" "}
-          <Link
-            to="/register"
-            onClick={() => {
-              if (profile.errorMessage) {
-                dispatch(logout());
-              }
-            }}
-          >
-            Register now
-          </Link>
-        </p>
-        {profile.loading && <Loader data-testid="loader" size="small" />}
-        {profile.errorMessage && (
-          <p className="u-textAccent" role="alert">
-            {profile.errorMessage}
+        <div className="u-textCenter">
+          <p>
+            Are you new?&nbsp;
+            <Link
+              to="/register"
+              onClick={() => {
+                if (profile.errorMessage) {
+                  dispatch(logout());
+                }
+              }}
+            >
+              Register now
+            </Link>
           </p>
-        )}
+          {profile.loading && <Loader data-testid="loader" size="small" />}
+          {profile.errorMessage && (
+            <p className="u-textAccent" role="alert">
+              {profile.errorMessage}
+            </p>
+          )}
+        </div>
       </Card>
     </div>
   );

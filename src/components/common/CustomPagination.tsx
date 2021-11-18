@@ -1,12 +1,12 @@
 import { Pagination } from "@ahaui/react";
-
+import React from "react";
 interface Props {
   currentPage: number;
   totalPage: number;
   onPageChange: (page: number) => void;
 }
 
-export default function PaginationCustom({ currentPage, totalPage, onPageChange }: Props) {
+const CustomPagination = React.memo(function CustomPagination({ currentPage, totalPage, onPageChange }: Props) {
   const paginationItems = [];
 
   if (totalPage <= 7) {
@@ -79,4 +79,5 @@ export default function PaginationCustom({ currentPage, totalPage, onPageChange 
       </Pagination>
     </div>
   );
-}
+});
+export default CustomPagination;

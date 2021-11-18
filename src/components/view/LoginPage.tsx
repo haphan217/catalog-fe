@@ -33,10 +33,10 @@ export default function LoginPage() {
     <Redirect to="/" />
   ) : (
     <div className="u-flex u-justifyContentCenter">
-      <Card body size="large" className="u-paddingLarge u-textCenter border0 w50">
-        <h3>Login</h3>
+      <Card body size="large" className="u-paddingLarge border0 w50">
+        <h3 className="u-textCenter">Login</h3>
         <Form.Group>
-          <Form.InputGroup className="u-marginBottomSmall">
+          <Form.InputGroup>
             <Form.InputGroup.Prepend>
               <Button disabled>
                 <Icon name="contact" className="u-textLight" />

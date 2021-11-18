@@ -40,7 +40,7 @@ export const useForm = <T extends Record<keyof T, any> = Record<string, unknown>
           } else setErrors((prev) => ({ ...prev, [key]: "" }));
 
           //Regex field
-          if (validation?.regex?.value && !RegExp(validation.regex?.value).test(value)) {
+          if (validation?.regex?.value && !RegExp(validation.regex?.value).test(value) && !!value) {
             setErrors((prev) => ({ ...prev, [key]: validation?.regex?.message }));
           } else {
             setErrors((prev) => ({ ...prev, [key]: "" }));

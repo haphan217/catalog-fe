@@ -1,8 +1,8 @@
 import { Route, Switch, Redirect } from "react-router-dom";
 import TopNav from "components/layout/TopNav";
-import HomePage from "view/HomePage";
-import Login from "view/LoginPage";
-import Signup from "view/Signup";
+import HomePage from "components/view/HomePage";
+import Login from "components/view/LoginPage";
+import Signup from "components/view/Signup";
 import ModalContainer from "components/layout/ModalContainer";
 import { ToastContainer } from "@ahaui/react";
 

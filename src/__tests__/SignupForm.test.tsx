@@ -5,8 +5,8 @@ import { rest } from "msw";
 import store from "store/store";
 import { Provider } from "react-redux";
 import { MemoryRouter } from "react-router-dom";
-import HomePage from "view/HomePage";
-import SignupPage from "view/Signup";
+import HomePage from "components/view/HomePage";
+import SignupPage from "components/view/Signup";
 import { API, AuthTestData } from "utils/constants";
 
 jest.mock("view/HomePage");

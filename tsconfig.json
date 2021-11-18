@@ -23,5 +23,5 @@
   },
   "include": [
     "src"
-, "src/view/HomePage.tsx"  ]
+, "src/components/view/HomePage.tsx"  ]
 }

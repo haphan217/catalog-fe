@@ -1,11 +1,37 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen, act, waitForElementToBeRemoved, RenderResult } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import AddItemModal from "components/HomePage/AddItemModal";
 import { Item } from "utils/Types";
-
+import { setupServer } from "msw/node";
+import { rest } from "msw";
+import { API } from "utils/constants";
+import { Provider } from "react-redux";
+import store from "store/store";
+import ModalContainer from "components/layout/ModalContainer";
 const sampleItem: Item = {
   name: "sample item",
   description: "sample description",
+  id: 1,
+  categoryId: 1,
+  authorId: 1,
+};
+
+const server = setupServer(
+  rest.post(`${API}/categories/1/items`, async (req: any, res, ctx) => {
+    return res(ctx.json(sampleItem));
+  }),
+);
+
+beforeAll(() => server.listen());
+afterAll(() => server.close());
+
+const renderModalInProvider = (handleSubmitItem: (c: Item) => void): RenderResult => {
+  return render(
+    <Provider store={store}>
+      <ModalContainer />
+      <AddItemModal onSubmitCategory={handleSubmitCategory} />
+    </Provider>,
+  );
 };
 const renderEditModal = (onSubmitItem: (i: Item) => void) => {
   render(<AddItemModal editingItem={sampleItem} onSubmitItem={onSubmitItem} />);

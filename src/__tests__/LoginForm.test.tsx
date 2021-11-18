@@ -1,12 +1,12 @@
 import { render, screen, waitForElementToBeRemoved, RenderResult } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import Login from "view/LoginPage";
+import Login from "components/view/LoginPage";
 import { setupServer } from "msw/node";
 import { rest } from "msw";
 import store from "store/store";
 import { Provider } from "react-redux";
 import { MemoryRouter } from "react-router-dom";
-import HomePage from "view/HomePage";
+import HomePage from "components/view/HomePage";
 import { API, AuthTestData } from "utils/constants";
 
 jest.mock("view/HomePage");

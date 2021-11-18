@@ -16,5 +16,13 @@ export const AuthTestData = {
   TOKEN: "Ey123",
 };
 
+export const FormValidation = {
+  EMAIL_REGEX: "^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$",
+  EMAIL_ERROR: "Please enter a valid email address.",
+  PASSWORD_REGEX: "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[a-zA-Z\\d]{6,}$",
+  PASSWORD_ERROR:
+    "Password must have at least 6 characters, including at least one lowercase letter, one uppercase letter, one digit.",
+};
+
 export const API = "http://192.168.131.100:5001";
 // export const API = "http://2a2d-42-113-36-65.ngrok.io";

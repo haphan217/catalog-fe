@@ -5,6 +5,7 @@ import { useSelector } from "react-redux";
 import { loginUser, logout, selectUser } from "store/slices/userSlice";
 import { LoginForm } from "utils/Types";
 import { useForm } from "utils/useForm";
+import { FormValidation } from "utils/constants";
 
 export default function LoginPage() {
   const dispatch = useAppDispatch();
@@ -12,19 +13,17 @@ export default function LoginPage() {
   const loginValidation = {
     password: {
       regex: {
-        value: "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[a-zA-Z\\d]{6,}$",
-        message:
-          "Password must have at least 6 characters, including at least one lowercase letter, one uppercase letter, one digit.",
+        value: FormValidation.PASSWORD_REGEX,
+        message: FormValidation.PASSWORD_ERROR,
       },
     },
     email: {
       regex: {
-        value: "^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$",
-        message: "Please enter a valid email address.",
+        value: FormValidation.EMAIL_REGEX,
+        message: FormValidation.EMAIL_ERROR,
       },
     },
   };
-
   const { formData, handleChange, handleSubmit, errors } = useForm<LoginForm>({
     onSubmit: () => dispatch(loginUser(formData)),
     validations: loginValidation,
@@ -67,7 +66,7 @@ export default function LoginPage() {
           variant="primary"
           width="full"
           onClick={handleSubmit}
-          disabled={!formData.password || !formData.email}
+          disabled={!formData.password || !formData.email || errors.email || errors.password}
         >
           Login
         </Button>

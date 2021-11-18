@@ -5,6 +5,7 @@ import { useSelector } from "react-redux";
 import { logout, registerUser, selectUser } from "store/slices/userSlice";
 import { SignupForm } from "utils/Types";
 import { useForm } from "utils/useForm";
+import { FormValidation } from "utils/constants";
 
 export default function SignupPage() {
   const dispatch = useAppDispatch();
@@ -12,15 +13,14 @@ export default function SignupPage() {
   const signupValidation = {
     password: {
       regex: {
-        value: "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[a-zA-Z\\d]{6,}$",
-        message:
-          "Password must have at least 6 characters, including at least one lowercase letter, one uppercase letter, one digit.",
+        value: FormValidation.PASSWORD_REGEX,
+        message: FormValidation.PASSWORD_ERROR,
       },
     },
     email: {
       regex: {
-        value: "^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$",
-        message: "Please enter a valid email address.",
+        value: FormValidation.EMAIL_REGEX,
+        message: FormValidation.EMAIL_ERROR,
       },
     },
   };
@@ -76,7 +76,7 @@ export default function SignupPage() {
           variant="primary"
           width="full"
           onClick={handleSubmit}
-          disabled={!formData.password || !formData.username || !formData.email}
+          disabled={!formData.password || !formData.username || !formData.email || errors.email || errors.password}
         >
           Register
         </Button>

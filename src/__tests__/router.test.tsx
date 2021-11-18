@@ -1,8 +1,8 @@
 import { render, RenderResult, screen } from "@testing-library/react";
-import HomePage from "view/HomePage";
+import HomePage from "components/view/HomePage";
 import App from "App";
-import Login from "view/LoginPage";
-import Signup from "view/Signup";
+import Login from "components/view/LoginPage";
+import Signup from "components/view/Signup";
 import TopNav from "components/layout/TopNav";
 import { MemoryRouter } from "react-router-dom";
 

@@ -31,7 +31,7 @@ export default function LoginPage() {
   });
 
   return profile.isAuthenticated ? (
-    <Redirect to="/category" />
+    <Redirect to="/" />
   ) : (
     <div className="u-flex u-justifyContentCenter">
       <Card body size="large" className="u-paddingLarge u-textCenter border0 w50">
@@ -84,8 +84,12 @@ export default function LoginPage() {
             Register now
           </Link>
         </p>
-        {profile.loading && <Loader size="small" />}
-        {profile.errorMessage && <p className="u-textAccent">{profile.errorMessage}</p>}
+        {profile.loading && <Loader data-testid="loader" size="small" />}
+        {profile.errorMessage && (
+          <p className="u-textAccent" role="alert">
+            {profile.errorMessage}
+          </p>
+        )}
       </Card>
     </div>
   );

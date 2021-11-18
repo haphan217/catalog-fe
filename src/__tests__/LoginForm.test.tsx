@@ -7,6 +7,7 @@ import store from "store/store";
 import { Provider } from "react-redux";
 import { MemoryRouter } from "react-router-dom";
 import HomePage from "view/HomePage";
+import { API, AuthTestData } from "utils/constants";
 
 jest.mock("view/HomePage");
 
@@ -15,21 +16,21 @@ const renderLoginInProvider = (): RenderResult => {
   return render(
     <Provider store={store}>
       <Login />
-      <HomePage isOpen />
+      <HomePage />
     </Provider>,
     { wrapper: MemoryRouter },
   );
 };
 
 const server = setupServer(
-  rest.post("http://localhost:8080", async (req, res, ctx) => {
-    // if (!req?.body?.password) {
-    //   return res(ctx.status(400), ctx.json({ message: "password required" }));
-    // }
-    // if (!req.body.username) {
-    //   return res(ctx.status(400), ctx.json({ message: "username required" }));
-    // }
+  rest.post(API + "/auth", async (req: any, res, ctx) => {
+    if (req.body?.password === AuthTestData.WRONG_PASSWORD) {
+      return res(ctx.status(400), ctx.json({ error_message: AuthTestData.ERROR })); //eslint-disable-line
+    }
     return res(ctx.json(req.body), ctx.delay(1000));
+  }),
+  rest.get(API + "/users/me", async (req: any, res, ctx) => {
+    return res(ctx.status(200));
   }),
 );
 
@@ -37,14 +38,9 @@ beforeAll(() => server.listen());
 afterAll(() => server.close());
 
 describe("LoginForm", () => {
-  const inputField = {
-    name: "validname",
-    password: "Validpass123",
-    invalidPassword: "invalid",
-  };
-  test("should display username, password field and submit button", () => {
+  test("should display email, password field and submit button", () => {
     renderLoginInProvider();
-    expect(screen.getByPlaceholderText(/username/i)).toBeInTheDocument();
+    expect(screen.getByPlaceholderText(/email/i)).toBeInTheDocument();
     expect(screen.getByPlaceholderText(/password/i)).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /login/i })).toBeInTheDocument();
   });
@@ -53,29 +49,39 @@ describe("LoginForm", () => {
     renderLoginInProvider();
     const loginBtn = screen.getByRole("button", { name: /login/i });
     expect(loginBtn).toBeDisabled();
-    userEvent.type(screen.getByPlaceholderText(/username/i), inputField.name);
-    userEvent.type(screen.getByPlaceholderText(/password/i), inputField.password);
+    userEvent.type(screen.getByPlaceholderText(/email/i), AuthTestData.EMAIL);
+    userEvent.type(screen.getByPlaceholderText(/password/i), AuthTestData.PASSWORD);
     expect(loginBtn).toBeEnabled();
   });
 
   test("should have correct error message when fields are invalid", () => {
     renderLoginInProvider();
-    userEvent.type(screen.getByPlaceholderText(/username/i), inputField.name);
-    userEvent.type(screen.getByPlaceholderText(/password/i), inputField.invalidPassword);
+    userEvent.type(screen.getByPlaceholderText(/email/i), AuthTestData.INVALID_EMAIL);
+    userEvent.type(screen.getByPlaceholderText(/password/i), AuthTestData.INVALID_PASSWORD);
     userEvent.click(screen.getByRole("button", { name: /login/i }));
-    expect(screen.getByRole("alert").textContent).toMatchInlineSnapshot(
+    const [firstAlert, secondAlert] = screen.getAllByRole("alert");
+    expect(firstAlert.textContent).toMatchInlineSnapshot(`"Please enter a valid email address."`);
+    expect(secondAlert.textContent).toMatchInlineSnapshot(
       `"Password must have at least 6 characters, including at least one lowercase letter, one uppercase letter, one digit."`,
     );
   });
 
+  test("should have correct error message for incorrect password", async () => {
+    renderLoginInProvider();
+    userEvent.type(screen.getByPlaceholderText(/email/i), AuthTestData.EMAIL);
+    userEvent.type(screen.getByPlaceholderText(/password/i), AuthTestData.WRONG_PASSWORD);
+    userEvent.click(screen.getByRole("button", { name: /login/i }));
+    const [firstAlert, secondAlert, thirdAlert] = screen.getAllByRole("alert");
+    expect(thirdAlert.textContent).toMatchInlineSnapshot();
+  });
+
   test("redirect to home page when login successfully.", async () => {
-    const { container } = renderLoginInProvider();
+    renderLoginInProvider();
     const loginBtn = screen.getByRole("button", { name: /login/i });
-    userEvent.type(screen.getByPlaceholderText(/username/i), inputField.name);
-    userEvent.type(screen.getByPlaceholderText(/password/i), inputField.password);
+    userEvent.type(screen.getByPlaceholderText(/email/i), AuthTestData.EMAIL);
+    userEvent.type(screen.getByPlaceholderText(/password/i), AuthTestData.PASSWORD);
     userEvent.click(loginBtn);
-    await waitForElementToBeRemoved(() => screen.getByText(/loading/i));
-    // expect(container.firstChild).toBeNull();
+    await waitForElementToBeRemoved(() => screen.getByTestId(/loader/i));
     expect(screen.getByText("HomePage")).toBeInTheDocument();
   });
 });

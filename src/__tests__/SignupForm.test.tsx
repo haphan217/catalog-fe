@@ -7,6 +7,7 @@ import { Provider } from "react-redux";
 import { MemoryRouter } from "react-router-dom";
 import HomePage from "view/HomePage";
 import SignupPage from "view/Signup";
+import { API, AuthTestData } from "utils/constants";
 
 jest.mock("view/HomePage");
 
@@ -15,21 +16,18 @@ const renderSignupInProvider = (): RenderResult => {
   return render(
     <Provider store={store}>
       <SignupPage />
-      <HomePage isOpen />
+      <HomePage />
     </Provider>,
     { wrapper: MemoryRouter },
   );
 };
 
 const server = setupServer(
-  rest.post("http://localhost:8080", async (req, res, ctx) => {
-    // if (!req?.body?.password) {
-    //   return res(ctx.status(400), ctx.json({ message: "password required" }));
-    // }
-    // if (!req.body.username) {
-    //   return res(ctx.status(400), ctx.json({ message: "username required" }));
-    // }
-    return res(ctx.json(req.body));
+  rest.post(API + "/users", async (req: any, res, ctx) => {
+    if (req.body?.email === AuthTestData.EXISTED_EMAIL) {
+      return res(ctx.status(400), ctx.json({ error_message: AuthTestData.ERROR })); //eslint-disable-line
+    }
+    return res(ctx.status(200), ctx.delay(1000));
   }),
 );
 
@@ -37,37 +35,30 @@ beforeAll(() => server.listen());
 afterAll(() => server.close());
 
 describe("SignupForm", () => {
-  const inputField = {
-    name: "validname",
-    password: "Validpass123",
-    invalidPassword: "invalid",
-    email: "valid@gmail.com",
-    invalidEmail: "invalid",
-  };
   test("should display username, password, email field and submit button", () => {
     renderSignupInProvider();
     expect(screen.getByPlaceholderText(/username/i)).toBeInTheDocument();
     expect(screen.getByPlaceholderText(/password/i)).toBeInTheDocument();
     expect(screen.getByPlaceholderText(/email/i)).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: /sign up/i })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /register/i })).toBeInTheDocument();
   });
 
   test("should be able to submit form after fill out all fields", () => {
     renderSignupInProvider();
-    const signupBtn = screen.getByRole("button", { name: /sign up/i });
+    const signupBtn = screen.getByRole("button", { name: /register/i });
     expect(signupBtn).toBeDisabled();
-    userEvent.type(screen.getByPlaceholderText(/username/i), inputField.name);
-    userEvent.type(screen.getByPlaceholderText(/password/i), inputField.password);
-    userEvent.type(screen.getByPlaceholderText(/email/i), inputField.email);
+    userEvent.type(screen.getByPlaceholderText(/username/i), AuthTestData.NAME);
+    userEvent.type(screen.getByPlaceholderText(/password/i), AuthTestData.PASSWORD);
+    userEvent.type(screen.getByPlaceholderText(/email/i), AuthTestData.EMAIL);
     expect(signupBtn).toBeEnabled();
   });
 
   test("should have correct error messages when fields are invalid", () => {
     renderSignupInProvider();
-    userEvent.type(screen.getByPlaceholderText(/username/i), inputField.name);
-    userEvent.type(screen.getByPlaceholderText(/password/i), inputField.invalidPassword);
-    userEvent.type(screen.getByPlaceholderText(/email/i), inputField.invalidEmail);
-    userEvent.click(screen.getByRole("button", { name: /sign up/i }));
+    userEvent.type(screen.getByPlaceholderText(/email/i), AuthTestData.INVALID_EMAIL);
+    userEvent.type(screen.getByPlaceholderText(/password/i), AuthTestData.INVALID_PASSWORD);
+    userEvent.type(screen.getByPlaceholderText(/username/i), AuthTestData.NAME);
+    userEvent.click(screen.getByRole("button", { name: /register/i }));
     const [firstAlert, secondAlert] = screen.getAllByRole("alert");
     expect(firstAlert.textContent).toMatchInlineSnapshot(`"Please enter a valid email address."`);
     expect(secondAlert.textContent).toMatchInlineSnapshot(
@@ -75,15 +66,25 @@ describe("SignupForm", () => {
     );
   });
 
-  test("redirect to home page when signup successfully.", async () => {
-    const { container } = renderSignupInProvider();
-    const signupBtn = screen.getByRole("button", { name: /sign up/i });
-    userEvent.type(screen.getByPlaceholderText(/username/i), inputField.name);
-    userEvent.type(screen.getByPlaceholderText(/password/i), inputField.password);
-    userEvent.type(screen.getByPlaceholderText(/email/i), inputField.email);
+  test("should have correct error message for existed email account", async () => {
+    renderSignupInProvider();
+    const signupBtn = screen.getByRole("button", { name: /register/i });
+    userEvent.type(screen.getByPlaceholderText(/email/i), AuthTestData.EXISTED_EMAIL);
+    userEvent.type(screen.getByPlaceholderText(/password/i), AuthTestData.PASSWORD);
+    userEvent.type(screen.getByPlaceholderText(/username/i), AuthTestData.NAME);
     userEvent.click(signupBtn);
-    await waitForElementToBeRemoved(() => screen.getByText(/loading/i));
-    // expect(container.firstChild).toBeNull();
+    await waitForElementToBeRemoved(() => screen.getByTestId("loader"));
+    const [firstAlert, secondAlert, thirdAlert] = screen.getAllByRole("alert");
+    expect(thirdAlert.textContent).toMatchInlineSnapshot(`"Bad request"`);
+  });
+
+  test("redirect to home page when signup successfully.", async () => {
+    renderSignupInProvider();
+    const signupBtn = screen.getByRole("button", { name: /register/i });
+    userEvent.type(screen.getByPlaceholderText(/email/i), AuthTestData.EMAIL);
+    userEvent.type(screen.getByPlaceholderText(/password/i), AuthTestData.PASSWORD);
+    userEvent.type(screen.getByPlaceholderText(/username/i), AuthTestData.NAME);
+    userEvent.click(signupBtn);
     expect(screen.getByText("HomePage")).toBeInTheDocument();
   });
 });

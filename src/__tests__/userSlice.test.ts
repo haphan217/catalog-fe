@@ -1,17 +1,12 @@
-import reducer, { loginUser, logout, SliceState } from "store/slices/userSlice";
-import { LoginForm } from "utils/Types";
+import reducer, { logout, SliceState } from "store/slices/userSlice";
 import { setupServer } from "msw/node";
 import { rest } from "msw";
 import store from "store/store";
+import { API } from "utils/constants";
+
 const server = setupServer(
-  rest.post("http://localhost:8080", async (req, res, ctx) => {
-    // if (!req?.body?.password) {
-    //   return res(ctx.status(400), ctx.json({ message: "password required" }));
-    // }
-    // if (!req.body.username) {
-    //   return res(ctx.status(400), ctx.json({ message: "username required" }));
-    // }
-    return res(ctx.json(req.body));
+  rest.post(API, async (req, res, ctx) => {
+    return res(ctx.status(200));
   }),
 );
 
@@ -30,20 +25,32 @@ describe("test redux user slice", () => {
 
   test("State changes to be authenticated after user logged in", async () => {
     const currentState = store.getState().userReducer;
-    const sampleForm: LoginForm = {
-      username: "username",
-      password: "password",
-    };
     expect(currentState.isAuthenticated).toBeFalsy();
-
     expect(reducer(undefined, { type: "user/login/pending" }).loading).toBeTruthy();
     expect(reducer(undefined, { type: "user/login/fulfilled" }).isAuthenticated).toBeTruthy();
+    expect(currentState.isAuthenticated).toBeTruthy();
+  });
 
-    store.dispatch(loginUser(sampleForm));
-    console.log(currentState);
-    // expect(store.getState().userReducer.loading).toBeTruthy();
+  test("Login fail should not change state", async () => {
+    const currentState = store.getState().userReducer;
+    expect(currentState.isAuthenticated).toBeFalsy();
+    expect(reducer(undefined, { type: "user/login/pending" }).loading).toBeTruthy();
+    expect(reducer(undefined, { type: "user/login/rejected" }).isAuthenticated).toBeFalsy();
+  });
 
-    // expect(await currentState.isAuthenticated).toBeTruthy();
+  test("State changes to be authenticated after user registered", async () => {
+    const currentState = store.getState().userReducer;
+    expect(currentState.isAuthenticated).toBeFalsy();
+    expect(reducer(undefined, { type: "user/register/pending" }).loading).toBeTruthy();
+    expect(reducer(undefined, { type: "user/register/fulfilled" }).isAuthenticated).toBeTruthy();
+    expect(currentState.isAuthenticated).toBeTruthy();
+  });
+
+  test("Register fail should not change state", async () => {
+    const currentState = store.getState().userReducer;
+    expect(currentState.isAuthenticated).toBeFalsy();
+    expect(reducer(undefined, { type: "user/register/pending" }).loading).toBeTruthy();
+    expect(reducer(undefined, { type: "user/register/rejected" }).isAuthenticated).toBeFalsy();
   });
 
   test("State changes to be not authenticated after user logged out", () => {

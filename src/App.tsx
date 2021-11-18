@@ -11,7 +11,7 @@ function App() {
     <div className="App">
       <TopNav />
       <ModalContainer />
-      <ToastContainer />
+      <ToastContainer autoDismiss={2000} />
       <Switch>
         <Route exact path="/">
           <HomePage />

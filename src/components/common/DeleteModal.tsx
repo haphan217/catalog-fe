@@ -27,11 +27,12 @@ export default function DeleteModal({ item, onDelete, type }: DeleteModalProps) 
       if (type === "Item") {
         await deleteItem((item as Item).categoryId, item.id);
       } else {
-        await deleteCategory(item.id);
+        const res = await deleteCategory(item.id);
       }
       onDelete(item);
       closeModal();
     } catch (error: any) {
+      console.log(error);
       setServerErr(error.message);
     } finally {
       setLoading(false);

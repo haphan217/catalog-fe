@@ -32,7 +32,7 @@ export default function HomePage() {
         setCategories((prevList) => {
           return [...prevList, ...camelData.items];
         });
-        page === 1 && setSelectedCategory(camelData.items[0].id);
+        page === 1 && camelData.items[0] && setSelectedCategory(camelData.items[0].id);
         setTotal(camelData.totalItems);
       } catch (error) {
         console.error(error);
@@ -50,6 +50,7 @@ export default function HomePage() {
     notifyPositive(`Category ${category.name} succesfully added`);
     setTotal(total + 1);
     setCategories([...categories, category]);
+    setSelectedCategory(category.id);
   };
 
   const showAddCategoryModal = () => {
@@ -68,7 +69,7 @@ export default function HomePage() {
     setTotal(total - 1);
     const filteredCateList = categories.filter((c) => c.id !== cate.id);
     setCategories(filteredCateList);
-    setSelectedCategory(filteredCateList[0].id);
+    filteredCateList[0] && setSelectedCategory(filteredCateList[0].id);
   };
 
   return categories[0] && selectedCategory ? (

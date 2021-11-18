@@ -75,7 +75,7 @@ export default function AddItemModal({ categoryId, editingItem, onSubmitItem }: 
       header={`${editingItem ? "Edit" : "Add"} Item`}
       body={modalBody}
       primaryBtn={editingItem ? "Edit" : "Add"}
-      primaryBtnDisabled={!item.name || !item.description}
+      primaryBtnDisabled={!item.name}
       onClickPrimary={onSubmit}
       onClose={closeModal}
       secondaryBtn="Cancel"

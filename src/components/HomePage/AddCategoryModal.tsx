@@ -42,7 +42,7 @@ export default function AddCategoryModal({ onSubmitCategory }: AddCateProps) {
 
   const modalBody = (
     <>
-      <Form.Group controlId="name">
+      <Form.Group controlId="name" onSubmit={onSubmit}>
         <Form.Label>Category name</Form.Label>
         <Form.Input isInvalid={!!serverErr} type="text" onChange={handleInputChange} value={category.name}></Form.Input>
         <Form.Feedback type="invalid" role="alert" visible={!!serverErr}>

@@ -1,19 +1,21 @@
-import { render, screen, act, waitForElementToBeRemoved, RenderResult } from "@testing-library/react";
+import { render, RenderResult, screen, act, waitForElementToBeRemoved } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import AddItemModal from "components/HomePage/AddItemModal";
-import { Item } from "utils/Types";
+import AddCategoryModal from "components/HomePage/AddCategoryModal";
+import { Category, Item } from "utils/Types";
 import { setupServer } from "msw/node";
 import { rest } from "msw";
 import { API } from "utils/constants";
 import { Provider } from "react-redux";
 import store from "store/store";
 import ModalContainer from "components/layout/ModalContainer";
+import AddItemModal from "components/HomePage/AddItemModal";
+
 const sampleItem: Item = {
-  name: "sample item",
-  description: "sample description",
-  id: 1,
-  categoryId: 1,
+  name: "sample",
+  description: "sample dex",
   authorId: 1,
+  categoryId: 1,
+  id: 1,
 };
 
 const server = setupServer(
@@ -25,66 +27,52 @@ const server = setupServer(
 beforeAll(() => server.listen());
 afterAll(() => server.close());
 
-const renderModalInProvider = (handleSubmitItem: (c: Item) => void): RenderResult => {
+const renderModalInProvider = (handleSubmitItem: (i: Item) => void, editingItem?: Item): RenderResult => {
   return render(
     <Provider store={store}>
       <ModalContainer />
-      <AddItemModal onSubmitCategory={handleSubmitCategory} />
+      <AddItemModal onSubmitItem={handleSubmitItem} editingItem={editingItem} categoryId={1} />
     </Provider>,
   );
 };
-const renderEditModal = (onSubmitItem: (i: Item) => void) => {
-  render(<AddItemModal editingItem={sampleItem} onSubmitItem={onSubmitItem} />);
-};
-describe("AddItemModal", () => {
+
+describe("AddCategoryModal", () => {
   const handleSubmitItem = jest.fn();
 
-  test("should open modal when user clicks on button", () => {
-    render(<AddItemModal onSubmitItem={handleSubmitItem} />);
-    const toggleBtn = screen.getByRole("button", { name: /item/i });
-    userEvent.click(toggleBtn);
-    const modalHeader = screen.getByRole("heading", { name: /add item/i });
-    expect(modalHeader).toBeInTheDocument();
+  test("should show correct input field", () => {
+    renderModalInProvider(handleSubmitItem);
+    const nameField = screen.getByRole("textbox", { name: /item name/i });
+    const descField = screen.getByRole("textbox", { name: /item description/i });
+    expect(nameField).toBeInTheDocument();
+    expect(descField).toBeInTheDocument();
   });
 
-  test("should be able to submit form after fill out both fields", () => {
-    render(<AddItemModal onSubmitItem={handleSubmitItem} />);
-    const toggleBtn = screen.getByRole("button", { name: /item/i });
-    userEvent.click(toggleBtn);
+  test("should be able to submit form after input item info", () => {
+    renderModalInProvider(handleSubmitItem);
     const addButton = screen.getByRole("button", { name: /add/i });
     expect(addButton).toBeDisabled();
-    userEvent.type(screen.getByLabelText(/name/i), sampleItem.name);
-    userEvent.type(screen.getByLabelText(/description/i), sampleItem.description);
+    userEvent.type(screen.getByRole("textbox", { name: /item name/i }), sampleItem.name);
+    userEvent.type(screen.getByRole("textbox", { name: /item description/i }), sampleItem.description);
     expect(addButton).toBeEnabled();
   });
 
-  test("submit form with correct input item then close modal", () => {
-    render(<AddItemModal onSubmitItem={handleSubmitItem} />);
-    const toggleBtn = screen.getByRole("button", { name: /item/i });
-    userEvent.click(toggleBtn);
+  test("submit form with correct input category", async () => {
+    renderModalInProvider(handleSubmitItem);
     const addButton = screen.getByRole("button", { name: /add/i });
-    userEvent.type(screen.getByLabelText(/name/i), sampleItem.name);
-    userEvent.type(screen.getByLabelText(/description/i), sampleItem.description);
-    userEvent.click(addButton);
+    await act(async () => userEvent.type(screen.getByRole("textbox", { name: /item name/i }), sampleItem.name));
+    await act(async () =>
+      userEvent.type(screen.getByRole("textbox", { name: /item description/i }), sampleItem.description),
+    );
+    await act(async () => userEvent.click(addButton));
+    await waitForElementToBeRemoved(() => screen.getByTestId(/loader/i));
     expect(handleSubmitItem).toHaveBeenCalledTimes(1);
     expect(handleSubmitItem).toHaveBeenCalledWith(sampleItem);
-    expect(addButton).not.toBeInTheDocument();
   });
 
-  test("should close the modal when user clicks cancel", () => {
-    render(<AddItemModal onSubmitItem={handleSubmitItem} />);
-    const toggleBtn = screen.getByRole("button", { name: /item/i });
-    userEvent.click(toggleBtn);
-    const cancelBtn = screen.getByRole("button", { name: /cancel/i });
-    userEvent.click(cancelBtn);
-    expect(cancelBtn).not.toBeInTheDocument();
-  });
-
-  test("should open edit modal when user clicks edit button", () => {
-    renderEditModal(handleSubmitItem);
-    const toggleBtn = screen.getByRole("button", { name: /edit item/i });
-    userEvent.click(toggleBtn);
-    const modalHeader = screen.getByRole("heading", { name: /edit item/i });
-    expect(modalHeader).toBeInTheDocument();
+  test("modal initiated with editing item", async () => {
+    renderModalInProvider(handleSubmitItem, sampleItem);
+    const nameField = screen.getByRole("textbox", { name: /item name/i });
+    expect(screen.getByRole("heading", { name: /edit/i })).toBeInTheDocument();
+    expect(nameField).toHaveValue(sampleItem.name);
   });
 });

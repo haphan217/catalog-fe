@@ -28,7 +28,6 @@ describe("test redux user slice", () => {
     expect(currentState.isAuthenticated).toBeFalsy();
     expect(reducer(undefined, { type: "user/login/pending" }).loading).toBeTruthy();
     expect(reducer(undefined, { type: "user/login/fulfilled" }).isAuthenticated).toBeTruthy();
-    expect(currentState.isAuthenticated).toBeTruthy();
   });
 
   test("Login fail should not change state", async () => {
@@ -43,7 +42,7 @@ describe("test redux user slice", () => {
     expect(currentState.isAuthenticated).toBeFalsy();
     expect(reducer(undefined, { type: "user/register/pending" }).loading).toBeTruthy();
     expect(reducer(undefined, { type: "user/register/fulfilled" }).isAuthenticated).toBeTruthy();
-    expect(currentState.isAuthenticated).toBeTruthy();
+    // expect(currentState.isAuthenticated).toBeTruthy();
   });
 
   test("Register fail should not change state", async () => {

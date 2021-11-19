@@ -25,20 +25,15 @@ export default function HomePage() {
 
   useEffect(() => {
     (async () => {
-      try {
-        setLoading(true);
-        const { data } = await getCategoryList(page);
-        const camelData: ListResponse = keysToCamel(data as ListResponseDTO);
-        setCategories((prevList) => {
-          return [...prevList, ...camelData.items];
-        });
-        page === 1 && camelData.items[0] && setSelectedCategory(camelData.items[0].id);
-        setTotal(camelData.totalItems);
-      } catch (error) {
-        console.error(error);
-      } finally {
-        setLoading(false);
-      }
+      setLoading(true);
+      const { data } = await getCategoryList(page);
+      const camelData: ListResponse = keysToCamel(data as ListResponseDTO);
+      setCategories((prevList) => {
+        return [...prevList, ...camelData.items];
+      });
+      page === 1 && camelData.items[0] && setSelectedCategory(camelData.items[0].id);
+      setTotal(camelData.totalItems);
+      setLoading(false);
     })();
   }, [page]);
 
@@ -85,7 +80,7 @@ export default function HomePage() {
     </div>
   ) : loading ? (
     <div className="u-positionAbsolute u-positionCenter">
-      <Loader size="medium" duration={500} />
+      <Loader data-testid="loader" size="medium" duration={500} />
     </div>
   ) : (
     <div className="u-positionAbsolute u-positionCenter">

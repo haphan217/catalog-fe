@@ -1,12 +1,13 @@
 import { Provider } from "react-redux";
 import configureStore from "redux-mock-store";
-import { render, screen, RenderResult, waitForElementToBeRemoved } from "@testing-library/react";
+import { render, screen, RenderResult, waitForElementToBeRemoved, act } from "@testing-library/react";
 import { setupServer } from "msw/node";
 import { rest } from "msw";
 import { API } from "utils/constants";
 import { Category, Item } from "utils/Types";
 import ItemList from "components/HomePage/ItemList";
 import { ListResponseDTO } from "utils/DTO";
+import userEvent from "@testing-library/user-event";
 
 const sampleItems: Item[] = [
   {
@@ -77,6 +78,7 @@ describe("Item List", () => {
     expect(item1).toBeInTheDocument();
     expect(item2).toBeInTheDocument();
     expect(addButton).toBeInTheDocument();
+    act(() => userEvent.click(addButton));
   });
 
   test("hide add item button if not logged in", async () => {
@@ -91,5 +93,7 @@ describe("Item List", () => {
     await waitForElementToBeRemoved(() => screen.getByTestId(/loader/i));
     const toggler = screen.getByTestId("dropdown");
     expect(toggler).toBeInTheDocument();
+    act(() => userEvent.click(toggler));
+    act(() => userEvent.click(screen.getByText(/delete/i)));
   });
 });

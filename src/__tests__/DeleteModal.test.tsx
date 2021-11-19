@@ -8,6 +8,7 @@ import { API } from "utils/constants";
 import { Provider } from "react-redux";
 import store from "store/store";
 import ModalContainer from "components/layout/ModalContainer";
+
 const item: Item = {
   name: "sample item",
   description: "sample description",
@@ -15,9 +16,17 @@ const item: Item = {
   categoryId: 1,
   id: 1,
 };
+const cate: Category = {
+  name: "cate",
+  id: 1,
+  authorId: 1,
+};
 
 const server = setupServer(
   rest.delete(`${API}/categories/1/items/1`, async (req: any, res, ctx) => {
+    return res(ctx.status(200));
+  }),
+  rest.delete(`${API}/categories/1`, async (req: any, res, ctx) => {
     return res(ctx.status(200));
   }),
 );
@@ -25,23 +34,30 @@ const server = setupServer(
 beforeAll(() => server.listen());
 afterAll(() => server.close());
 
-const renderModalInProvider = (handleDelete: (i: Item | Category) => void): RenderResult => {
+const renderModalInProvider = (handleDelete: (i: Item | Category) => void, type: string): RenderResult => {
   return render(
     <Provider store={store}>
       <ModalContainer />
-      <DeleteModal item={item} onDelete={handleDelete} type="Item" />
+      <DeleteModal item={type === "Item" ? item : cate} onDelete={handleDelete} type={type} />
     </Provider>,
   );
 };
 describe("DeleteModal", () => {
   const handleDelete = jest.fn();
-  test("should display correct to be deleted item", () => {
-    renderModalInProvider(handleDelete);
+  test("should display correct item to be deleted", () => {
+    renderModalInProvider(handleDelete, "Item");
     expect(screen.getByText(item.name)).toBeInTheDocument();
   });
 
+  test("should display correct category to be deleted", async () => {
+    renderModalInProvider(handleDelete, "Category");
+    const deleteBtn = screen.getByRole("button", { name: "Delete" });
+    expect(screen.getByText(cate.name)).toBeInTheDocument();
+    await act(async () => userEvent.click(deleteBtn));
+  });
+
   test("should let user delete item", async () => {
-    renderModalInProvider(handleDelete);
+    renderModalInProvider(handleDelete, "Item");
     const deleteBtn = screen.getByRole("button", { name: "Delete" });
     await act(async () => userEvent.click(deleteBtn));
     await waitForElementToBeRemoved(() => screen.getByTestId(/loader/i));

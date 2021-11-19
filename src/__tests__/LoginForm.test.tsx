@@ -64,6 +64,7 @@ describe("LoginForm", () => {
     expect(secondAlert.textContent).toMatchInlineSnapshot(
       `"Password must have at least 6 characters, including at least one lowercase letter, one uppercase letter, one digit."`,
     );
+    userEvent.click(screen.getByText(/register/i));
   });
 
   test("should have correct error message for incorrect password", async () => {

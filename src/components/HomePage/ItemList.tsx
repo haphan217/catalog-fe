@@ -30,17 +30,12 @@ export default function ItemList({ category, onDeleteCategory }: Props) {
   const dispatch = useAppDispatch();
 
   const fetchItems = async () => {
-    try {
-      setIsLoading(true);
-      const { data } = await getItemList(category.id, currentPage);
-      const camelData: ListResponse = keysToCamel(data as ListResponseDTO);
-      setItemList(camelData.items as Item[]);
-      setTotalItems(camelData.totalItems);
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setIsLoading(false);
-    }
+    setIsLoading(true);
+    const { data } = await getItemList(category.id, currentPage);
+    const camelData: ListResponse = keysToCamel(data as ListResponseDTO);
+    setItemList(camelData.items as Item[]);
+    setTotalItems(camelData.totalItems);
+    setIsLoading(false);
   };
 
   useEffect(() => {
@@ -110,8 +105,8 @@ export default function ItemList({ category, onDeleteCategory }: Props) {
         <div className="u-flex u-justifyContentBetween u-marginRightMedium">
           <h3 className="u-marginLeftSmall">{category.name} items</h3>
           {profile.isAuthenticated && category.authorId === profile.user.id && (
-            <Dropdown data-testid="dropdown" alignRight>
-              <Dropdown.Toggle className="u-textLight u-lineHeightNone">
+            <Dropdown alignRight>
+              <Dropdown.Toggle data-testid="dropdown" className="u-textLight u-lineHeightNone">
                 <Icon name="more" size="medium" />
               </Dropdown.Toggle>
               <Dropdown.Container className="u-paddingVerticalExtraSmall">

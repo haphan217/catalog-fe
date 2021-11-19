@@ -9,7 +9,7 @@ import { MemoryRouter } from "react-router-dom";
 import HomePage from "components/view/HomePage";
 import { API, AuthTestData } from "utils/constants";
 
-jest.mock("view/HomePage");
+jest.mock("components/view/HomePage");
 
 const renderLoginInProvider = (): RenderResult => {
   (HomePage as jest.Mock).mockImplementation(() => <div>HomePage</div>);

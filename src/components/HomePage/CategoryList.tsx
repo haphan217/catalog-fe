@@ -29,6 +29,9 @@ const CategoryList = ({
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [isVisible, setIsVisible] = useState(true);
 
+  const dispatch = useAppDispatch();
+  const profile = useSelector(selectUser);
+
   // Hide toggle button when page is scorlled upto given distance
   const toggleVisibility = () => {
     if (window.pageYOffset > 5) {
@@ -40,9 +43,6 @@ const CategoryList = ({
   useEffect(() => {
     window.addEventListener("scroll", toggleVisibility);
   }, []);
-
-  const dispatch = useAppDispatch();
-  const profile = useSelector(selectUser);
 
   const showAddCategoryModal = () => {
     const props: AddCateProps = {

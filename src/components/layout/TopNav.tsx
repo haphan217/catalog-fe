@@ -13,7 +13,7 @@ export default function TopNav() {
       {(location.pathname === "/login" || location.pathname === "/register") && (
         <Header.Left>
           <Link to="/">
-            <Icon size="medium" name="arrowBack" className="u-textPrimary" />
+            <Icon data-testid="back-icon" size="medium" name="arrowBack" className="u-textPrimary" />
           </Link>
         </Header.Left>
       )}
@@ -21,7 +21,7 @@ export default function TopNav() {
         {profile.isAuthenticated ? (
           <Dropdown alignRight>
             <span>Hi, {profile.user.name}</span>
-            <Dropdown.Toggle className="u-textLight u-lineHeightNone u-marginLeftExtraSmall">
+            <Dropdown.Toggle data-testid="logout" className="u-textLight u-lineHeightNone u-marginLeftExtraSmall">
               <Icon name="contact" size="medium" />
             </Dropdown.Toggle>
             <Dropdown.Container className="u-paddingVerticalExtraSmall">

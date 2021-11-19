@@ -110,7 +110,7 @@ export default function ItemList({ category, onDeleteCategory }: Props) {
         <div className="u-flex u-justifyContentBetween u-marginRightMedium">
           <h3 className="u-marginLeftSmall">{category.name} items</h3>
           {profile.isAuthenticated && category.authorId === profile.user.id && (
-            <Dropdown alignRight>
+            <Dropdown data-testid="dropdown" alignRight>
               <Dropdown.Toggle className="u-textLight u-lineHeightNone">
                 <Icon name="more" size="medium" />
               </Dropdown.Toggle>
@@ -127,7 +127,7 @@ export default function ItemList({ category, onDeleteCategory }: Props) {
       )}
       {isLoading ? (
         <div className="u-positionAbsolute u-positionLeft60 u-positionTop50">
-          <Loader size="medium" duration={500} />
+          <Loader size="medium" duration={500} data-testid="loader" />
         </div>
       ) : itemList[0] ? (
         <div>

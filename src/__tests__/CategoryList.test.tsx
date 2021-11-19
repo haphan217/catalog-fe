@@ -1,22 +1,9 @@
-import { setupServer } from "msw/node";
-import { rest } from "msw";
-import { API } from "utils/constants";
 import { Provider } from "react-redux";
 import configureStore from "redux-mock-store";
-import { render, screen, RenderResult, act } from "@testing-library/react";
+import { render, screen, RenderResult } from "@testing-library/react";
 import CategoryList from "components/HomePage/CategoryList";
 import { Category } from "utils/Types";
 import userEvent from "@testing-library/user-event";
-import ModalContainer from "components/layout/ModalContainer";
-
-const server = setupServer(
-  rest.delete(`${API}/categories/1/items/1`, async (req: any, res, ctx) => {
-    return res(ctx.status(200));
-  }),
-);
-
-beforeAll(() => server.listen());
-afterAll(() => server.close());
 
 const sampleCategory: Category[] = [
   {

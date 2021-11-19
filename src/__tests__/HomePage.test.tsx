@@ -15,16 +15,26 @@ const sampleRes: ListResponseDTO = {
 };
 const mockStore = configureStore();
 
-const renderComponentInProvider = (): RenderResult => {
-  const loggedInState = {
-    userReducer: {
-      isAuthenticated: true,
-      loading: false,
-      user: { name: "user", id: 1 },
-      errorMessage: "",
-    },
-  };
-  const store = mockStore(loggedInState);
+const loggedInState = {
+  userReducer: {
+    isAuthenticated: true,
+    loading: false,
+    user: { name: "user", id: 1 },
+    errorMessage: "",
+  },
+};
+
+const notLoginState = {
+  userReducer: {
+    isAuthenticated: false,
+    loading: false,
+    user: { name: "user", id: 1 },
+    errorMessage: "",
+  },
+};
+
+const renderComponentInProvider = (initialState: any): RenderResult => {
+  const store = mockStore(initialState);
   return render(
     <Provider store={store}>
       <HomePage />
@@ -42,10 +52,16 @@ beforeAll(() => server.listen());
 afterAll(() => server.close());
 
 describe("Home Page", () => {
-  test("Empty State", async () => {
-    renderComponentInProvider();
+  test("Empty State when login", async () => {
+    renderComponentInProvider(loggedInState);
     await waitForElementToBeRemoved(screen.getByTestId("loader"));
     expect(screen.getByText(/nothing/i)).toBeInTheDocument();
     userEvent.click(screen.getByRole("button", { name: /category/i }));
+  });
+
+  test("Empty State when not login", async () => {
+    renderComponentInProvider(notLoginState);
+    await waitForElementToBeRemoved(screen.getByTestId("loader"));
+    expect(screen.getByText(/please login/i)).toBeInTheDocument();
   });
 });

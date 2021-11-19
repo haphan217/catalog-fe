@@ -60,6 +60,7 @@ const CustomPagination = ({ currentPage, totalPage, onPageChange }: Props) => {
     <div className="u-textCenter lg:u-textRight lg:u-marginRightSmall">
       <Pagination>
         <Pagination.Prev
+          data-testid="prev"
           disabled={currentPage <= 1}
           onClick={() => {
             if (currentPage > 1) {
@@ -69,6 +70,7 @@ const CustomPagination = ({ currentPage, totalPage, onPageChange }: Props) => {
         />
         {paginationItems}
         <Pagination.Next
+          data-testid="next"
           disabled={currentPage >= totalPage}
           onClick={() => {
             if (currentPage < totalPage) {

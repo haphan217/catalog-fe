@@ -21,13 +21,6 @@ function App() {
         </Route>
         <RedirectRoute path="/login" profile={profile} component={Login} />
         <RedirectRoute path="/register" profile={profile} component={Signup} />
-
-        {/* <Route path="/login">
-          <Login />
-        </Route> */}
-        {/* <Route path="/register">
-          <Signup />
-        </Route> */}
         <Redirect from="*" to="/" />
       </Switch>
     </div>

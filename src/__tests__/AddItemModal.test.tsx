@@ -3,7 +3,7 @@ import userEvent from "@testing-library/user-event";
 import { Item } from "utils/Types";
 import { setupServer } from "msw/node";
 import { rest } from "msw";
-import { API } from "utils/constants";
+import { API, AuthTestData } from "utils/constants";
 import { Provider } from "react-redux";
 import store from "store/store";
 import ModalContainer from "components/layout/ModalContainer";
@@ -21,6 +21,12 @@ const server = setupServer(
   rest.post(`${API}/categories/1/items`, async (req: any, res, ctx) => {
     return res(ctx.json(sampleItem));
   }),
+  rest.put(`${API}/categories/1/items/1`, async (req: any, res, ctx) => {
+    if (req.body.name === "sample1") {
+      return res(ctx.status(400), ctx.json({ error_message: AuthTestData.ERROR })); //eslint-disable-line
+    }
+    return res(ctx.json(sampleItem));
+  }),
 );
 
 beforeAll(() => server.listen());
@@ -35,7 +41,7 @@ const renderModalInProvider = (handleSubmitItem: (i: Item) => void, editingItem?
   );
 };
 
-describe("AddCategoryModal", () => {
+describe("AddItemModal", () => {
   const handleSubmitItem = jest.fn();
 
   test("should show correct input field", () => {
@@ -73,5 +79,9 @@ describe("AddCategoryModal", () => {
     const nameField = screen.getByRole("textbox", { name: /item name/i });
     expect(screen.getByRole("heading", { name: /edit/i })).toBeInTheDocument();
     expect(nameField).toHaveValue(sampleItem.name);
+    await act(async () => userEvent.type(nameField, "1"));
+    await act(async () => userEvent.click(screen.getByRole("button", { name: /edit/i })));
+    const alert = screen.getByRole("alert");
+    expect(alert.textContent).toMatchInlineSnapshot(`""`);
   });
 });

@@ -1,8 +1,9 @@
 import { Provider } from "react-redux";
 import configureStore from "redux-mock-store";
-import { render, screen, RenderResult, waitForElementToBeRemoved } from "@testing-library/react";
+import { render, screen, RenderResult, act } from "@testing-library/react";
 import { Category, Item } from "utils/Types";
 import ItemCard from "components/HomePage/ItemCard";
+import userEvent from "@testing-library/user-event";
 
 const sampleItem: Item = {
   name: "sample",
@@ -52,9 +53,18 @@ describe("Item Card", () => {
     expect(toggler).not.toBeInTheDocument();
   });
 
-  test("show dropdown button for logged in author", async () => {
+  test("author can edit item", () => {
     renderComponentInProvider(handleDeleteItem, true);
     const toggler = screen.getByTestId("dropdown-card");
     expect(toggler).toBeInTheDocument();
+    act(() => userEvent.click(toggler));
+    act(() => userEvent.click(screen.getByText(/edit/i)));
+  });
+  test("author can delete item", () => {
+    renderComponentInProvider(handleDeleteItem, true);
+    const toggler = screen.getByTestId("dropdown-card");
+    expect(toggler).toBeInTheDocument();
+    act(() => userEvent.click(toggler));
+    act(() => userEvent.click(screen.getByText(/delete/i)));
   });
 });

@@ -60,8 +60,8 @@ export default function ItemCard({ initItem, onDeleteItem }: CardProps) {
             <p>{item.description}</p>
           </div>
           {profile.isAuthenticated && profile.user.id === item.authorId && (
-            <Dropdown data-testid="dropdown-card" alignRight>
-              <Dropdown.Toggle className="u-textLight u-lineHeightNone">
+            <Dropdown alignRight>
+              <Dropdown.Toggle data-testid="dropdown-card" className="u-textLight u-lineHeightNone">
                 <Icon name="more" size="small" />
               </Dropdown.Toggle>
               <Dropdown.Container className="u-paddingVerticalExtraSmall">

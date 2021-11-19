@@ -1,7 +1,6 @@
 import { render, RenderResult, screen, act, waitForElementToBeRemoved } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import AddCategoryModal from "components/HomePage/AddCategoryModal";
-import { Category, Item } from "utils/Types";
+import { Item } from "utils/Types";
 import { setupServer } from "msw/node";
 import { rest } from "msw";
 import { API } from "utils/constants";

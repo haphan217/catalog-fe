@@ -5,8 +5,11 @@ import Login from "components/view/LoginPage";
 import Signup from "components/view/Signup";
 import ModalContainer from "components/layout/ModalContainer";
 import { ToastContainer } from "@ahaui/react";
-
+import RedirectRoute from "components/layout/RedirectRoute";
+import { useSelector } from "react-redux";
+import { selectUser } from "store/slices/userSlice";
 function App() {
+  const profile = useSelector(selectUser);
   return (
     <div className="App">
       <TopNav />
@@ -16,12 +19,15 @@ function App() {
         <Route exact path="/">
           <HomePage />
         </Route>
-        <Route path="/login">
+        <RedirectRoute path="/login" profile={profile} component={Login} />
+        <RedirectRoute path="/register" profile={profile} component={Signup} />
+
+        {/* <Route path="/login">
           <Login />
-        </Route>
-        <Route path="/register">
+        </Route> */}
+        {/* <Route path="/register">
           <Signup />
-        </Route>
+        </Route> */}
         <Redirect from="*" to="/" />
       </Switch>
     </div>

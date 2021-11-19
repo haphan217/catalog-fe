@@ -29,9 +29,10 @@ export default function LoginPage() {
     validations: loginValidation,
   });
 
-  return profile.isAuthenticated ? (
-    <Redirect to="/" />
-  ) : (
+  // return profile.isAuthenticated ? (
+  //   <Redirect to="/" />
+  // ) : (
+  return (
     <div className="u-flex u-justifyContentCenter">
       <Card body size="large" className="u-paddingLarge border0 w50">
         <h3 className="u-textCenter">Login</h3>

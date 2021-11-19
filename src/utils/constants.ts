@@ -24,5 +24,5 @@ export const FormValidation = {
     "Password must have at least 6 characters, including at least one lowercase letter, one uppercase letter, one digit.",
 };
 
-export const API = "http://192.168.131.100:5001";
-// export const API = "http://2a2d-42-113-36-65.ngrok.io";
+// export const API = "http://192.168.131.100:5001";
+export const API = "http://51df-27-72-105-96.ngrok.io/";

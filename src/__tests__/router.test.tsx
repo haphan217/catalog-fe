@@ -4,15 +4,18 @@ import App from "App";
 import Login from "components/view/LoginPage";
 import Signup from "components/view/Signup";
 import TopNav from "components/layout/TopNav";
+import ModalContainer from "components/layout/ModalContainer";
 import { MemoryRouter } from "react-router-dom";
 
 jest.mock("components/layout/TopNav");
-jest.mock("view/HomePage");
-jest.mock("view/LoginPage");
-jest.mock("view/Signup");
+jest.mock("components/view/HomePage");
+jest.mock("components/view/LoginPage");
+jest.mock("components/view/Signup");
+jest.mock("components/layout/ModalContainer");
 
 const renderApp = (entry: string): RenderResult => {
   (TopNav as jest.Mock).mockImplementation(() => <div>TopNav</div>);
+  (ModalContainer as jest.Mock).mockImplementation(() => <div>ModalContainer</div>);
   return render(
     <MemoryRouter initialEntries={[entry]}>
       <App />

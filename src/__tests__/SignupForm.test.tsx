@@ -9,7 +9,7 @@ import HomePage from "components/view/HomePage";
 import SignupPage from "components/view/Signup";
 import { API, AuthTestData } from "utils/constants";
 
-jest.mock("view/HomePage");
+jest.mock("components/view/HomePage");
 
 const renderSignupInProvider = (): RenderResult => {
   (HomePage as jest.Mock).mockImplementation(() => <div>HomePage</div>);

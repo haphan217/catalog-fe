@@ -1,4 +1,4 @@
-import DeleteModal from "components/common/DeleteModal";
+import DeleteModal from "components/HomePage/DeleteModal";
 import AddCategoryModal from "components/HomePage/AddCategoryModal";
 import AddItemModal from "components/HomePage/AddItemModal";
 import { useSelector } from "react-redux";

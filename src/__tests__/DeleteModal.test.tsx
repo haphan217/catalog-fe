@@ -1,6 +1,6 @@
 import { render, screen, RenderResult, act, waitForElementToBeRemoved } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import DeleteModal from "components/common/DeleteModal";
+import DeleteModal from "components/HomePage/DeleteModal";
 import { Item, Category } from "utils/Types";
 import { setupServer } from "msw/node";
 import { rest } from "msw";

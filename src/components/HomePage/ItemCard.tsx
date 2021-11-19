@@ -4,11 +4,11 @@ import { useAppDispatch } from "store/store";
 import { AddItemProps } from "./AddItemModal";
 import { showModal, ModalContent } from "store/slices/modalSlice";
 import { ModalKey } from "utils/constants";
-import { DeleteModalProps } from "components/common/DeleteModal";
+import { DeleteModalProps } from "components/HomePage/DeleteModal";
 import { useSelector } from "react-redux";
 import { selectUser } from "store/slices/userSlice";
 import { useState } from "react";
-import { notifyPositive } from "components/common/ToastSuccess";
+import { notifyPositive } from "components/layout/ToastSuccess";
 
 interface CardProps {
   initItem: Item;

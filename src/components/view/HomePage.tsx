@@ -12,7 +12,7 @@ import { selectUser } from "store/slices/userSlice";
 import { getCategoryList } from "services/CategoryService";
 import { ListResponseDTO } from "utils/DTO";
 import { keysToCamel } from "utils/functions";
-import { notifyPositive } from "components/common/ToastSuccess";
+import { notifyPositive } from "components/layout/ToastSuccess";
 
 export default function HomePage() {
   const [loading, setLoading] = useState<boolean>(false);

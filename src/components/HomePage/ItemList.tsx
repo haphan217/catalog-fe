@@ -1,8 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
 import { Dropdown, Icon, Button, EmptyState, Loader } from "@ahaui/react";
 import { Category, Item, ListResponse } from "utils/Types";
-import { DeleteModalProps } from "components/common/DeleteModal";
-import CustomPagination from "components/common/CustomPagination";
+import { DeleteModalProps } from "components/HomePage/DeleteModal";
+import CustomPagination from "components/HomePage/CustomPagination";
 import { AddItemProps } from "./AddItemModal";
 import ItemCard from "./ItemCard";
 import { useAppDispatch } from "store/store";
@@ -13,7 +13,7 @@ import { selectUser } from "store/slices/userSlice";
 import { getItemList } from "services/ItemService";
 import { keysToCamel } from "utils/functions";
 import { ListResponseDTO } from "utils/DTO";
-import { notifyPositive } from "components/common/ToastSuccess";
+import { notifyPositive } from "components/layout/ToastSuccess";
 
 interface Props {
   category: Category;

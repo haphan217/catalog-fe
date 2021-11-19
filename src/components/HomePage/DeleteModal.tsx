@@ -1,5 +1,5 @@
 import { Category, Item } from "utils/Types";
-import BaseModal from "./BaseModal";
+import BaseModal from "../layout/BaseModal";
 import { useAppDispatch } from "store/store";
 import { hideModal } from "store/slices/modalSlice";
 import { useState } from "react";

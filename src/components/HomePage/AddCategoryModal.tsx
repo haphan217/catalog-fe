@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Form } from "@ahaui/react";
 import { Category } from "utils/Types";
-import BaseModal from "components/common/BaseModal";
+import BaseModal from "components/layout/BaseModal";
 import { useAppDispatch } from "store/store";
 import { hideModal } from "store/slices/modalSlice";
 import { createCategory } from "services/CategoryService";

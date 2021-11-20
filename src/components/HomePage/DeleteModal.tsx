@@ -43,7 +43,11 @@ export default function DeleteModal({ item, onDelete, type }: DeleteModalProps) 
       <p>
         Are you sure you want to delete <b>{item.name}</b>?
       </p>
-      {serverErr && <p className="u-textAccent">{serverErr}</p>}
+      {serverErr && (
+        <p role="alert" className="u-textAccent">
+          {serverErr}
+        </p>
+      )}
     </>
   );
 

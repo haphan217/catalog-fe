@@ -8,11 +8,25 @@ import { Provider } from "react-redux";
 import configureStore from "redux-mock-store";
 import userEvent from "@testing-library/user-event";
 
+/* eslint-disable */
 const sampleRes: ListResponseDTO = {
-  item_per_page: 20, //eslint-disable-line
-  total_items: 2, //eslint-disable-line
+  item_per_page: 20,
+  total_items: 2,
   items: [],
 };
+const sampleResHasItems: ListResponseDTO = {
+  item_per_page: 20,
+  total_items: 2,
+  items: [
+    {
+      id: 1,
+      name: "cate",
+      authorId: 1,
+    },
+  ],
+};
+/* eslint-enable */
+
 const mockStore = configureStore();
 
 const loggedInState = {
@@ -42,26 +56,47 @@ const renderComponentInProvider = (initialState: any): RenderResult => {
   );
 };
 
-const server = setupServer(
+const serverReturnsEmpty = setupServer(
   rest.get(`${API}/categories`, async (req: any, res, ctx) => {
     return res(ctx.status(200), ctx.json(sampleRes));
   }),
 );
 
-beforeAll(() => server.listen());
-afterAll(() => server.close());
+const server = setupServer(
+  rest.get(`${API}/categories`, async (req: any, res, ctx) => {
+    return res(ctx.status(200), ctx.json(sampleResHasItems));
+  }),
+  rest.get(`${API}/categories/1/items`, async (req: any, res, ctx) => {
+    return res(ctx.status(200), ctx.json([]));
+  }),
+);
 
 describe("Home Page", () => {
-  test("Empty State when login", async () => {
-    renderComponentInProvider(loggedInState);
-    await waitForElementToBeRemoved(screen.getByTestId("loader"));
-    expect(screen.getByText(/nothing/i)).toBeInTheDocument();
-    userEvent.click(screen.getByRole("button", { name: /category/i }));
+  describe("Home Page/Empty", () => {
+    beforeAll(() => serverReturnsEmpty.listen());
+    afterAll(() => serverReturnsEmpty.close());
+    test("Empty State when login", async () => {
+      renderComponentInProvider(loggedInState);
+      await waitForElementToBeRemoved(screen.getByTestId("loader"));
+      expect(screen.getByText(/nothing/i)).toBeInTheDocument();
+      userEvent.click(screen.getByRole("button", { name: /category/i }));
+    });
+
+    test("Empty State when not login", async () => {
+      renderComponentInProvider(notLoginState);
+      await waitForElementToBeRemoved(screen.getByTestId("loader"));
+      expect(screen.getByText(/please login/i)).toBeInTheDocument();
+    });
   });
 
-  test("Empty State when not login", async () => {
-    renderComponentInProvider(notLoginState);
-    await waitForElementToBeRemoved(screen.getByTestId("loader"));
-    expect(screen.getByText(/please login/i)).toBeInTheDocument();
+  describe("HomePage/Has data", () => {
+    beforeAll(() => server.listen());
+    afterAll(() => server.close());
+
+    test("should render category list", async () => {
+      renderComponentInProvider(notLoginState);
+      await waitForElementToBeRemoved(screen.getByTestId("loader"));
+      expect(screen.getByRole("button", { name: "cate" })).toBeInTheDocument();
+    });
   });
 });

@@ -1,4 +1,4 @@
-import { render, screen, waitForElementToBeRemoved, RenderResult } from "@testing-library/react";
+import { render, screen, waitForElementToBeRemoved, RenderResult, act } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import Login from "components/view/LoginPage";
 import { setupServer } from "msw/node";
@@ -24,13 +24,14 @@ const renderLoginInProvider = (): RenderResult => {
 
 const server = setupServer(
   rest.post(API + "/auth", async (req: any, res, ctx) => {
-    if (req.body?.password === AuthTestData.WRONG_PASSWORD) {
+    if (req.body?.password === "1wrongPassword") {
       return res(ctx.status(400), ctx.json({ error_message: AuthTestData.ERROR })); //eslint-disable-line
     }
-    return res(ctx.json(req.body), ctx.delay(1000));
+    return res(ctx.json({ access_token: "token" })); //eslint-disable-line
   }),
   rest.get(API + "/users/me", async (req: any, res, ctx) => {
-    return res(ctx.status(200));
+    console.log("here");
+    return res(ctx.status(200), ctx.json({ id: 1 }));
   }),
 );
 
@@ -64,16 +65,17 @@ describe("LoginForm", () => {
     expect(secondAlert.textContent).toMatchInlineSnapshot(
       `"Password must have at least 6 characters, including at least one lowercase letter, one uppercase letter, one digit."`,
     );
-    userEvent.click(screen.getByText(/register/i));
   });
 
   test("should have correct error message for incorrect password", async () => {
     renderLoginInProvider();
     userEvent.type(screen.getByPlaceholderText(/email/i), AuthTestData.EMAIL);
-    userEvent.type(screen.getByPlaceholderText(/password/i), AuthTestData.WRONG_PASSWORD);
+    userEvent.type(screen.getByPlaceholderText(/password/i), "1wrongPassword");
     userEvent.click(screen.getByRole("button", { name: /login/i }));
+    await waitForElementToBeRemoved(() => screen.getByTestId(/loader/i));
     const [firstAlert, secondAlert, thirdAlert] = screen.getAllByRole("alert");
-    expect(thirdAlert.textContent).toMatchInlineSnapshot();
+    expect(thirdAlert.textContent).toMatchInlineSnapshot(`"Bad request"`);
+    userEvent.click(screen.getByText(/register/i));
   });
 
   test("redirect to home page when login successfully.", async () => {
@@ -81,8 +83,8 @@ describe("LoginForm", () => {
     const loginBtn = screen.getByRole("button", { name: /login/i });
     userEvent.type(screen.getByPlaceholderText(/email/i), AuthTestData.EMAIL);
     userEvent.type(screen.getByPlaceholderText(/password/i), AuthTestData.PASSWORD);
-    userEvent.click(loginBtn);
-    await waitForElementToBeRemoved(() => screen.getByTestId(/loader/i));
+    await act(async () => userEvent.click(loginBtn));
+    // await waitForElementToBeRemoved(() => screen.getByTestId(/loader/i));
     expect(screen.getByText("HomePage")).toBeInTheDocument();
   });
 });

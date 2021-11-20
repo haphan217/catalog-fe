@@ -4,10 +4,11 @@ import DeleteModal from "components/HomePage/DeleteModal";
 import { Item, Category } from "utils/Types";
 import { setupServer } from "msw/node";
 import { rest } from "msw";
-import { API } from "utils/constants";
+import { API, AuthTestData } from "utils/constants";
 import { Provider } from "react-redux";
 import store from "store/store";
 import ModalContainer from "components/layout/ModalContainer";
+import { notifyPositive } from "components/layout/ToastSuccess";
 
 const item: Item = {
   name: "sample item",
@@ -31,8 +32,11 @@ const server = setupServer(
   }),
 );
 
-beforeAll(() => server.listen());
-afterAll(() => server.close());
+const failedServer = setupServer(
+  rest.delete(`${API}/categories/1/items/1`, async (req: any, res, ctx) => {
+    return res(ctx.status(400), ctx.json(AuthTestData.ERROR));
+  }),
+);
 
 const renderModalInProvider = (handleDelete: (i: Item | Category) => void, type: string): RenderResult => {
   return render(
@@ -42,7 +46,9 @@ const renderModalInProvider = (handleDelete: (i: Item | Category) => void, type:
     </Provider>,
   );
 };
-describe("DeleteModal", () => {
+describe("Delete Modal/Working Server", () => {
+  beforeAll(() => server.listen());
+  afterAll(() => server.close());
   const handleDelete = jest.fn();
   test("should display correct item to be deleted", () => {
     renderModalInProvider(handleDelete, "Item");
@@ -57,11 +63,23 @@ describe("DeleteModal", () => {
   });
 
   test("should let user delete item", async () => {
+    const mock = jest.fn().mockImplementation(() => notifyPositive("Success"));
+    renderModalInProvider(mock, "Item");
+    const deleteBtn = screen.getByRole("button", { name: "Delete" });
+    await act(async () => userEvent.click(deleteBtn));
+    expect(mock).toHaveBeenCalledWith(item);
+  });
+});
+
+describe("Delete Modal/Failed Server", () => {
+  beforeAll(() => failedServer.listen());
+  afterAll(() => failedServer.close());
+  const handleDelete = jest.fn();
+  test("should show error when server fails", async () => {
     renderModalInProvider(handleDelete, "Item");
     const deleteBtn = screen.getByRole("button", { name: "Delete" });
     await act(async () => userEvent.click(deleteBtn));
     await waitForElementToBeRemoved(() => screen.getByTestId(/loader/i));
-    expect(handleDelete).toHaveBeenCalledTimes(1);
-    expect(handleDelete).toHaveBeenCalledWith(item);
+    expect(screen.getByRole("alert").textContent).toMatchInlineSnapshot(`"Bad request"`);
   });
 });

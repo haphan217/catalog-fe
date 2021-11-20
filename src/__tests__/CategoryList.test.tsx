@@ -1,6 +1,6 @@
 import { Provider } from "react-redux";
 import configureStore from "redux-mock-store";
-import { render, screen, RenderResult } from "@testing-library/react";
+import { render, screen, RenderResult, act, fireEvent } from "@testing-library/react";
 import CategoryList from "components/HomePage/CategoryList";
 import { Category } from "utils/Types";
 import userEvent from "@testing-library/user-event";
@@ -25,6 +25,7 @@ const renderComponentInProvider = (
   onAddCategory: () => void,
   onScrollToEnd: () => void,
   isAuthenticated: boolean,
+  totalCategories?: number,
 ): RenderResult => {
   const loggedInState = {
     userReducer: {
@@ -42,7 +43,7 @@ const renderComponentInProvider = (
         onSelectCategory={onSelectCategory}
         categories={sampleCategory}
         onAddCategory={onAddCategory}
-        totalCategories={1}
+        totalCategories={totalCategories || 2}
         onScrollToEnd={onScrollToEnd}
       />
     </Provider>,
@@ -60,6 +61,7 @@ describe("Category List", () => {
     const [categoryBtn1] = screen.getAllByRole("button", { name: /sample/i });
     expect(categoryBtn1).toBeInTheDocument();
     expect(addButton).toBeInTheDocument();
+    act(() => userEvent.click(addButton));
   });
 
   test("hide add category button if not logged in", () => {
@@ -75,5 +77,29 @@ describe("Category List", () => {
     userEvent.click(cate2);
     expect(handleSelectCategory).toHaveBeenCalledTimes(1);
     expect(handleSelectCategory).toHaveBeenCalledWith(2);
+  });
+
+  test("display total number of categories", () => {
+    renderComponentInProvider(handleSelectCategory, handleAddCategory, handleScrollToEnd, false, 1);
+    expect(screen.getByText("1 category")).toBeInTheDocument();
+  });
+
+  test("display sidebar toggler for phone media", async () => {
+    window.matchMedia = jest.fn().mockImplementation((query) => {
+      return {
+        matches: query === "(max-width: 767px)" ? true : false,
+        media: "",
+        onchange: null,
+        addListener: jest.fn(),
+        removeListener: jest.fn(),
+      };
+    });
+
+    renderComponentInProvider(handleSelectCategory, handleAddCategory, handleScrollToEnd, true);
+    const togglerOpen = screen.getByTestId("open-sidebar");
+    act(() => userEvent.click(togglerOpen));
+    const togglerClose = screen.getByTestId("close-sidebar");
+    act(() => userEvent.click(togglerClose));
+    fireEvent.scroll(window, { target: { scrollY: 300 } });
   });
 });

@@ -1,4 +1,4 @@
-import { Link, Redirect } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { Card, Form, Button, Icon, Loader } from "@ahaui/react";
 import { useAppDispatch } from "store/store";
 import { useSelector } from "react-redux";

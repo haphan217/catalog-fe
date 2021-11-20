@@ -6,6 +6,8 @@ import Signup from "components/view/Signup";
 import TopNav from "components/layout/TopNav";
 import ModalContainer from "components/layout/ModalContainer";
 import { MemoryRouter } from "react-router-dom";
+import { Provider } from "react-redux";
+import store from "store/store";
 
 jest.mock("components/layout/TopNav");
 jest.mock("components/view/HomePage");
@@ -17,9 +19,11 @@ const renderApp = (entry: string): RenderResult => {
   (TopNav as jest.Mock).mockImplementation(() => <div>TopNav</div>);
   (ModalContainer as jest.Mock).mockImplementation(() => <div>ModalContainer</div>);
   return render(
-    <MemoryRouter initialEntries={[entry]}>
-      <App />
-    </MemoryRouter>,
+    <Provider store={store}>
+      <MemoryRouter initialEntries={[entry]}>
+        <App />
+      </MemoryRouter>
+    </Provider>,
   );
 };
 

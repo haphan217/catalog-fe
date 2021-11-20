@@ -4,7 +4,7 @@ import AddCategoryModal from "components/HomePage/AddCategoryModal";
 import { Category } from "utils/Types";
 import { setupServer } from "msw/node";
 import { rest } from "msw";
-import { API } from "utils/constants";
+import { API, AuthTestData } from "utils/constants";
 import { Provider } from "react-redux";
 import store from "store/store";
 import ModalContainer from "components/layout/ModalContainer";
@@ -17,6 +17,9 @@ const sampleCategory: Category = {
 
 const server = setupServer(
   rest.post(`${API}/categories`, async (req: any, res, ctx) => {
+    if (req.body.name === "m") {
+      return res(ctx.status(400), ctx.json({ error_message: AuthTestData.ERROR })); //eslint-disable-line
+    }
     return res(ctx.json(sampleCategory));
   }),
 );
@@ -58,5 +61,15 @@ describe("AddCategoryModal", () => {
     await waitForElementToBeRemoved(() => screen.getByTestId(/loader/i));
     expect(handleSubmitCategory).toHaveBeenCalledTimes(1);
     expect(handleSubmitCategory).toHaveBeenCalledWith(sampleCategory);
+  });
+
+  test("add existed category should show error", async () => {
+    renderModalInProvider(handleSubmitCategory);
+    const addButton = screen.getByRole("button", { name: /add/i });
+    await act(async () => userEvent.type(screen.getByRole("textbox", { name: /category name/i }), "m"));
+    await act(async () => userEvent.click(addButton));
+    await waitForElementToBeRemoved(() => screen.getByTestId(/loader/i));
+    const alert = screen.getByRole("alert");
+    expect(alert.textContent).toMatchInlineSnapshot(`"Bad request"`);
   });
 });

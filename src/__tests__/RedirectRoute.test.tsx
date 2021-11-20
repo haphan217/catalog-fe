@@ -5,8 +5,12 @@ import { MemoryRouter } from "react-router-dom";
 import configureStore from "redux-mock-store";
 import App from "App";
 import { Provider } from "react-redux";
+import ModalContainer from "components/layout/ModalContainer";
+import TopNav from "components/layout/TopNav";
 jest.mock("components/view/HomePage");
 jest.mock("components/view/LoginPage");
+jest.mock("components/layout/ModalContainer");
+jest.mock("components/layout/TopNav");
 
 const mockStore = configureStore();
 const loggedInState = {
@@ -30,6 +34,9 @@ const notLoginState = {
 const renderApp = (entry: string, initialState: any): RenderResult => {
   (HomePage as jest.Mock).mockImplementation(() => <div>HomePage</div>);
   (LoginPage as jest.Mock).mockImplementation(() => <div>Login Page</div>);
+  (ModalContainer as jest.Mock).mockImplementation(() => <div>ModalContainer</div>);
+  (TopNav as jest.Mock).mockImplementation(() => <div>TopNav</div>);
+
   const store = mockStore(initialState);
 
   return render(

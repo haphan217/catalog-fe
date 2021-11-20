@@ -1,17 +1,5 @@
 import reducer, { logout, SliceState } from "store/slices/userSlice";
-import { setupServer } from "msw/node";
-import { rest } from "msw";
 import store from "store/store";
-import { API } from "utils/constants";
-
-const server = setupServer(
-  rest.post(API, async (req, res, ctx) => {
-    return res(ctx.status(200));
-  }),
-);
-
-beforeAll(() => server.listen());
-afterAll(() => server.close());
 
 describe("test redux user slice", () => {
   test("states when user is not logged in", () => {

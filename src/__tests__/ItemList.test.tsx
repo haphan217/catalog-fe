@@ -27,7 +27,7 @@ const sampleItems: Item[] = [
 ];
 const sampleRes: ListResponseDTO = {
   item_per_page: 20, //eslint-disable-line
-  total_items: 2, //eslint-disable-line
+  total_items: 40, //eslint-disable-line
   items: sampleItems,
 };
 

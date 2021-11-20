@@ -64,7 +64,6 @@ describe("SignupForm", () => {
     expect(secondAlert.textContent).toMatchInlineSnapshot(
       `"Password must have at least 6 characters, including at least one lowercase letter, one uppercase letter, one digit."`,
     );
-    userEvent.click(screen.getByText(/login/i));
   });
 
   test("should have correct error message for existed email account", async () => {
@@ -77,6 +76,7 @@ describe("SignupForm", () => {
     await waitForElementToBeRemoved(() => screen.getByTestId("loader"));
     const [firstAlert, secondAlert, thirdAlert] = screen.getAllByRole("alert");
     expect(thirdAlert.textContent).toMatchInlineSnapshot(`"Bad request"`);
+    userEvent.click(screen.getByText(/login/i));
   });
 
   test("redirect to home page when signup successfully.", async () => {

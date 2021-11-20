@@ -19,12 +19,12 @@ const sampleItem: Item = {
 
 const server = setupServer(
   rest.post(`${API}/categories/1/items`, async (req: any, res, ctx) => {
+    if (req.body.name === "m") {
+      return res(ctx.status(400), ctx.json({ error_message: AuthTestData.ERROR })); //eslint-disable-line
+    }
     return res(ctx.json(sampleItem));
   }),
   rest.put(`${API}/categories/1/items/1`, async (req: any, res, ctx) => {
-    if (req.body.name === "sample1") {
-      return res(ctx.status(400), ctx.json({ error_message: AuthTestData.ERROR })); //eslint-disable-line
-    }
     return res(ctx.json(sampleItem));
   }),
 );
@@ -52,12 +52,14 @@ describe("AddItemModal", () => {
     expect(descField).toBeInTheDocument();
   });
 
-  test("should be able to submit form after input item info", () => {
+  test("should be able to submit form after input item info", async () => {
     renderModalInProvider(handleSubmitItem);
     const addButton = screen.getByRole("button", { name: /add/i });
     expect(addButton).toBeDisabled();
-    userEvent.type(screen.getByRole("textbox", { name: /item name/i }), sampleItem.name);
-    userEvent.type(screen.getByRole("textbox", { name: /item description/i }), sampleItem.description);
+    await act(async () => userEvent.type(screen.getByRole("textbox", { name: /item name/i }), sampleItem.name));
+    await act(async () =>
+      userEvent.type(screen.getByRole("textbox", { name: /item description/i }), sampleItem.description),
+    );
     expect(addButton).toBeEnabled();
   });
 
@@ -69,7 +71,6 @@ describe("AddItemModal", () => {
       userEvent.type(screen.getByRole("textbox", { name: /item description/i }), sampleItem.description),
     );
     await act(async () => userEvent.click(addButton));
-    await waitForElementToBeRemoved(() => screen.getByTestId(/loader/i));
     expect(handleSubmitItem).toHaveBeenCalledTimes(1);
     expect(handleSubmitItem).toHaveBeenCalledWith(sampleItem);
   });
@@ -83,5 +84,15 @@ describe("AddItemModal", () => {
     await act(async () => userEvent.click(screen.getByRole("button", { name: /edit/i })));
     const alert = screen.getByRole("alert");
     expect(alert.textContent).toMatchInlineSnapshot(`""`);
+  });
+
+  test("add existed item should show error", async () => {
+    renderModalInProvider(handleSubmitItem);
+    const addButton = screen.getByRole("button", { name: /add/i });
+    await act(async () => userEvent.type(screen.getByRole("textbox", { name: /item name/i }), "m"));
+    await act(async () => userEvent.click(addButton));
+    await waitForElementToBeRemoved(() => screen.getByTestId(/loader/i));
+    const alert = screen.getByRole("alert");
+    expect(alert.textContent).toMatchInlineSnapshot(`"Bad request"`);
   });
 });

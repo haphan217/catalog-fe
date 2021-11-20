@@ -1,10 +1,6 @@
 import { useEffect, useState } from "react";
 
 interface Validation {
-  required?: {
-    value: boolean;
-    message: string;
-  };
   regex?: {
     value: string;
     message: string;
@@ -34,12 +30,6 @@ export const useForm = <T extends Record<keyof T, any> = Record<string, unknown>
           const value = event.target.value;
           const validation = validations[key];
 
-          //Required field
-          if (validation?.required?.value && !value) {
-            setErrors((prev) => ({ ...prev, [key]: validation?.required?.message }));
-          } else setErrors((prev) => ({ ...prev, [key]: "" }));
-
-          //Regex field
           if (validation?.regex?.value && !RegExp(validation.regex?.value).test(value) && !!value) {
             setErrors((prev) => ({ ...prev, [key]: validation?.regex?.message }));
           } else {

@@ -59,7 +59,7 @@ const CategoryList = ({
     <div className={`sidenav ${isOpen ? "Show " : ""} md:u-size2of10`} id="scrollableDiv">
       {isVisible && (
         <div className="toggler md:u-hidden">
-          <Icon size="medium" name="menu" role="button" onClick={() => setIsOpen(true)} />
+          <Icon size="medium" name="menu" data-testid="open-sidebar" onClick={() => setIsOpen(true)} />
         </div>
       )}
       <div className="u-flex u-justifyContentBetween">
@@ -69,6 +69,7 @@ const CategoryList = ({
           </Button>
         )}
         <Icon
+          data-testid="close-sidebar"
           size="medium"
           name="close"
           className="u-block md:u-hidden u-marginHorizontalSmall"

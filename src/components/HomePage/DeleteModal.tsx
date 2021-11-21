@@ -32,7 +32,7 @@ export default function DeleteModal({ item, onDelete, type }: DeleteModalProps) 
       onDelete(item);
       closeModal();
     } catch (error: any) {
-      setServerErr(error.response.data);
+      setServerErr(error.response?.data);
     } finally {
       setLoading(false);
     }

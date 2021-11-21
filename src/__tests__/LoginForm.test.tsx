@@ -8,7 +8,7 @@ import { Provider } from "react-redux";
 import { MemoryRouter } from "react-router-dom";
 import HomePage from "components/view/HomePage";
 import { API, AuthTestData } from "utils/constants";
-
+import { mockLocalStorage } from "utils/functions";
 jest.mock("components/view/HomePage");
 
 const renderLoginInProvider = (): RenderResult => {
@@ -22,20 +22,25 @@ const renderLoginInProvider = (): RenderResult => {
   );
 };
 
+const setItemMock = mockLocalStorage();
+
 const server = setupServer(
   rest.post(API + "/auth", async (req: any, res, ctx) => {
     if (req.body?.password === "1wrongPassword") {
       return res(ctx.status(400), ctx.json({ error_message: AuthTestData.ERROR })); //eslint-disable-line
     }
-    return res(ctx.json({ access_token: "token" })); //eslint-disable-line
+    return res(ctx.status(200), ctx.json({ access_token: "token" })); //eslint-disable-line
   }),
-  rest.get(API + "/users/me", async (req: any, res, ctx) => {
-    console.log("here");
-    return res(ctx.status(200), ctx.json({ id: 1 }));
+  rest.get(`${API}/users/me`, async (req: any, res, ctx) => {
+    console.log("get user");
+    return res(ctx.status(200), ctx.json({ name: "user" }));
   }),
 );
 
-beforeAll(() => server.listen());
+beforeAll(() => {
+  // global.Storage.prototype.setItem = jest.fn((k, v) => console.log(k, v));
+  server.listen();
+});
 afterAll(() => server.close());
 
 describe("LoginForm", () => {
@@ -81,9 +86,10 @@ describe("LoginForm", () => {
   test("redirect to home page when login successfully.", async () => {
     renderLoginInProvider();
     const loginBtn = screen.getByRole("button", { name: /login/i });
-    userEvent.type(screen.getByPlaceholderText(/email/i), AuthTestData.EMAIL);
-    userEvent.type(screen.getByPlaceholderText(/password/i), AuthTestData.PASSWORD);
+    await act(async () => userEvent.type(screen.getByPlaceholderText(/email/i), AuthTestData.EMAIL));
+    await act(async () => userEvent.type(screen.getByPlaceholderText(/password/i), AuthTestData.PASSWORD));
     await act(async () => userEvent.click(loginBtn));
+    expect(setItemMock).toHaveBeenCalled();
     // await waitForElementToBeRemoved(() => screen.getByTestId(/loader/i));
     expect(screen.getByText("HomePage")).toBeInTheDocument();
   });

@@ -33,7 +33,7 @@ const sampleRes: ListResponseDTO = {
 
 const server = setupServer(
   rest.get(`${API}/categories/1/items`, async (req: any, res, ctx) => {
-    return res(ctx.json(sampleRes));
+    return res(ctx.status(200), ctx.json(sampleRes));
   }),
 );
 

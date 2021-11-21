@@ -3,7 +3,6 @@
 // expect(element).toHaveTextContent(/react/i)
 // learn more: https://github.com/testing-library/jest-dom
 import "@testing-library/jest-dom/extend-expect";
-// require("jest-localstorage-mock");
 global.matchMedia =
   global.matchMedia ||
   function () {
@@ -27,12 +26,7 @@ module.exports = {
   // Runs special logic, such as cleaning up components
   // when using React Testing Library and adds special
   // extended assertions to Jest
-  setupFilesAfterEnv: [
-    "@testing-library/react/cleanup-after-each",
-    "@testing-library/jest-dom/extend-expect",
-    "jest-localstorage-mock",
-  ],
-
+  setupFilesAfterEnv: ["@testing-library/react/cleanup-after-each", "@testing-library/jest-dom/extend-expect"],
   // Test spec file resolution pattern
   // Matches parent folder `__tests__` and filename
   // should contain `test` or `spec`.

@@ -1753,6 +1753,14 @@
     schema-utils "^2.6.5"
     source-map "^0.7.3"
 
+"@react-mock/localstorage@^0.1.2":
+  version "0.1.2"
+  resolved "https://registry.yarnpkg.com/@react-mock/localstorage/-/localstorage-0.1.2.tgz#694c7d59d8fc8450db98025a61e62b842b307435"
+  integrity sha512-IprMHwcAeyl6gfSA9nEhNDYQiLlVnKdw62O3WDFkHtuT6X16Fajic/geN7HrTdPTL47flhG9coXhgkXDmj665w==
+  dependencies:
+    "@babel/runtime" "^7.1.2"
+    lodash "^4.17.11"
+
 "@reduxjs/toolkit@^1.6.2":
   version "1.6.2"
   resolved "https://registry.yarnpkg.com/@reduxjs/toolkit/-/toolkit-1.6.2.tgz#2f2b5365df77dd6697da28fdf44f33501ed9ba37"

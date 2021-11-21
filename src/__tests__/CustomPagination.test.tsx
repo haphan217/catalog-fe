@@ -24,7 +24,7 @@ describe("Custom Pagination", () => {
   test("correct page number is called on page change", () => {
     render(<CustomPagination currentPage={1} totalPage={3} onPageChange={handleSelectPage} />);
     userEvent.click(screen.getByRole("button", { name: "2" }));
-    expect(handleSelectPage).toHaveBeenCalledTimes(1);
+    expect(handleSelectPage).toHaveBeenCalled();
     expect(handleSelectPage).toHaveBeenCalledWith(2);
   });
 
@@ -61,29 +61,31 @@ describe("Custom Pagination", () => {
     render(<CustomPagination currentPage={2} totalPage={2} onPageChange={handleSelectPage} />);
     const prev = screen.getByTestId("prev");
     userEvent.click(prev);
-    expect(handleSelectPage).toHaveBeenCalledTimes(1);
+    expect(handleSelectPage).toHaveBeenCalled();
     expect(handleSelectPage).toHaveBeenCalledWith(1);
   });
 
   test("cannot click on prev button if at page 1", () => {
+    const handlePrev = jest.fn();
     render(<CustomPagination currentPage={1} totalPage={2} onPageChange={handleSelectPage} />);
     const prev = screen.getByTestId("prev");
     userEvent.click(prev);
-    expect(handleSelectPage).toHaveBeenCalledTimes(0);
+    expect(handlePrev).toHaveBeenCalledTimes(0);
   });
 
   test("go to next page by click on next button", () => {
     render(<CustomPagination currentPage={1} totalPage={2} onPageChange={handleSelectPage} />);
     const next = screen.getByTestId("next");
     userEvent.click(next);
-    expect(handleSelectPage).toHaveBeenCalledTimes(1);
+    expect(handleSelectPage).toHaveBeenCalled();
     expect(handleSelectPage).toHaveBeenCalledWith(2);
   });
 
-  test("cannot click on mext button if at last page", () => {
+  test("cannot click on next button if at last page", () => {
+    const handleNext = jest.fn();
     render(<CustomPagination currentPage={2} totalPage={2} onPageChange={handleSelectPage} />);
     const next = screen.getByTestId("next");
     userEvent.click(next);
-    expect(handleSelectPage).toHaveBeenCalledTimes(0);
+    expect(handleNext).toHaveBeenCalledTimes(0);
   });
 });

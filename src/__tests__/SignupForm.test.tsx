@@ -29,9 +29,16 @@ const server = setupServer(
     }
     return res(ctx.status(200), ctx.delay(1000));
   }),
+  rest.get(`${API}/users/me`, async (req: any, res, ctx) => {
+    console.log("get user");
+    return res(ctx.status(200), ctx.json({ id: 1 }));
+  }),
 );
 
-beforeAll(() => server.listen());
+beforeAll(() => {
+  global.Storage.prototype.setItem = jest.fn();
+  server.listen();
+});
 afterAll(() => server.close());
 
 describe("SignupForm", () => {

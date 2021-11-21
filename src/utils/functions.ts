@@ -36,3 +36,17 @@ export const getHeaders = () => {
     "Content-Type": "application/json",
   };
 };
+
+export const mockLocalStorage = () => {
+  const setItemMock = jest.fn();
+
+  beforeEach(() => {
+    Storage.prototype.setItem = setItemMock;
+  });
+
+  afterEach(() => {
+    setItemMock.mockRestore();
+  });
+
+  return setItemMock;
+};

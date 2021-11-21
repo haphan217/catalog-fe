@@ -22,10 +22,11 @@ const server = setupServer(
     if (req.body.name === "m") {
       return res(ctx.status(400), ctx.json({ error_message: AuthTestData.ERROR })); //eslint-disable-line
     }
-    return res(ctx.json(sampleItem));
+    console.log("add item");
+    return res(ctx.status(200), ctx.json(sampleItem));
   }),
   rest.put(`${API}/categories/1/items/1`, async (req: any, res, ctx) => {
-    return res(ctx.json(sampleItem));
+    return res(ctx.status(200), ctx.json(sampleItem));
   }),
 );
 
@@ -52,6 +53,20 @@ describe("AddItemModal", () => {
     expect(descField).toBeInTheDocument();
   });
 
+  test("submit form with correct input category", async () => {
+    const submitMock = jest.fn();
+    renderModalInProvider(submitMock);
+    const addButton = screen.getByRole("button", { name: /add/i });
+    await act(async () => userEvent.type(screen.getByRole("textbox", { name: /item name/i }), sampleItem.name));
+    await act(async () =>
+      userEvent.type(screen.getByRole("textbox", { name: /item description/i }), sampleItem.description),
+    );
+    await act(async () => userEvent.click(addButton));
+    await waitForElementToBeRemoved(() => screen.getByTestId(/loader/i));
+    expect(submitMock).toHaveBeenCalledTimes(1);
+    expect(submitMock).toHaveBeenCalledWith(sampleItem);
+  });
+
   test("should be able to submit form after input item info", async () => {
     renderModalInProvider(handleSubmitItem);
     const addButton = screen.getByRole("button", { name: /add/i });
@@ -61,18 +76,6 @@ describe("AddItemModal", () => {
       userEvent.type(screen.getByRole("textbox", { name: /item description/i }), sampleItem.description),
     );
     expect(addButton).toBeEnabled();
-  });
-
-  test("submit form with correct input category", async () => {
-    renderModalInProvider(handleSubmitItem);
-    const addButton = screen.getByRole("button", { name: /add/i });
-    await act(async () => userEvent.type(screen.getByRole("textbox", { name: /item name/i }), sampleItem.name));
-    await act(async () =>
-      userEvent.type(screen.getByRole("textbox", { name: /item description/i }), sampleItem.description),
-    );
-    await act(async () => userEvent.click(addButton));
-    expect(handleSubmitItem).toHaveBeenCalledTimes(1);
-    expect(handleSubmitItem).toHaveBeenCalledWith(sampleItem);
   });
 
   test("modal initiated with editing item", async () => {
@@ -91,7 +94,7 @@ describe("AddItemModal", () => {
     const addButton = screen.getByRole("button", { name: /add/i });
     await act(async () => userEvent.type(screen.getByRole("textbox", { name: /item name/i }), "m"));
     await act(async () => userEvent.click(addButton));
-    await waitForElementToBeRemoved(() => screen.getByTestId(/loader/i));
+    await waitForElementToBeRemoved(() => screen.queryByTestId(/loader/i));
     const alert = screen.getByRole("alert");
     expect(alert.textContent).toMatchInlineSnapshot(`"Bad request"`);
   });

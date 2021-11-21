@@ -1,6 +1,5 @@
 import { render, screen, RenderResult, act, waitForElementToBeRemoved } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import DeleteModal from "components/HomePage/DeleteModal";
 import { Item, Category } from "utils/Types";
 import { setupServer } from "msw/node";
 import { rest } from "msw";
@@ -9,6 +8,8 @@ import { Provider } from "react-redux";
 import store from "store/store";
 import ModalContainer from "components/layout/ModalContainer";
 import { notifyPositive } from "components/layout/ToastSuccess";
+import { ToastContainer } from "@ahaui/react";
+import DeleteModal from "components/HomePage/DeleteModal";
 
 const item: Item = {
   name: "sample item",
@@ -42,6 +43,7 @@ const renderModalInProvider = (handleDelete: (i: Item | Category) => void, type:
   return render(
     <Provider store={store}>
       <ModalContainer />
+      <ToastContainer />
       <DeleteModal item={type === "Item" ? item : cate} onDelete={handleDelete} type={type} />
     </Provider>,
   );
@@ -63,11 +65,12 @@ describe("Delete Modal/Working Server", () => {
   });
 
   test("should let user delete item", async () => {
-    const mock = jest.fn().mockImplementation(() => notifyPositive("Success"));
+    const mock = jest.fn(notifyPositive(item.name));
     renderModalInProvider(mock, "Item");
     const deleteBtn = screen.getByRole("button", { name: "Delete" });
     await act(async () => userEvent.click(deleteBtn));
-    expect(mock).toHaveBeenCalledWith(item);
+    await waitForElementToBeRemoved(() => screen.getByTestId(/loader/i));
+    expect(mock).toHaveBeenCalledTimes(1);
   });
 });
 

@@ -25,4 +25,4 @@ export const FormValidation = {
 };
 
 // export const API = "http://192.168.131.100:5001";
-export const API = "http://51df-27-72-105-96.ngrok.io/";
+export const API = "http://51df-27-72-105-96.ngrok.io";

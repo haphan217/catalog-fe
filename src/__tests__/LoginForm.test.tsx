@@ -38,7 +38,7 @@ const server = setupServer(
 );
 
 beforeAll(() => {
-  // global.Storage.prototype.setItem = jest.fn((k, v) => console.log(k, v));
+  global.Storage.prototype.setItem = jest.fn((k, v) => console.log(k, v));
   server.listen();
 });
 afterAll(() => server.close());

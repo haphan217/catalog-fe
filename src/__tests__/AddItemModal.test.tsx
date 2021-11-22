@@ -22,7 +22,6 @@ const server = setupServer(
     if (req.body.name === "m") {
       return res(ctx.status(400), ctx.json({ error_message: AuthTestData.ERROR })); //eslint-disable-line
     }
-    console.log("add item");
     return res(ctx.status(200), ctx.json(sampleItem));
   }),
   rest.put(`${API}/categories/1/items/1`, async (req: any, res, ctx) => {

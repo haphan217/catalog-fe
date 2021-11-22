@@ -1,12 +1,13 @@
 import { setupServer } from "msw/node";
 import { rest } from "msw";
-import { API } from "utils/constants";
+import { API, ModalKey } from "utils/constants";
 import { ListResponseDTO } from "utils/DTO";
 import { render, RenderResult, screen, waitForElementToBeRemoved } from "@testing-library/react";
 import HomePage from "components/view/HomePage";
 import { Provider } from "react-redux";
 import configureStore from "redux-mock-store";
 import userEvent from "@testing-library/user-event";
+import ModalContainer from "components/layout/ModalContainer";
 
 /* eslint-disable */
 const sampleRes: ListResponseDTO = {
@@ -36,6 +37,12 @@ const loggedInState = {
     user: { name: "user", id: 1 },
     errorMessage: "",
   },
+  modalReducer: {
+    modalContent: {
+      modalName: ModalKey.ADD_CATEGORY,
+      modalProps: {},
+    },
+  },
 };
 
 const notLoginState = {
@@ -45,6 +52,12 @@ const notLoginState = {
     user: { name: "user", id: 1 },
     errorMessage: "",
   },
+  modalReducer: {
+    modalContent: {
+      modalName: ModalKey.ADD_CATEGORY,
+      modalProps: {},
+    },
+  },
 };
 
 const renderComponentInProvider = (initialState: any): RenderResult => {
@@ -52,6 +65,7 @@ const renderComponentInProvider = (initialState: any): RenderResult => {
   return render(
     <Provider store={store}>
       <HomePage />
+      <ModalContainer />
     </Provider>,
   );
 };

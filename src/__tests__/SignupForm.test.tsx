@@ -30,7 +30,6 @@ const server = setupServer(
     return res(ctx.status(200), ctx.delay(1000));
   }),
   rest.get(`${API}/users/me`, async (req: any, res, ctx) => {
-    console.log("get user");
     return res(ctx.status(200), ctx.json({ id: 1 }));
   }),
 );
@@ -81,7 +80,7 @@ describe("SignupForm", () => {
     userEvent.type(screen.getByPlaceholderText(/username/i), AuthTestData.NAME);
     userEvent.click(signupBtn);
     await waitForElementToBeRemoved(() => screen.getByTestId("loader"));
-    const [firstAlert, secondAlert, thirdAlert] = screen.getAllByRole("alert");
+    const [, , thirdAlert] = screen.getAllByRole("alert");
     expect(thirdAlert.textContent).toMatchInlineSnapshot(`"Bad request"`);
     userEvent.click(screen.getByText(/login/i));
   });

@@ -9,6 +9,7 @@ import { MemoryRouter } from "react-router-dom";
 import HomePage from "components/view/HomePage";
 import { API, AuthTestData } from "utils/constants";
 import { mockLocalStorage } from "utils/functions";
+
 jest.mock("components/view/HomePage");
 
 const renderLoginInProvider = (): RenderResult => {
@@ -32,13 +33,12 @@ const server = setupServer(
     return res(ctx.status(200), ctx.json({ access_token: "token" })); //eslint-disable-line
   }),
   rest.get(`${API}/users/me`, async (req: any, res, ctx) => {
-    console.log("get user");
     return res(ctx.status(200), ctx.json({ name: "user" }));
   }),
 );
 
 beforeAll(() => {
-  global.Storage.prototype.setItem = jest.fn((k, v) => console.log(k, v));
+  global.Storage.prototype.setItem = jest.fn();
   server.listen();
 });
 afterAll(() => server.close());
@@ -78,7 +78,7 @@ describe("LoginForm", () => {
     userEvent.type(screen.getByPlaceholderText(/password/i), "1wrongPassword");
     userEvent.click(screen.getByRole("button", { name: /login/i }));
     await waitForElementToBeRemoved(() => screen.getByTestId(/loader/i));
-    const [firstAlert, secondAlert, thirdAlert] = screen.getAllByRole("alert");
+    const [, , thirdAlert] = screen.getAllByRole("alert");
     expect(thirdAlert.textContent).toMatchInlineSnapshot(`"Bad request"`);
     userEvent.click(screen.getByText(/register/i));
   });
@@ -90,7 +90,6 @@ describe("LoginForm", () => {
     await act(async () => userEvent.type(screen.getByPlaceholderText(/password/i), AuthTestData.PASSWORD));
     await act(async () => userEvent.click(loginBtn));
     expect(setItemMock).toHaveBeenCalled();
-    // await waitForElementToBeRemoved(() => screen.getByTestId(/loader/i));
     expect(screen.getByText("HomePage")).toBeInTheDocument();
   });
 });

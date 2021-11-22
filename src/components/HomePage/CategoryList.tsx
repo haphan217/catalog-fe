@@ -1,13 +1,13 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
+import { Icon, Button, Loader } from "@ahaui/react";
+import InfiniteScroll from "react-infinite-scroll-component";
+import { useSelector } from "react-redux";
 import { AddCateProps } from "components/HomePage/AddCategoryModal";
 import { Category } from "utils/Types";
-import { Icon, Button, Loader } from "@ahaui/react";
 import { useAppDispatch } from "store/store";
 import { ModalContent, showModal } from "store/slices/modalSlice";
 import { ModalKey } from "utils/constants";
-import { useSelector } from "react-redux";
 import { selectUser } from "store/slices/userSlice";
-import InfiniteScroll from "react-infinite-scroll-component";
 
 interface Props {
   selectedCategory: number;
@@ -28,7 +28,6 @@ const CategoryList = ({
 }: Props) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [isVisible, setIsVisible] = useState(true);
-
   const dispatch = useAppDispatch();
   const profile = useSelector(selectUser);
 

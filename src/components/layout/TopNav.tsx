@@ -1,7 +1,7 @@
+import { useSelector } from "react-redux";
 import { Link, useLocation } from "react-router-dom";
 import { Header, Icon, Button, Dropdown } from "@ahaui/react";
 import { useAppDispatch } from "store/store";
-import { useSelector } from "react-redux";
 import { selectUser, logout } from "store/slices/userSlice";
 
 export default function TopNav() {

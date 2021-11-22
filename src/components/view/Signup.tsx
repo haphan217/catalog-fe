@@ -10,6 +10,7 @@ import { FormValidation } from "utils/constants";
 export default function SignupPage() {
   const dispatch = useAppDispatch();
   const profile = useSelector(selectUser);
+
   const signupValidation = {
     password: {
       regex: {
@@ -29,9 +30,6 @@ export default function SignupPage() {
     validations: signupValidation,
   });
 
-  // return profile.isAuthenticated ? (
-  //   <Redirect to="/" />
-  // ) : (
   return (
     <div className="u-flex u-justifyContentCenter">
       <Card body size="large" className="u-paddingLarge border0 w50">

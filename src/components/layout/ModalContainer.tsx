@@ -1,7 +1,7 @@
+import { useSelector } from "react-redux";
 import DeleteModal from "components/HomePage/DeleteModal";
 import AddCategoryModal from "components/HomePage/AddCategoryModal";
 import AddItemModal from "components/HomePage/AddItemModal";
-import { useSelector } from "react-redux";
 import { selectModal } from "store/slices/modalSlice";
 import { ModalKey } from "utils/constants";
 

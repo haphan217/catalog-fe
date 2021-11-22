@@ -1,5 +1,6 @@
 import { Pagination } from "@ahaui/react";
 import React from "react";
+
 interface Props {
   currentPage: number;
   totalPage: number;

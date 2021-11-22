@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { Card, Form, Button, Icon, Loader } from "@ahaui/react";
-import { useAppDispatch } from "store/store";
 import { useSelector } from "react-redux";
+import { useAppDispatch } from "store/store";
 import { loginUser, logout, selectUser } from "store/slices/userSlice";
 import { LoginForm } from "utils/Types";
 import { useForm } from "utils/useForm";
@@ -10,6 +10,7 @@ import { FormValidation } from "utils/constants";
 export default function LoginPage() {
   const dispatch = useAppDispatch();
   const profile = useSelector(selectUser);
+
   const loginValidation = {
     password: {
       regex: {
@@ -29,9 +30,6 @@ export default function LoginPage() {
     validations: loginValidation,
   });
 
-  // return profile.isAuthenticated ? (
-  //   <Redirect to="/" />
-  // ) : (
   return (
     <div className="u-flex u-justifyContentCenter">
       <Card body size="large" className="u-paddingLarge border0 w50">

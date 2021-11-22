@@ -9,6 +9,7 @@ export type ModalContent = {
 export type ModalSliceState = {
   modalContent: ModalContent | null;
 };
+
 const initialState: ModalSliceState = { modalContent: null };
 
 const modaleSlice = createSlice({

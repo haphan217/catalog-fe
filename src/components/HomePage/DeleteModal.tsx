@@ -1,10 +1,11 @@
+import { useState } from "react";
 import { Category, Item } from "utils/Types";
-import BaseModal from "../layout/BaseModal";
+import BaseModal from "components/layout/BaseModal";
 import { useAppDispatch } from "store/store";
 import { hideModal } from "store/slices/modalSlice";
-import { useState } from "react";
 import { deleteCategory } from "services/CategoryService";
 import { deleteItem } from "services/ItemService";
+
 export interface DeleteModalProps {
   item: Category | Item;
   type: string;
@@ -14,7 +15,6 @@ export interface DeleteModalProps {
 export default function DeleteModal({ item, onDelete, type }: DeleteModalProps) {
   const [serverErr, setServerErr] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
-
   const dispatch = useAppDispatch();
 
   const closeModal = () => {

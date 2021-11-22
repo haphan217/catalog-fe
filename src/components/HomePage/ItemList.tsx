@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { Dropdown, Icon, Button, EmptyState, Loader } from "@ahaui/react";
+import { useSelector } from "react-redux";
 import { Category, Item, ListResponse } from "utils/Types";
 import { DeleteModalProps } from "components/HomePage/DeleteModal";
 import CustomPagination from "components/HomePage/CustomPagination";
@@ -8,7 +9,6 @@ import ItemCard from "./ItemCard";
 import { useAppDispatch } from "store/store";
 import { showModal, ModalContent } from "store/slices/modalSlice";
 import { ModalKey } from "utils/constants";
-import { useSelector } from "react-redux";
 import { selectUser } from "store/slices/userSlice";
 import { getItemList } from "services/ItemService";
 import { keysToCamel } from "utils/functions";
@@ -26,7 +26,6 @@ export default function ItemList({ category, onDeleteCategory }: Props) {
   const [totalItems, setTotalItems] = useState<number>(0);
   const [itemList, setItemList] = useState<Item[]>([]);
   const profile = useSelector(selectUser);
-
   const dispatch = useAppDispatch();
 
   const fetchItems = async () => {

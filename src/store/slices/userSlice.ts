@@ -13,6 +13,7 @@ const initialState: SliceState = {
 };
 
 type Error = { error_message: string }; //eslint-disable-line
+
 export const loginUser = createAsyncThunk<User, LoginForm, { rejectValue: Error }>(
   "user/login",
   async (user: LoginForm, thunkAPI) => {

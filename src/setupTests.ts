@@ -1,7 +1,3 @@
-// jest-dom adds custom jest matchers for asserting on DOM nodes.
-// allows you to do things like:
-// expect(element).toHaveTextContent(/react/i)
-// learn more: https://github.com/testing-library/jest-dom
 import "@testing-library/jest-dom/extend-expect";
 global.matchMedia =
   global.matchMedia ||
@@ -13,12 +9,11 @@ global.matchMedia =
     };
   };
 module.exports = {
-  // The root of your source code, typically /src
+  // The root of the source code
   // `<rootDir>` is a token Jest substitutes
   roots: ["<rootDir>/src"],
 
-  // Jest transformations -- this adds support for TypeScript
-  // using ts-jest
+  // Typescript support for Jest transformations
   transform: {
     "^.+\\.tsx?$": "ts-jest",
   },
@@ -28,9 +23,8 @@ module.exports = {
   // extended assertions to Jest
   setupFilesAfterEnv: ["@testing-library/react/cleanup-after-each", "@testing-library/jest-dom/extend-expect"],
   // Test spec file resolution pattern
-  // Matches parent folder `__tests__` and filename
-  // should contain `test` or `spec`.
-  testRegex: "(/__tests__/.*|(\\.|/)(test|spec))\\.tsx?$",
+  // Matches parent folder `__tests__` and filename should contain `test`.
+  testRegex: "(/__tests__/.*|(\\.|/)(test))\\.tsx?$",
 
   // Module file extensions for importing
   moduleFileExtensions: ["ts", "tsx", "js", "jsx", "json", "node"],

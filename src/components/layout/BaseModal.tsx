@@ -1,5 +1,6 @@
 import { Modal, Button, Loader } from "@ahaui/react";
 import { ModalProps } from "utils/Types";
+
 const BaseModal = (props: ModalProps) => {
   const {
     header,

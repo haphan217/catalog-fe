@@ -4,14 +4,14 @@ import { useAppDispatch } from "store/store";
 import { useSelector } from "react-redux";
 import { logout, registerUser, selectUser } from "store/slices/userSlice";
 import { SignUpForm } from "utils/Types";
-import { useForm } from "utils/useForm";
+import { useForm } from "hooks/useForm";
 import { FormValidation } from "utils/constants";
 
 export default function SignUpPage() {
   const dispatch = useAppDispatch();
   const profile = useSelector(selectUser);
 
-  const signupValidation = {
+  const signUpValidation = {
     password: {
       regex: {
         value: FormValidation.PASSWORD_REGEX,
@@ -27,7 +27,7 @@ export default function SignUpPage() {
   };
   const { formData, handleChange, handleSubmit, errors } = useForm<SignUpForm>({
     onSubmit: () => dispatch(registerUser(formData)),
-    validations: signupValidation,
+    validations: signUpValidation,
   });
 
   return (

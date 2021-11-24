@@ -3,11 +3,11 @@ import { Card, Form, Button, Icon, Loader } from "@ahaui/react";
 import { useAppDispatch } from "store/store";
 import { useSelector } from "react-redux";
 import { logout, registerUser, selectUser } from "store/slices/userSlice";
-import { SignupForm } from "utils/Types";
+import { SignUpForm } from "utils/Types";
 import { useForm } from "utils/useForm";
 import { FormValidation } from "utils/constants";
 
-export default function SignupPage() {
+export default function SignUpPage() {
   const dispatch = useAppDispatch();
   const profile = useSelector(selectUser);
 
@@ -25,7 +25,7 @@ export default function SignupPage() {
       },
     },
   };
-  const { formData, handleChange, handleSubmit, errors } = useForm<SignupForm>({
+  const { formData, handleChange, handleSubmit, errors } = useForm<SignUpForm>({
     onSubmit: () => dispatch(registerUser(formData)),
     validations: signupValidation,
   });

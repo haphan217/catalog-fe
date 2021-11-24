@@ -1,5 +1,5 @@
 import LoginPage from "components/view/LoginPage";
-import HomePage from "components/view/HomePage";
+import HomePage from "components/HomePage";
 import { render, RenderResult, screen } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import configureStore from "redux-mock-store";
@@ -7,7 +7,7 @@ import App from "App";
 import { Provider } from "react-redux";
 import ModalContainer from "components/layout/ModalContainer";
 import TopNav from "components/layout/TopNav";
-jest.mock("components/view/HomePage");
+jest.mock("components/HomePage");
 jest.mock("components/view/LoginPage");
 jest.mock("components/layout/ModalContainer");
 jest.mock("components/layout/TopNav");

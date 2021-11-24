@@ -3,7 +3,7 @@ import { Dropdown, Icon, Button, EmptyState, Loader } from "@ahaui/react";
 import { useSelector } from "react-redux";
 import { Category, Item, ListResponse } from "utils/Types";
 import { DeleteModalProps } from "components/HomePage/DeleteModal";
-import CustomPagination from "components/HomePage/CustomPagination";
+import CustomPagination from "components/common/CustomPagination";
 import { AddItemProps } from "./AddItemModal";
 import ItemCard from "./ItemCard";
 import { useAppDispatch } from "store/store";

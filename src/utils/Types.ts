@@ -9,7 +9,7 @@ export type LoginForm = {
   password: string;
 };
 
-export type SignupForm = {
+export type SignUpForm = {
   email: string;
   username: string;
   password: string;

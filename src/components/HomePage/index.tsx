@@ -38,7 +38,7 @@ export default function HomePage() {
   }, [page]);
 
   const onAddCategorySuccess = (category: Category) => {
-    notifyPositive(`Category ${category.name} succesfully added`);
+    notifyPositive(`Category ${category.name} successfully added`);
     setTotal(total + 1);
     setCategories([...categories, category]);
     setSelectedCategory(category.id);
@@ -56,7 +56,7 @@ export default function HomePage() {
   };
 
   const onDeleteCategory = (cate: Category) => {
-    notifyPositive(`Category ${cate.name} succesfully deleted`);
+    notifyPositive(`Category ${cate.name} successfully deleted`);
     setTotal(total - 1);
     const filteredCateList = categories.filter((c) => c.id !== cate.id);
     setCategories(filteredCateList);

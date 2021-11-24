@@ -6,11 +6,11 @@ import { rest } from "msw";
 import store from "store/store";
 import { Provider } from "react-redux";
 import { MemoryRouter } from "react-router-dom";
-import HomePage from "components/view/HomePage";
+import HomePage from "components/HomePage";
 import { API, AuthTestData } from "utils/constants";
 import { mockLocalStorage } from "utils/functions";
 
-jest.mock("components/view/HomePage");
+jest.mock("components/HomePage");
 
 const renderLoginInProvider = (): RenderResult => {
   (HomePage as jest.Mock).mockImplementation(() => <div>HomePage</div>);

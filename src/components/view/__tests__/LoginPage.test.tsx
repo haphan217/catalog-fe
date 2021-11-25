@@ -8,6 +8,7 @@ import { Provider } from "react-redux";
 import { MemoryRouter } from "react-router-dom";
 import HomePage from "components/HomePage";
 import { API, AuthTestData } from "utils/constants";
+import { mockLocalStorage } from "utils/functions";
 
 jest.mock("components/HomePage");
 
@@ -35,10 +36,10 @@ const server = setupServer(
 );
 
 beforeAll(() => {
-  global.Storage.prototype.setItem = jest.fn();
   server.listen();
 });
 afterAll(() => server.close());
+mockLocalStorage();
 
 describe("LoginForm", () => {
   test("should display email, password field and submit button", () => {

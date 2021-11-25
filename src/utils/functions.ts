@@ -41,7 +41,7 @@ export const mockLocalStorage = () => {
   const setItemMock = jest.fn();
 
   beforeEach(() => {
-    Storage.prototype.setItem = setItemMock;
+    global.Storage.prototype.setItem = setItemMock;
   });
 
   afterEach(() => {

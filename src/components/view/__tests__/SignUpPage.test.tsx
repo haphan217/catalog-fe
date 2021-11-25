@@ -51,12 +51,12 @@ describe("SignUpForm", () => {
 
   test("should be able to submit form after fill out all fields", () => {
     renderSignUpInProvider();
-    const signupBtn = screen.getByRole("button", { name: /register/i });
-    expect(signupBtn).toBeDisabled();
+    const signUpBtn = screen.getByRole("button", { name: /register/i });
+    expect(signUpBtn).toBeDisabled();
     userEvent.type(screen.getByPlaceholderText(/username/i), AuthTestData.NAME);
     userEvent.type(screen.getByPlaceholderText(/password/i), AuthTestData.PASSWORD);
     userEvent.type(screen.getByPlaceholderText(/email/i), AuthTestData.EMAIL);
-    expect(signupBtn).toBeEnabled();
+    expect(signUpBtn).toBeEnabled();
   });
 
   test("should have correct error messages when fields are invalid", () => {
@@ -74,24 +74,24 @@ describe("SignUpForm", () => {
 
   test("should have correct error message for existed email account", async () => {
     renderSignUpInProvider();
-    const signupBtn = screen.getByRole("button", { name: /register/i });
+    const signUpBtn = screen.getByRole("button", { name: /register/i });
     userEvent.type(screen.getByPlaceholderText(/email/i), AuthTestData.EXISTED_EMAIL);
     userEvent.type(screen.getByPlaceholderText(/password/i), AuthTestData.PASSWORD);
     userEvent.type(screen.getByPlaceholderText(/username/i), AuthTestData.NAME);
-    userEvent.click(signupBtn);
+    userEvent.click(signUpBtn);
     await waitForElementToBeRemoved(() => screen.getByTestId("loader"));
     const [, , thirdAlert] = screen.getAllByRole("alert");
     expect(thirdAlert.textContent).toMatchInlineSnapshot(`"Bad request"`);
     userEvent.click(screen.getByText(/login/i));
   });
 
-  test("redirect to home page when signup successfully.", async () => {
+  test("redirect to home page when signUp successfully.", async () => {
     renderSignUpInProvider();
-    const signupBtn = screen.getByRole("button", { name: /register/i });
+    const signUpBtn = screen.getByRole("button", { name: /register/i });
     userEvent.type(screen.getByPlaceholderText(/email/i), AuthTestData.EMAIL);
     userEvent.type(screen.getByPlaceholderText(/password/i), AuthTestData.PASSWORD);
     userEvent.type(screen.getByPlaceholderText(/username/i), AuthTestData.NAME);
-    userEvent.click(signupBtn);
+    userEvent.click(signUpBtn);
     expect(screen.getByText("HomePage")).toBeInTheDocument();
   });
 });

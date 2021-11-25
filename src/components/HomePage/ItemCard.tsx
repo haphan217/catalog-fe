@@ -21,7 +21,7 @@ export default function ItemCard({ initItem, onDeleteItem }: CardProps) {
   const [item, setItem] = useState<Item>(initItem);
 
   const onEditItem = (editingItem: Item) => {
-    notifyPositive(`Item ${editingItem.name} succesfully updated`);
+    notifyPositive(`Item ${editingItem.name} successfully updated`);
     setItem(editingItem);
   };
 

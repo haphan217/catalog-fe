@@ -46,7 +46,7 @@ describe("test routing", () => {
     expect(screen.getByText("Login Page")).toBeInTheDocument();
   });
 
-  test("should render signup page for signup route", () => {
+  test("should render signUp page for signUp route", () => {
     (SignUp as jest.Mock).mockImplementation(() => <div>Register Page</div>);
     renderApp("/register");
     expect(screen.getByText("Register Page")).toBeInTheDocument();

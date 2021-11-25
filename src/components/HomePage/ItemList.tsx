@@ -42,7 +42,7 @@ export default function ItemList({ category, onDeleteCategory }: Props) {
   }, [currentPage, category]);
 
   const onAddItem = (item: Item) => {
-    notifyPositive(`Item ${item.name} succesfully added`);
+    notifyPositive(`Item ${item.name} successfully added`);
     if (itemList.length < 20) {
       setTotalItems((prev) => prev + 1);
       setItemList([...itemList, item]);
@@ -55,7 +55,7 @@ export default function ItemList({ category, onDeleteCategory }: Props) {
   };
 
   const onDeleteItem = (item: Item | Category) => {
-    notifyPositive(`Item ${item.name} succesfully deleted`);
+    notifyPositive(`Item ${item.name} successfully deleted`);
     if (totalItems - 1 <= currentPage * 20) {
       fetchItems();
       return;

@@ -35,7 +35,7 @@
     "eject": "react-scripts eject",
     "lint": "eslint \"src/**/*.{ts,tsx}\" --fix",
     "format": "prettier --write",
-    "coverage": "react-scripts test folder/name --coverage --coverageDirectory='coverage'"
+    "test:coverage": "react-scripts test folder/name --coverage --coverageDirectory='coverage'"
   },
   "husky": {
     "hooks": {

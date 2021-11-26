@@ -11,7 +11,7 @@ Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
 Launches the test runner in the interactive watch mode.
 
-### `yarn coverage`
+### `yarn test:coverage`
 
 Launches the test runner and generates code coverage report.
 

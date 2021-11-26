@@ -41,6 +41,10 @@ export default function ItemList({ category, onDeleteCategory }: Props) {
     fetchItems();
   }, [currentPage, category]);
 
+  const totalPage = useMemo(() => {
+    return Math.ceil(totalItems / 20);
+  }, [totalItems]);
+
   const onAddItem = (item: Item) => {
     notifyPositive(`Item ${item.name} successfully added`);
     if (itemList.length < 20) {
@@ -56,7 +60,8 @@ export default function ItemList({ category, onDeleteCategory }: Props) {
 
   const onDeleteItem = (item: Item | Category) => {
     notifyPositive(`Item ${item.name} successfully deleted`);
-    if (totalItems - 1 <= currentPage * 20) {
+    if (totalItems - 1 <= currentPage * 20 && totalPage != currentPage) {
+      console.log(totalItems, currentPage * 20);
       fetchItems();
       return;
     }
@@ -93,10 +98,6 @@ export default function ItemList({ category, onDeleteCategory }: Props) {
     };
     dispatch(showModal(content));
   };
-
-  const totalPage = useMemo(() => {
-    return Math.ceil(totalItems / 20);
-  }, [totalItems]);
 
   return (
     <div className="u-sizeFull md:u-size8of10">

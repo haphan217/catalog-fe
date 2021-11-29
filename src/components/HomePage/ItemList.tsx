@@ -60,18 +60,7 @@ export default function ItemList({ category, onDeleteCategory }: Props) {
 
   const onDeleteItem = (item: Item | Category) => {
     notifyPositive(`Item ${item.name} successfully deleted`);
-    if (totalItems - 1 <= currentPage * 20 && totalPage != currentPage) {
-      console.log(totalItems, currentPage * 20);
-      fetchItems();
-      return;
-    }
-    setTotalItems((prev) => prev - 1);
-    const filteredItemList = itemList.filter((i) => i.id !== item.id);
-    if (filteredItemList[0] || currentPage === 1) {
-      setItemList(filteredItemList);
-    } else {
-      setCurrentPage(1);
-    }
+    fetchItems();
   };
 
   const showAddItemModal = () => {

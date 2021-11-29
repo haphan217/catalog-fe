@@ -39,7 +39,16 @@ export default function HomePage() {
       const { data } = await getCategoryList(page);
       const camelData: ListResponse = keysToCamel(data as ListResponseDTO);
       setCategories((prevList) => {
-        return [...prevList, ...camelData.items];
+        const tempList = camelData.items.filter((item) => {
+          let notDuplicate = true;
+          prevList.forEach((existItem) => {
+            if (existItem.id === item.id) {
+              notDuplicate = false;
+            }
+          });
+          return notDuplicate;
+        });
+        return [...prevList, ...tempList];
       });
       page === 1 && camelData.items[0] && setSelectedCategory(camelData.items[0].id);
       setTotal(camelData.totalItems);
@@ -49,11 +58,9 @@ export default function HomePage() {
 
   const onAddCategorySuccess = (category: Category) => {
     notifyPositive(`Category ${category.name} successfully added`);
-    // if (page === Math.ceil(total / 20)) {
     setTotal(total + 1);
     setCategories([...categories, category]);
     setSelectedCategory(category.id);
-    // }
   };
 
   const showAddCategoryModal = () => {

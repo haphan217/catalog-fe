@@ -2,12 +2,15 @@ import { setupServer } from "msw/node";
 import { rest } from "msw";
 import { API, ModalKey } from "utils/constants";
 import { ListResponseDTO } from "utils/DTO";
-import { render, RenderResult, screen, waitForElementToBeRemoved } from "@testing-library/react";
+import { act, render, RenderResult, screen, waitForElementToBeRemoved } from "@testing-library/react";
 import HomePage from "components/HomePage";
 import { Provider } from "react-redux";
-import configureStore from "redux-mock-store";
 import userEvent from "@testing-library/user-event";
 import ModalContainer from "components/layout/ModalContainer";
+import { configureStore } from "@reduxjs/toolkit";
+import userSlice from "store/slices/userSlice";
+import modalSlice from "store/slices/modalSlice";
+import { Category } from "utils/Types";
 
 /* eslint-disable */
 const sampleRes: ListResponseDTO = {
@@ -27,8 +30,6 @@ const sampleResHasItems: ListResponseDTO = {
   ],
 };
 /* eslint-enable */
-
-const mockStore = configureStore();
 
 const loggedInState = {
   userReducer: {
@@ -60,19 +61,41 @@ const notLoginState = {
   },
 };
 
+export function renderWithRedux(
+  ui: any,
+  {
+    preloadedState,
+    store = configureStore({ reducer: { userReducer: userSlice, modalReducer: modalSlice }, preloadedState }),
+    ...renderOptions
+  } = {},
+) {
+  function Wrapper({ children }: any) {
+    return <Provider store={store}>{children}</Provider>;
+  }
+  return render(ui, { wrapper: Wrapper, ...renderOptions });
+}
+
 const renderComponentInProvider = (initialState: any): RenderResult => {
-  const store = mockStore(initialState);
-  return render(
-    <Provider store={store}>
+  return renderWithRedux(
+    <>
       <HomePage />
       <ModalContainer />
-    </Provider>,
+    </>,
+    { preloadedState: initialState },
   );
 };
 
+const sampleCategory: Category = {
+  name: "category",
+  id: 1,
+  authorId: 1,
+};
 const serverReturnsEmpty = setupServer(
   rest.get(`${API}/categories`, async (req: any, res, ctx) => {
     return res(ctx.status(200), ctx.json(sampleRes));
+  }),
+  rest.post(`${API}/categories`, async (req: any, res, ctx) => {
+    return res(ctx.json(sampleCategory));
   }),
 );
 
@@ -82,6 +105,9 @@ const server = setupServer(
   }),
   rest.get(`${API}/categories/1/items`, async (req: any, res, ctx) => {
     return res(ctx.status(200), ctx.json([]));
+  }),
+  rest.delete(`${API}/categories/1`, async (req: any, res, ctx) => {
+    return res(ctx.status(200));
   }),
 );
 
@@ -94,6 +120,8 @@ describe("Home Page", () => {
       await waitForElementToBeRemoved(screen.getByTestId("loader"));
       expect(screen.getByText(/nothing/i)).toBeInTheDocument();
       userEvent.click(screen.getByRole("button", { name: /category/i }));
+      await act(async () => userEvent.type(screen.getByRole("textbox", { name: /category name/i }), "y"));
+      await act(async () => userEvent.click(screen.getByRole("button", { name: /add/i })));
     });
 
     test("Empty State when not login", async () => {

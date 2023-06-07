@@ -3,7 +3,7 @@ import { Dropdown, Icon, Button, EmptyState, Loader } from "@ahaui/react";
 import { useSelector } from "react-redux";
 import { Category, Item, ListResponse } from "utils/Types";
 import { DeleteModalProps } from "components/HomePage/DeleteModal";
-import CustomPagination from "components/HomePage/CustomPagination";
+import CustomPagination from "components/common/CustomPagination";
 import { AddItemProps } from "./AddItemModal";
 import ItemCard from "./ItemCard";
 import { useAppDispatch } from "store/store";
@@ -41,8 +41,12 @@ export default function ItemList({ category, onDeleteCategory }: Props) {
     fetchItems();
   }, [currentPage, category]);
 
+  const totalPage = useMemo(() => {
+    return Math.ceil(totalItems / 20);
+  }, [totalItems]);
+
   const onAddItem = (item: Item) => {
-    notifyPositive(`Item ${item.name} succesfully added`);
+    notifyPositive(`Item ${item.name} successfully added`);
     if (itemList.length < 20) {
       setTotalItems((prev) => prev + 1);
       setItemList([...itemList, item]);
@@ -55,18 +59,8 @@ export default function ItemList({ category, onDeleteCategory }: Props) {
   };
 
   const onDeleteItem = (item: Item | Category) => {
-    notifyPositive(`Item ${item.name} succesfully deleted`);
-    if (totalItems - 1 <= currentPage * 20) {
-      fetchItems();
-      return;
-    }
-    setTotalItems((prev) => prev - 1);
-    const filteredItemList = itemList.filter((i) => i.id !== item.id);
-    if (filteredItemList[0] || currentPage === 1) {
-      setItemList(filteredItemList);
-    } else {
-      setCurrentPage(1);
-    }
+    notifyPositive(`Item ${item.name} successfully deleted`);
+    fetchItems();
   };
 
   const showAddItemModal = () => {
@@ -93,10 +87,6 @@ export default function ItemList({ category, onDeleteCategory }: Props) {
     };
     dispatch(showModal(content));
   };
-
-  const totalPage = useMemo(() => {
-    return Math.ceil(totalItems / 20);
-  }, [totalItems]);
 
   return (
     <div className="u-sizeFull md:u-size8of10">

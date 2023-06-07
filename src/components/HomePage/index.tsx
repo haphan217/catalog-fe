@@ -23,13 +23,32 @@ export default function HomePage() {
   const dispatch = useAppDispatch();
   const profile = useSelector(selectUser);
 
+  const fetchFirstPage = async () => {
+    setLoading(true);
+    const { data } = await getCategoryList(1);
+    const camelData: ListResponse = keysToCamel(data as ListResponseDTO);
+    setCategories(camelData.items);
+    camelData.items[0] && setSelectedCategory(camelData.items[0].id);
+    setTotal(camelData.totalItems);
+    setLoading(false);
+  };
+
   useEffect(() => {
     (async () => {
       setLoading(true);
       const { data } = await getCategoryList(page);
       const camelData: ListResponse = keysToCamel(data as ListResponseDTO);
       setCategories((prevList) => {
-        return [...prevList, ...camelData.items];
+        const tempList = camelData.items.filter((item) => {
+          let notDuplicate = true;
+          prevList.forEach((existItem) => {
+            if (existItem.id === item.id) {
+              notDuplicate = false;
+            }
+          });
+          return notDuplicate;
+        });
+        return [...prevList, ...tempList];
       });
       page === 1 && camelData.items[0] && setSelectedCategory(camelData.items[0].id);
       setTotal(camelData.totalItems);
@@ -38,7 +57,7 @@ export default function HomePage() {
   }, [page]);
 
   const onAddCategorySuccess = (category: Category) => {
-    notifyPositive(`Category ${category.name} succesfully added`);
+    notifyPositive(`Category ${category.name} successfully added`);
     setTotal(total + 1);
     setCategories([...categories, category]);
     setSelectedCategory(category.id);
@@ -56,11 +75,13 @@ export default function HomePage() {
   };
 
   const onDeleteCategory = (cate: Category) => {
-    notifyPositive(`Category ${cate.name} succesfully deleted`);
-    setTotal(total - 1);
-    const filteredCateList = categories.filter((c) => c.id !== cate.id);
-    setCategories(filteredCateList);
-    filteredCateList[0] && setSelectedCategory(filteredCateList[0].id);
+    notifyPositive(`Category ${cate.name} successfully deleted`);
+    if (page == Math.ceil(total / 20)) {
+      const filteredCateList = categories.filter((c) => c.id !== cate.id);
+      setCategories(filteredCateList);
+      setTotal((prev) => prev - 1);
+      filteredCateList[0] && setSelectedCategory(filteredCateList[0].id);
+    } else fetchFirstPage();
   };
 
   return categories[0] && selectedCategory ? (

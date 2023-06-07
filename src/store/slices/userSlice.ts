@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { User, LoginForm, SignupForm } from "utils/Types";
+import { User, LoginForm, SignUpForm } from "utils/Types";
 import { getUser, login, register } from "services/AuthService";
 import { RootState } from "store/rootReducer";
 
@@ -30,9 +30,9 @@ export const loginUser = createAsyncThunk<User, LoginForm, { rejectValue: Error 
   },
 );
 
-export const registerUser = createAsyncThunk<User, SignupForm, { rejectValue: Error }>(
+export const registerUser = createAsyncThunk<User, SignUpForm, { rejectValue: Error }>(
   "user/register",
-  async (user: SignupForm, thunkAPI) => {
+  async (user: SignUpForm, thunkAPI) => {
     try {
       const { data } = await register(user.username, user.password, user.email || "");
       localStorage.setItem("token", data.access_token);

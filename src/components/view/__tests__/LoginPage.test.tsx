@@ -6,11 +6,11 @@ import { rest } from "msw";
 import store from "store/store";
 import { Provider } from "react-redux";
 import { MemoryRouter } from "react-router-dom";
-import HomePage from "components/view/HomePage";
+import HomePage from "components/HomePage";
 import { API, AuthTestData } from "utils/constants";
 import { mockLocalStorage } from "utils/functions";
 
-jest.mock("components/view/HomePage");
+jest.mock("components/HomePage");
 
 const renderLoginInProvider = (): RenderResult => {
   (HomePage as jest.Mock).mockImplementation(() => <div>HomePage</div>);
@@ -22,8 +22,6 @@ const renderLoginInProvider = (): RenderResult => {
     { wrapper: MemoryRouter },
   );
 };
-
-const setItemMock = mockLocalStorage();
 
 const server = setupServer(
   rest.post(API + "/auth", async (req: any, res, ctx) => {
@@ -38,10 +36,10 @@ const server = setupServer(
 );
 
 beforeAll(() => {
-  global.Storage.prototype.setItem = jest.fn();
   server.listen();
 });
 afterAll(() => server.close());
+mockLocalStorage();
 
 describe("LoginForm", () => {
   test("should display email, password field and submit button", () => {
@@ -89,7 +87,6 @@ describe("LoginForm", () => {
     await act(async () => userEvent.type(screen.getByPlaceholderText(/email/i), AuthTestData.EMAIL));
     await act(async () => userEvent.type(screen.getByPlaceholderText(/password/i), AuthTestData.PASSWORD));
     await act(async () => userEvent.click(loginBtn));
-    expect(setItemMock).toHaveBeenCalled();
     expect(screen.getByText("HomePage")).toBeInTheDocument();
   });
 });

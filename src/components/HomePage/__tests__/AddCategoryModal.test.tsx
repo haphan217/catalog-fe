@@ -58,7 +58,7 @@ describe("AddCategoryModal", () => {
     const addButton = screen.getByRole("button", { name: /add/i });
     await act(async () => userEvent.type(screen.getByRole("textbox", { name: /category name/i }), sampleCategory.name));
     await act(async () => userEvent.click(addButton));
-    await waitForElementToBeRemoved(() => screen.getByTestId(/loader/i));
+    await waitForElementToBeRemoved(() => screen.queryByTestId(/loader/i));
     expect(handleSubmitCategory).toHaveBeenCalledTimes(1);
     expect(handleSubmitCategory).toHaveBeenCalledWith(sampleCategory);
   });
@@ -68,7 +68,7 @@ describe("AddCategoryModal", () => {
     const addButton = screen.getByRole("button", { name: /add/i });
     await act(async () => userEvent.type(screen.getByRole("textbox", { name: /category name/i }), "m"));
     await act(async () => userEvent.click(addButton));
-    await waitForElementToBeRemoved(() => screen.getByTestId(/loader/i));
+    await waitForElementToBeRemoved(() => screen.queryByTestId(/loader/i));
     const alert = screen.getByRole("alert");
     expect(alert.textContent).toMatchInlineSnapshot(`"Bad request"`);
   });

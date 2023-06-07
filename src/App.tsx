@@ -2,11 +2,11 @@ import { Route, Switch, Redirect } from "react-router-dom";
 import { ToastContainer } from "@ahaui/react";
 import { useSelector } from "react-redux";
 import TopNav from "components/layout/TopNav";
-import HomePage from "components/view/HomePage";
+import HomePage from "components/HomePage";
 import Login from "components/view/LoginPage";
-import Signup from "components/view/Signup";
+import SignUp from "components/view/SignUp";
 import ModalContainer from "components/layout/ModalContainer";
-import RedirectRoute from "components/layout/RedirectRoute";
+import RedirectRoute from "components/common/RedirectRoute";
 import { selectUser } from "store/slices/userSlice";
 
 function App() {
@@ -22,7 +22,7 @@ function App() {
           <HomePage />
         </Route>
         <RedirectRoute path="/login" profile={profile} component={Login} />
-        <RedirectRoute path="/register" profile={profile} component={Signup} />
+        <RedirectRoute path="/register" profile={profile} component={SignUp} />
         <Redirect from="*" to="/" />
       </Switch>
     </div>

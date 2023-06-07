@@ -5,17 +5,18 @@ import { rest } from "msw";
 import store from "store/store";
 import { Provider } from "react-redux";
 import { MemoryRouter } from "react-router-dom";
-import HomePage from "components/view/HomePage";
-import SignupPage from "components/view/Signup";
+import HomePage from "components/HomePage";
 import { API, AuthTestData } from "utils/constants";
+import SignUpPage from "components/view/SignUp";
+import { mockLocalStorage } from "utils/functions";
 
-jest.mock("components/view/HomePage");
+jest.mock("components/HomePage");
 
-const renderSignupInProvider = (): RenderResult => {
+const renderSignUpInProvider = (): RenderResult => {
   (HomePage as jest.Mock).mockImplementation(() => <div>HomePage</div>);
   return render(
     <Provider store={store}>
-      <SignupPage />
+      <SignUpPage />
       <HomePage />
     </Provider>,
     { wrapper: MemoryRouter },
@@ -35,14 +36,14 @@ const server = setupServer(
 );
 
 beforeAll(() => {
-  global.Storage.prototype.setItem = jest.fn();
   server.listen();
 });
 afterAll(() => server.close());
+mockLocalStorage();
 
-describe("SignupForm", () => {
+describe("SignUpForm", () => {
   test("should display username, password, email field and submit button", () => {
-    renderSignupInProvider();
+    renderSignUpInProvider();
     expect(screen.getByPlaceholderText(/username/i)).toBeInTheDocument();
     expect(screen.getByPlaceholderText(/password/i)).toBeInTheDocument();
     expect(screen.getByPlaceholderText(/email/i)).toBeInTheDocument();
@@ -50,17 +51,17 @@ describe("SignupForm", () => {
   });
 
   test("should be able to submit form after fill out all fields", () => {
-    renderSignupInProvider();
-    const signupBtn = screen.getByRole("button", { name: /register/i });
-    expect(signupBtn).toBeDisabled();
+    renderSignUpInProvider();
+    const signUpBtn = screen.getByRole("button", { name: /register/i });
+    expect(signUpBtn).toBeDisabled();
     userEvent.type(screen.getByPlaceholderText(/username/i), AuthTestData.NAME);
     userEvent.type(screen.getByPlaceholderText(/password/i), AuthTestData.PASSWORD);
     userEvent.type(screen.getByPlaceholderText(/email/i), AuthTestData.EMAIL);
-    expect(signupBtn).toBeEnabled();
+    expect(signUpBtn).toBeEnabled();
   });
 
   test("should have correct error messages when fields are invalid", () => {
-    renderSignupInProvider();
+    renderSignUpInProvider();
     userEvent.type(screen.getByPlaceholderText(/email/i), AuthTestData.INVALID_EMAIL);
     userEvent.type(screen.getByPlaceholderText(/password/i), AuthTestData.INVALID_PASSWORD);
     userEvent.type(screen.getByPlaceholderText(/username/i), AuthTestData.NAME);
@@ -73,25 +74,25 @@ describe("SignupForm", () => {
   });
 
   test("should have correct error message for existed email account", async () => {
-    renderSignupInProvider();
-    const signupBtn = screen.getByRole("button", { name: /register/i });
+    renderSignUpInProvider();
+    const signUpBtn = screen.getByRole("button", { name: /register/i });
     userEvent.type(screen.getByPlaceholderText(/email/i), AuthTestData.EXISTED_EMAIL);
     userEvent.type(screen.getByPlaceholderText(/password/i), AuthTestData.PASSWORD);
     userEvent.type(screen.getByPlaceholderText(/username/i), AuthTestData.NAME);
-    userEvent.click(signupBtn);
+    userEvent.click(signUpBtn);
     await waitForElementToBeRemoved(() => screen.getByTestId("loader"));
     const [, , thirdAlert] = screen.getAllByRole("alert");
     expect(thirdAlert.textContent).toMatchInlineSnapshot(`"Bad request"`);
     userEvent.click(screen.getByText(/login/i));
   });
 
-  test("redirect to home page when signup successfully.", async () => {
-    renderSignupInProvider();
-    const signupBtn = screen.getByRole("button", { name: /register/i });
+  test("redirect to home page when signUp successfully.", async () => {
+    renderSignUpInProvider();
+    const signUpBtn = screen.getByRole("button", { name: /register/i });
     userEvent.type(screen.getByPlaceholderText(/email/i), AuthTestData.EMAIL);
     userEvent.type(screen.getByPlaceholderText(/password/i), AuthTestData.PASSWORD);
     userEvent.type(screen.getByPlaceholderText(/username/i), AuthTestData.NAME);
-    userEvent.click(signupBtn);
+    userEvent.click(signUpBtn);
     expect(screen.getByText("HomePage")).toBeInTheDocument();
   });
 });

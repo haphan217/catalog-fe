@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 interface Validation {
   regex?: {
@@ -40,8 +40,7 @@ export const useForm = <T extends Record<keyof T, any> = Record<string, unknown>
     }
   };
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const handleSubmit = async () => {
     onSubmit();
   };
 

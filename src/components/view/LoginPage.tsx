@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import { useAppDispatch } from "store/store";
 import { loginUser, logout, selectUser } from "store/slices/userSlice";
 import { LoginForm } from "utils/Types";
-import { useForm } from "utils/useForm";
+import { useForm } from "hooks/useForm";
 import { FormValidation } from "utils/constants";
 
 export default function LoginPage() {
